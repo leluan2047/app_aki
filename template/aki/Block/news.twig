@@ -1,0 +1,27 @@
+					<section class="news">
+						<div class="row">
+							<div class="col-sm-12">
+								<h3 class="title">新着情報</h3>
+								<div class="news_container newslist">
+									{% for News in NewsList %}
+									<dl>
+										<dt><strong>{{ News.date|date("Y年m月d日") }}</strong>
+										{% if News.url %}
+										<a href="{{ News.url }}" {% if News.link_method == '1' %}target="_blank"{% endif %}>
+											{{ News.title }}
+										</a>
+										{% else %}
+										{{ News.title }}
+										</dt>
+										{% endif %}
+										{% if News.comment %}
+										<dd>
+										{{ News.comment|raw|nl2br}}
+										</dd>
+										{% endif %}
+									</dl>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</section>

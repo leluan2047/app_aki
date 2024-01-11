@@ -1,0 +1,7 @@
+member_id,work,authority,creator_id,name,department,login_id,password,salt,rank,del_flg,create_date,update_date,login_date
+1,1,0,1,dummy,,dummy,dummy,dummy,0,1,"2017-03-07 18:16:55","2017-03-07 18:16:55",
+2,1,0,1,管理者,"EC-CUBE SHOP",lleb1732,751fb6b79a889d9f995ad87c80b189cede4c041e38d6899b728f0963a1f0e2c2,SmutzXhZ258n8duof4jDLb5f5lNCuNrx,1,0,"2017-03-07 18:16:59","2023-08-01 13:04:39","2023-08-01 13:04:39"
+3,1,0,2,kozo,kozo,kozo,3199207b8d97af87f158abeaa7463935f21a34a5e2715ac48b7e609ba70e57fc,000a63591a,2,0,"2017-03-30 15:34:18","2023-10-06 15:45:45","2023-10-06 15:45:45"
+4,1,1,2,kudo,kozo,kozokozo,0b6490bcdcbb9da584fb6c0824bc86f551a6185cb61c997c5cb8efefec82c218,d4c37d6d90,3,0,"2019-03-13 17:03:09","2019-03-13 17:03:33","2019-03-13 17:03:33"
+5,1,1,2,ducxinh,ducxinh,ducxinh,4b743333b7d7010b4606e2798f2cddaac693d5a4c5ac144f8253313f03c3b7e5,HUAh8hL872NKlSuQILDjF122rnF5ob0G,3,0,"2019-03-13 17:03:09","2023-07-31 18:02:25","2023-07-31 18:02:25"
+6,1,1,2,xinh,xinh,ducxinh,4b743333b7d7010b4606e2798f2cddaac693d5a4c5ac144f8253313f03c3b7e5,HUAh8hL872NKlSuQILDjF122rnF5ob0G,3,0,"2019-03-13 17:03:09","2019-05-10 11:19:39","2019-05-10 11:19:39"

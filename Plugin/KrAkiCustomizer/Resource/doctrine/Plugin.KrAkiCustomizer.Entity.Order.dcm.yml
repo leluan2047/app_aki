@@ -1,0 +1,15 @@
+Plugin\KrAkiCustomizer\Entity\Order:
+    type: entity
+    table: dtb_order
+    repositoryClass: Plugin\KrAkiCustomizer\Repository\OrderRepository
+    id:
+        order_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: AUTO
+        
+
+    lifecycleCallbacks: {  }

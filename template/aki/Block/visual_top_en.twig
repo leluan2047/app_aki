@@ -1,0 +1,54 @@
+<script>
+$(function(){
+	$('.main_visual').slick({
+		dots: true,
+		arrows: false,
+		infinite: true,
+		speed: 500,
+		autoplay: true,
+		fade: true,
+		cssEase: 'linear'
+	});
+});
+</script>
+	<div class="visual-inner">
+		<section class="">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="main_visual mb20">
+							<div class="item active">
+								<img src="{{ app.config.front_urlpath }}/img/english/e-main.jpg" alt="Kimono rental aki" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/english/e-main_s.jpg" alt="Kimono rental aki" class="img-responsive visible-xs">
+							</div>
+						</div>
+						<!-- <div class="col-sm-12 pa5 mb20 text-center" style="border: 2px #9DD4B9 solid">
+                    		<h4 class="ma20" style="font-weight:bold;">Business hour on the New Year's Day</h4>
+                    		<p>We are open from 10:00 to 18:00 on Dec 31 and Jan 1. ※There is a 3,240yen [new year's day charge] on Jan 1.<br>
+							Please be informed that all stores will be closed from January 2 and 3.<br>
+							<br>
+							Thank you !!</p>
+                		</div> -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="feature hidden-xs">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4 text-center">
+						<a href="https://m.facebook.com/kimono.rental.aki.tokyo/photos/?ref=page_internal&amp;mt_nav=1" target="_blank"><img src="{{ app.config.front_urlpath }}/img/english/e-menu01.jpg" alt="Photo Galleries" class="img-responsive"></a>
+						<p><a href="https://m.facebook.com/kimono.rental.aki.tokyo/photos/?ref=page_internal&amp;mt_nav=1" target="_blank">Photo Galleries</a></p>
+					</div>
+					<div class="col-sm-4 text-center">
+						<a href="/user_data/english/woman#e-tpo"><img src="{{ app.config.front_urlpath }}/img/english/e-menu02.jpg" alt="Occation Appropriate Kimonos" class="img-responsive"></a>
+						<p><a href="/user_data/english/woman#e-tpo">Occation Appropriate Kimonos</a></p>
+					</div>
+					<div class="col-sm-4 text-center">
+						<a href="#PhotoShoot"><img src="{{ app.config.front_urlpath }}/img/english/e-menu03.jpg" alt="Photo Shooot Menu" class="img-responsive"></a>
+						<p><a href="#PhotoShoot">Photo Shooot Menu</a></p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>

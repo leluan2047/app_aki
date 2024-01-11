@@ -1,0 +1,212 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['content', 'news'] %}
+
+{% block title %}設定{% endblock %}
+{% block sub_title %}商品情報 : 拡張項目管理{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ app.config.admin_urlpath }}/assets/css/bootstrap-datetimepicker.min.css">
+<style>
+    .code {
+        font-size: 16px;
+        color: red;
+        margin-left: 15px;
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment.min.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment-ja.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/bootstrap-datetimepicker.min.js"></script>
+<script>
+$(function() {
+    var inputDate = document.createElement('input');
+    inputDate.setAttribute('type', 'date');
+    if (inputDate.type !== 'date') {
+        $('#admin_news_date').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+    }
+
+});
+</script>
+<script>
+    $(function() {
+        // 編集画面か新規追加画面かの判断
+        var is_edit = {{ is_edit }};
+        // column_type
+        var TEXT = 1,
+            TEXTAREA = 2,
+            IMAGE = 3,
+            SELECT = 4,
+            CHECKBOX = 5,
+            RADIO = 6
+        ;
+        
+        // column type
+        var $type_select = $('#admin_plg_expand_product_columns_columnType');
+        // セッティングテキストエリアそのもの
+        var $setting = $('#admin_plg_expand_product_columns_columnSetting');
+        // ラベルを含めたセッティングエリア
+        var $setting_area = $setting.parent().parent('div.form-group');
+        // ラベル
+        var $label = $setting_area.find('label');
+        
+        var show = function ($target) {
+            if ($target.hasClass('hidden')) {
+                $target.removeClass('hidden');
+            }
+        };
+
+        var hide = function ($target) {
+            if (!$target.hasClass('hidden')) {
+                $target.addClass('hidden');
+            }
+        };
+        
+        var changeSetting = function ($column_type) {
+            switch ($column_type) {
+                case TEXT :
+                case TEXTAREA :
+                case IMAGE :
+                    hide($setting_area);
+                    break;
+                case SELECT :
+                case CHECKBOX :
+                case RADIO :
+                    show($setting_area);
+                    $label.text('選択肢');
+                    break;
+            }
+            
+            // 説明を一旦全て隠す
+            hide($('.description'));
+            // 必要なものだけ見せる
+            var $description = $('.description' + $column_type);
+            if ($description) {
+                show($description);
+            }
+        };
+
+        /**
+         * 即時処理
+         */
+        changeSetting(parseInt($type_select.val()));
+        if (is_edit) {
+            var selected_type = $type_select.val();
+            $.each($type_select.find('option'), function(i, option) {
+                var $option = $(option);
+                if (selected_type !== $option.val()) {
+                    $option.attr('disabled', 'disabled');
+                }
+            });
+        }
+        
+        /**
+         * イベント
+         */
+        $type_select.on('change', function() {
+            changeSetting(parseInt($type_select.val()));
+        });
+    });
+</script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="row" id="aside_wrap">
+        <div class="col-md-9">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">商品情報 : 拡張項目管理 ・ 編集</h3>
+                </div><!-- /.box-header -->
+                <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="?">
+                    <div class="box-body">
+
+                        {{ form_row(form.columnId) }}
+
+                        {{ form_row(form.columnName) }}
+
+                        {% if is_edit == true %}
+                            {{ form_row(form.columnType, { attr : { readonly : 'readonly' } }) }}
+                        {% else %}
+                            {{ form_row(form.columnType) }}
+                        {% endif %}
+
+                        {{ form_row(form.columnSetting) }}
+
+                    </div><!-- /.box-body -->
+                </form>
+            </div><!-- /.box -->
+
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+                    <p><a href="{{ url('plugin_PlgExpandProductColumns_config') }}">戻る</a></p>
+                </div>
+            </div>
+
+        </div><!-- /.col -->
+
+        <div class="col-md-3">
+            <div class="col_inner" id="aside_column">
+                <div class="box no-header">
+                    <div class="box-body">
+                        <div class="row text-center">
+                            <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                <button class="btn btn-primary btn-block btn-lg" onclick="document.form1.submit();">登録</button>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div>
+        </div><!-- /.col -->
+
+
+        <div class="col-md-9 description description4 description5 description6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">選択肢 設定方法</h3>
+                </div>
+                <div class="box-body">
+                    <ul>
+                        <li>ルール1. 1行に1つの選択肢情報を記載する</li>
+                        <li>ルール2. 選択肢の値と、テキストの間はコロン「:」で区切る</li>
+                        <li>&nbsp;</li>
+                        <li>(設定例)</li>
+                        <li class="code">value1:テキスト1</li>
+                        <li class="code">value2:テキスト2</li>
+                        <li class="code">value3:テキスト3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

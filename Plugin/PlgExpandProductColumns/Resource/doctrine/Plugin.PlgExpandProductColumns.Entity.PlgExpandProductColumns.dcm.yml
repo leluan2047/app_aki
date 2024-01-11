@@ -1,0 +1,39 @@
+Plugin\PlgExpandProductColumns\Entity\PlgExpandProductColumns:
+    type: entity
+    table: plg_expand_product_columns
+    repositoryClass: Plugin\PlgExpandProductColumns\Repository\PlgExpandProductColumnsRepository
+    indexes:
+        column_id:
+            columns:
+                - column_id
+    id:
+        columnId:
+            type: integer
+            nullable: false
+            unsigned: true
+            id: true
+            column: column_id
+            generator:
+                strategy: AUTO
+    fields:
+        columnName:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            column: column_name
+        columnType:
+            type: smallint
+            nullable: false
+            unsigned: false
+            column: column_type
+        columnSetting:
+            type: string
+            nullable: true
+            column: column_setting
+        csvId:
+            type: integer
+            nullable: false
+            unsigned: true
+            column: csv_id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,12 @@
+{% extends  'default_frame.twig' %}
+{% block main %}
+    <h2 class="heading02">{{ paygent_title }}</h2>
+	<div>
+	<form method="POST" name="form1" id="form1" action="{{ url('shopping_complete') }}">
+		<div>Thong tin don hang:</div>
+		<div>Ten KH: {{ customer_name }}
+		</div>
+		<input type="submit" value="OK">
+	</form>
+	</div>
+{% endblock %}

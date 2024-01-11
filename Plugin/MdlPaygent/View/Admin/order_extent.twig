@@ -1,0 +1,95 @@
+{% block javascript %}
+    <style type="text/css">
+        .center{
+            text-align: center;
+        }
+    </style>
+
+
+{% endblock %}
+{% block main %}
+	<td class = "center">
+	{% if OrderObj is not empty and OrderObj.memo09 is not empty %}
+		{{arrDispKind[OrderObj.memo09]}}
+	{% endif %}
+	</td>
+	{#Payment commit checkbox#}
+	<td class = "center paycommit">
+		{#クレジット決済売上表示条件 #}
+		{% if OrderObj is not empty and OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+		and OrderObj.memo08 == paymentMethod['PAYGENT_CREDIT']
+		and (OrderObj.memo09 == 0 or OrderObj.memo09 == paymentMethod['PAYGENT_CREDIT'])
+		and OrderObj.memo07 != '33' and OrderObj.memo06|length > 0 %}
+			<input type="checkbox" name="paygent_commit[]" value="card_commit,{{ orderId }}">売上
+		{% endif %}
+
+		{#携帯キャリア決済売上表示条件#}
+		{% if OrderObj is not empty and OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+		and ((OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_D'] and (OrderObj.memo07 == '20'
+			or OrderObj.memo07 == '21') and OrderObj.memo09|length == 0)
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_A'] and OrderObj.memo07 == '20'
+			and OrderObj.memo09|length == 0)
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_S'] and (OrderObj.memo07 == '20'
+				or OrderObj.memo07 == '21') and OrderObj.memo09|length == 0)
+			)
+		 %}
+			<input type="checkbox" name="paygent_commit[]" value="career_commit,{{ orderId }}">売上
+		{% endif %}
+	</td>
+
+	{#Payment cancel checkbox#}
+	<td class = "center paycancel">
+		{# クレジット決済取消表示条件 #}
+		{% if OrderObj is not empty%}
+		{% if OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+		and OrderObj.memo08 == paymentMethod['PAYGENT_CREDIT']
+		and OrderObj.memo06|length > 0
+		and ((OrderObj.memo07 != '33' and (OrderObj.memo09|length == 0 or OrderObj.memo09 == paymentMethod['PAYGENT_CREDIT']))
+		  or (OrderObj.memo07 != '41' and OrderObj.memo09 == paymentMethod['PAYGENT_CARD_COMMIT']))
+		or (OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+			and OrderObj.memo08 == paymentMethod['PAYGENT_CREDIT']
+			and OrderObj.memo09 == '029')
+		or (OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+			and OrderObj.memo08 == paymentMethod['PAYGENT_CREDIT']
+			and OrderObj.memo09 == '022')
+		 %}
+		<input type="checkbox" name="paygent_cancel[]" value="{% if OrderObj.memo09|length == 0 %}auth_cancel{% else %}card_commit_cancel{% endif %},{{ orderId }}">取消
+		{% endif %}
+		{% endif %}
+		{# 携帯キャリア決済取消表示条件 #}
+		{% if OrderObj is not empty and OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+		and ((OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_D'] and (OrderObj.memo07 == '20' or OrderObj.memo07 == '21') and OrderObj.memo09|length == 0)
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_D'] and OrderObj.memo07 == '44' and (OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_A'] and OrderObj.memo07 == '20' and (OrderObj.memo09|length == 0
+				or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_A'] and OrderObj.memo07 == '40' and (OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+			or (OrderObj.memo08 == paymentMethod['PAYGENT_CAREER_S'] and (OrderObj.memo07 == '20' or OrderObj.memo07 == '21'
+				or OrderObj.memo07 == '40') and (OrderObj.memo09|length == 0 or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or OrderObj.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+			)
+		%}
+		<input type="checkbox" name="paygent_cancel[]" value="career_commit_cancel,{{ orderId }}">取消
+		{% endif %}
+
+		{# 電子マネー決済取消表示条件 #}
+		{% if OrderObj is not empty and OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+			and (OrderObj.memo08 == paymentMethod['PAYGENT_EMONEY_W'] and OrderObj.memo07 == '40'
+			and (OrderObj.memo09|length == 0 or OrderObj.memo09 == '153'))
+		%}
+		<input type="checkbox" name="paygent_cancel[]" value="emoney_cancel,{{ orderId }}">取消
+		{% endif %}
+
+		{% if OrderObj is not empty and OrderObj.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+			and OrderObj.memo08 == paymentMethod['PAYGENT_LATER_PAYMENT']
+			and (OrderObj.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED_BEFORE_PRINT']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR_REQ_FIN']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_SALES_RESERVE']
+				or OrderObj.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR'])
+		%}
+		<input type="checkbox" name="paygent_cancel[]" value="later_payment_cancel,{{ orderId }}">取消
+		{% endif %}
+	</td>
+
+{% endblock %}

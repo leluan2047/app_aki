@@ -1,0 +1,8 @@
+#管理画面
+
+
+#フロント画面
+
+#全画面
+eccube.event.app.before:
+    - [onRenderMailTemplate, NORMAL]

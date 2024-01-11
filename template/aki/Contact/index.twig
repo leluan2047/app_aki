@@ -1,0 +1,150 @@
+{% extends 'default_frame.twig' %}
+{% block javascript %}
+<script src="//ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+<script>
+	$(function() {
+		$('#zip-search').click(function() {
+			AjaxZip3.zip2addr('contact[zip][zip01]', 'contact[zip][zip02]', 'contact[address][pref]', 'contact[address][addr01]');
+		});
+	});
+</script>
+{% endblock javascript %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">お問い合わせ</h2>
+			<p>
+				内容によっては回答をさしあげるのにお時間をいただくこともございます。<br>
+				また、火曜日は定休日となるので、月曜日営業時間終了以降のお問合わせに関しては、水曜日にお答えさせて頂きますのでご了承ください。
+			</p>
+
+			<!-- メールやフォームに障害が起きた時の文言↓↓↓↓↓↓↓↓
+			<p>
+				<b>
+					現在こちらのお問い合わせフォームが不通となっております。<br>
+					誠に恐れ入りますが、お問い合わせは下記店舗へのメールよりお問合せ下さい。<br>
+					ご不便をおかけしますが、何卒ご了承の程宜しくお願い申し上げます。<br>
+					・渋谷店：<a href="mailto:shibuya@kr-aki.jp" class="underline">shibuya@kr-aki.jp</a><br>
+					・銀座店：<a href="mailto:ginza@kr-aki.jp" class="underline">ginza@kr-aki.jp</a><br>
+					・池袋店：<a href="mailto:ikebukuro@kr-aki.jp" class="underline">ikebukuro@kr-aki.jp</a><br>
+					・横浜店：<a href="mailto:yokohama@kr-aki.jp" class="underline">yokohama@kr-aki.jp</a><br>
+				</b>
+			</p>
+			-->
+		</div>
+	</div>
+	<!-- <div class="mb20" style="padding: 10px; background: #e0f46e;">
+		<h5 style="color:red;">メール不具合のお知らせ</h5>
+		<p class="text-left">現在、弊社から一部のメールアカウントへの送信ができない不具合が発生しております。確認しているアカウントは「outlook.jp」「hotmail.com」です。お客様には大変ご迷惑をおかけしてしまい申し訳ございません。ほかのアカウントをお持ちの場合はそちらでご連絡頂けますと幸いです。もしくは、お電話でのご対応とさせていただきます。現在、復旧作業を行っております。恐れ入りますが今しばらくお待ち下さい。</p>
+		<h5 style="color:red;">Gmailをご利用のお客様へ</h5>
+		<p class="text-left">現在Gmailをご利用のお客様において、当店からのメールが一部正常に受信しないことがございます。お問合せ、またはご注文後に当店からのご返信が確認できない場合は、お手数をおかけしますが、「迷惑メールフォルダ」をご確認いただけますと幸いです。</p>
+		<div class="row">
+			<div class="col-sm-6">渋谷本店：　<a href="tel:0334763341" style="color: #337ab7; text-decoration: underline;">TEL：03-3476-3341</a></div>
+			<div class="col-sm-6">銀座店　：　<a href="tel:0355680529" style="color: #337ab7; text-decoration: underline;">TEL：03-5568-0529</a></div>
+			<div class="col-sm-6">池袋店　：　<a href="tel:0364160529" style="color: #337ab7; text-decoration: underline;">TEL：03-6416-0529</a></div>
+			<div class="col-sm-6">横浜店　：　<a href="tel:0454410529" style="color: #337ab7; text-decoration: underline;">TEL：045-441-0529</a></div>
+		</div>
+	</div> -->
+
+	<div id="contents" class="main_only">
+		<div id="">
+			<div id="top_wrap" class="">
+				<div id="top_box" class="row">
+					<div id="top_box__body" class="col-md-12">
+						<form name="form1" id="form1" method="post" action="{{ url('contact') }}">
+							{{ form_widget(form._token) }}
+							<div id="top_box__body_inner" class="dl_table">
+								<dl id="top_box__name">
+									<dt>{{ form_label(form.store) }}</dt>
+									<dd class="form-group input_store">
+										{{ form_widget(form.store) }}
+										{{ form_errors(form.store) }}
+									</dd>
+								</dl>
+								<dl id="top_box__name">
+									<dt>{{ form_label(form.name) }}</dt>
+									<dd class="form-group input_name">
+										{{ form_widget(form.name.name01) }}
+										{{ form_widget(form.name.name02) }}
+										{{ form_errors(form.name.name01) }}
+										{{ form_errors(form.name.name02) }}
+									</dd>
+								</dl>
+								<dl id="top_box__kana">
+								<dt>{{ form_label(form.kana) }}</dt>
+								<dd class="form-group input_name">
+									{{ form_widget(form.kana.kana01) }}
+									{{ form_widget(form.kana.kana02) }}
+									{{ form_errors(form.kana.kana01) }}
+									{{ form_errors(form.kana.kana02) }}
+								</dd>
+								</dl>
+								<dl id="top_box__address_detail">
+									<dt>{{ form_label(form.address) }}</dt>
+									<dd>
+										<div id="top_box__zip" class="form-group form-inline input_zip {% if form.zip.zip01.vars.errors is not empty or form.zip.zip02.vars.errors is not empty %}has-error{% endif %}">{{ form_widget(form.zip) }}</div>
+										<div id="top_box__address" class="{% if form.address.pref.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}has-error{% endif %}">
+											{{ form_widget(form.address) }}
+											{{ form_errors(form.address) }}
+										</div>
+									</dd>
+								</dl>
+								<dl id="top_box__tel">
+									<dt>{{ form_label(form.tel) }}</dt>
+									<dd>
+										<div class="form-inline form-group input_tel">
+											{{ form_widget(form.tel, {attr : {class : 'short'}}) }}
+											{{ form_errors(form.tel) }}
+										</div>
+									</dd>
+								</dl>
+								<dl id="top_box__email">
+									<dt>{{ form_label(form.email) }}</dt>
+									<dd>
+										<div class="form-group">
+											{{ form_widget(form.email) }}
+											{{ form_errors(form.email) }}
+										</div>
+									</dd>
+								</dl>
+								<dl id="top_box__reply">
+									<dt>{{ form_label(form.reply) }}</dt>
+									<dd class="form-inline form-group input_reply">
+										{{ form_widget(form.reply) }}
+										{{ form_errors(form.reply) }}
+									</dd>
+								</dl>
+								<dl id="top_box__contents">
+									<dt>{{ form_label(form.contents) }}</dt>
+									<dd>
+										<div class="column">
+											{{ form_widget(form.contents) }}
+											{{ form_errors(form.contents) }}
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<input id="top_box__hidden_mode" type="hidden" name="mode" value="confirm">
+							{% for f in form %}
+								{% if f.vars.name matches '[^plg*]' %}
+									<div class="extra-form dl_table">
+										{{ form_row(f) }}
+									</div>
+								{% endif %}
+							{% endfor %}
+							<div class="well">
+								<div id="top_box__footer" class="row no-padding">
+									<div id="top_box__confirm_button" class="btn_group col-sm-offset-4 col-sm-4">
+										<p><button type="submit" class="btn btn-primary btn-block">確認ページへ</button></p>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

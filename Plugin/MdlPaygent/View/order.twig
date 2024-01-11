@@ -1,0 +1,241 @@
+{% if Order.orderType == "visit" %}
+{{ Order.name01 }} {{ Order.name02 }} 様
+
+{{ header }}
+             
+
+************************************************
+　お支払情報
+************************************************
+ご注文番号：{{ Order.id }}
+ご予約方法：来店着付けレンタル 
+お支払い方法：{{ Order.payment_method }}
+メッセージ：{{ Order.message }}
+
+{% set index = 0 %}{% set actual_total_price = 0 %}{% set has_deposit = false %}{% set deposit_price = 0 %}{% set secure_pack_price = 0 %}{% for OrderDetail in Order.OrderDetails %}{% if OrderDetail.product_code == 'secure_pack' %}{% set secure_pack_price = OrderDetail.productClass.price02 + OrderDetail.productClass.price02*OrderDetail.tax_rate/100 %}{% endif %}{% endfor %}
+{% for OrderDetail in Order.OrderDetails %}{% if OrderDetail.product_code != 'secure_pack' and OrderDetail.product_code != 'deposit' %}{% set actual_total_price = actual_total_price + OrderDetail.productClass.price02 %}{% set actual_total_price = actual_total_price + OrderDetail.productClass.price02*OrderDetail.tax_rate/100 %}{% set addinfo = Order.orderDetailInfo[index] %}{% if addinfo.secure_pack|length  > 0 %}{% set actual_total_price = actual_total_price + secure_pack_price %}{% endif %}{% set index = index + 1 %}{% endif %}{% if OrderDetail.product_code == 'deposit' %}{% set has_deposit = true %}{% set deposit_price = OrderDetail.productClass.price02 %}{% endif %}{% endfor %}
+{% if has_deposit %}
+{% set actual_total_price = actual_total_price - deposit_price %}
+内金：{{ deposit_price|price }}
+店舗支払い：{{ actual_total_price|price }}
+-------------------------------------------------
+
+{% endif %}
+合　計(税込) {{ Order.payment_total|price }}
+※上記の料金はレンタル料金・安心パックの金額となっております。
+※ヘアー＆メイク、早朝料金、有料写真については完了メールにてご案内させていただきます。 
+
+{% if Order.hasPoint %}
+============================================
+ご使用ポイント {{ Order.usePoint }} pt
+現在の所持ポイント {{ Order.currentPoint }} pt
+============================================
+{% endif %}
+
+{% if arrOther is not null %}
+{% if arrOther.title.value %}
+************************************************		
+　{{ arrOther.title.name }}情報		
+************************************************		
+{% for key,item in arrOther %}
+{% if key != 'title' %}
+{% if item.name is not null %}
+{% if item.name !='' %}{{ item.name }}：{% endif %}
+{% endif %}
+{{ item.value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% set index = 0 %}
+{% set actual_total_price = 0 %}
+{% set has_deposit = false %}
+{% set deposit_price = 0 %}
+{% set secure_pack_price = 0 %}
+{% for OrderDetail in Order.OrderDetails %}
+{% if OrderDetail.product_code == 'secure_pack' %}
+{% set secure_pack_price = OrderDetail.productClass.price02 + OrderDetail.productClass.price02*OrderDetail.tax_rate/100 %}
+{% endif %}
+{% endfor %}
+{% for OrderDetail in Order.OrderDetails %}
+{% if OrderDetail.product_code != 'secure_pack' and OrderDetail.product_code != 'deposit' %}
+{% set actual_total_price = actual_total_price + OrderDetail.productClass.price02 %}
+{% set actual_total_price = actual_total_price + OrderDetail.productClass.price02*OrderDetail.tax_rate/100 %}
+{% set addinfo = Order.orderDetailInfo[index] %}
+
+************************************************
+  ご利用内容
+************************************************
+
+商品コード：{{ OrderDetail.product_code }}
+商品名: {{ OrderDetail.product_name }}  {{ OrderDetail.classcategory_name1 }}  {{ OrderDetail.classcategory_name2 }}
+{% if calc_inc_tax(OrderDetail.price, OrderDetail.tax_rate, OrderDetail.tax_rule) != 0 %}単価(税込)： {{ calc_inc_tax(OrderDetail.price, OrderDetail.tax_rate, OrderDetail.tax_rule)|price }}
+{% else %}単価(税込)： {{ calc_inc_tax(OrderDetail.productClass.price02, OrderDetail.tax_rate, OrderDetail.tax_rule)|price }}{% endif %} 
+{% if addinfo.secure_pack|length  > 0 %}
+{% set actual_total_price = actual_total_price + secure_pack_price %}
+安心パック(税込)：{% if addinfo.secure_pack is iterable %}{% for secure_pack in addinfo.secure_pack %}{{secure_pack}}{% endfor %}{% else %}{{addinfo.secure_pack}}{% endif %}
+{% else %}
+安心パック(税込)：加入なし
+{% endif %}
+
+着付けご来店希望店舗：{{ addinfo.visit_store }}
+※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）
+
+ご利用日：{{ addinfo.wear_date }} 
+ご出発予定時間：{{ addinfo.time_departure }}
+
+用途：{{ addinfo.purpose }}
+身長：{{ addinfo.body_height }}
+足のサイズ：{{ addinfo.foot_size }}
+年代：{{ addinfo.decade }}
+{% if addinfo.body_type|length  > 0 %}
+体型：{% for body_type in addinfo.body_type %}{{body_type}}  {% endfor %}
+{% endif %}
+
+フォト：{{ addinfo.need_photo }}
+ヘア・メイクの有無：{{ addinfo.need_hair_make }}
+
+{% set index = index + 1 %}
+{% endif %}
+{% if OrderDetail.product_code == 'deposit' %}
+{% set has_deposit = true %}
+{% set deposit_price = OrderDetail.productClass.price02 %}
+{% endif %}
+{% endfor %}
+
+
+************************************************
+　ご注文者情報
+************************************************
+お名前　：{{ Order.name01 }}{{ Order.name02 }}　様
+フリガナ：{{ Order.kana01 }}{{ Order.kana02 }}
+{% if Order.company_name %}
+会社名　：{{ Order.company_name }}
+{% endif %}
+郵便番号：〒{{ Order.zip01 }}-{{ Order.zip02 }}
+住所　　：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}
+電話番号：{{ Order.tel01 }}-{{ Order.tel02 }}-{{ Order.tel03 }}
+FAX番号 ：{{ Order.fax01 }}-{{ Order.fax02 }}-{{ Order.fax03 }}
+
+メールアドレス：{{ Order.email }}
+
+************************************************
+
+{{ footer }}
+
+
+
+
+{% else %}         
+{{ Order.name01 }} {{ Order.name02 }} 様
+
+{{ header }}
+             
+************************************************
+　お支払情報
+************************************************
+ご注文番号：{{ Order.id }}
+ご予約方法：宅配着物レンタル 
+お支払い方法：{{ Order.payment_method }}
+メッセージ：{{ Order.message }}
+
+-------------------------------------------------
+
+合　計(税込) {{ Order.payment_total|price }}
+
+{% if Order.hasPoint %}
+============================================
+ご使用ポイント {{ Order.usePoint }} pt
+現在の所持ポイント {{ Order.currentPoint }} pt
+============================================
+{% endif %}
+
+{% if arrOther is not null %}
+{% if arrOther.title.value %}
+************************************************
+　{{ arrOther.title.name }}情報
+************************************************
+{% for key,item in arrOther %}
+{% if key != 'title' %}
+{% if item.name is not null %}{% if item.name !='' %}{{ item.name }}：{% endif %}{% endif %}{{ item.value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% set index = 0 %}
+{% for OrderDetail in Order.OrderDetails %}
+{% if OrderDetail.product_code != 'secure_pack' %}
+{% set addinfo = Order.orderDetailInfo[index] %}
+
+************************************************
+  ご利用内容
+************************************************
+
+商品コード：{{ OrderDetail.product_code }}
+商品名: {{ OrderDetail.product_name }}  {{ OrderDetail.classcategory_name1 }}  {{ OrderDetail.classcategory_name2 }}
+単価(税込)： {{ calc_inc_tax(OrderDetail.price, OrderDetail.tax_rate, OrderDetail.tax_rule)|price }}
+{% if addinfo.secure_pack|length  > 0 %}
+安心パック(税込)：{% for secure_pack in addinfo.secure_pack %}{{secure_pack}}  {% endfor %}
+{% else %}
+安心パック(税込)：加入なし
+{% endif %}
+
+ご利用日：{{ addinfo.wear_date }}
+お届け日：{{ addinfo.wear_date|date_modify("-2 day")|date("Y-m-d") }}
+
+用途：{{ addinfo.purpose }}
+身長：{{ addinfo.body_height }}
+足のサイズ：{{ addinfo.foot_size }}
+年代：{{ addinfo.decade }}
+{% if addinfo.body_type|length  > 0 %}
+体型：{% for body_type in addinfo.body_type %}{{body_type}}  {% endfor %}
+{% endif %}
+
+{% set index = index + 1 %}
+{% endif %}
+{% endfor %}
+
+************************************************
+　ご注文者情報
+************************************************
+お名前　：{{ Order.name01 }}{{ Order.name02 }}　様
+フリガナ：{{ Order.kana01 }}{{ Order.kana02 }}
+{% if Order.company_name %}
+会社名　：{{ Order.company_name }}
+{% endif %}
+郵便番号：〒{{ Order.zip01 }}-{{ Order.zip02 }}
+住所　　：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}
+電話番号：{{ Order.tel01 }}-{{ Order.tel02 }}-{{ Order.tel03 }}
+FAX番号 ：{{ Order.fax01 }}-{{ Order.fax02 }}-{{ Order.fax03 }}
+
+メールアドレス：{{ Order.email }}
+
+
+************************************************
+　配送情報
+************************************************
+
+{%  for Shipping in Order.Shippings %}
+◎お届け先{% if Order.multiple %}{{ loop.index }}{% endif %}
+
+お名前　：{{ Shipping.name01 }}{{ Shipping.name02 }}　様
+フリガナ：{{ Order.kana01 }}{{ Order.kana02 }}
+{% if Shipping.company_name %}
+会社名　：{{ Shipping.company_name }}
+{% endif %}
+郵便番号：〒{{ Shipping.zip01 }}-{{ Shipping.zip02 }}
+住所　　：{{ Shipping.Pref.name }}{{ Shipping.addr01 }}{{ Shipping.addr02 }}
+電話番号：{{ Shipping.tel01 }}-{{ Shipping.tel02 }}-{{ Shipping.tel03 }}
+FAX番号 ：{{ Shipping.fax01 }}-{{ Shipping.fax02 }}-{{ Shipping.fax03 }}
+
+お届け日はご利用日の2日前となります。
+お届け時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}
+
+{% endfor %}
+
+************************************************
+
+{{ footer }}
+{% endif %}

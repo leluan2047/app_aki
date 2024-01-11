@@ -1,0 +1,333 @@
+<script>
+	$(function(){
+		$('.slider-for').slick({
+			dots: true,
+			arrows: true,
+			infinite: true,
+			speed: 500,
+			autoplaySpeed: 6000,
+			autoplay: true,
+			fade: true,
+			cssEase: 'linear',
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			arrows: true,
+			fade: true,
+			asNavFor: '.slider-nav',
+			responsive: [
+				{
+					breakpoint: 1024,
+					settings: {
+						dots: true
+					}
+				},
+				{
+					breakpoint: 600,
+					settings: {
+						dots: true
+					}
+				},
+				{
+					breakpoint: 480,
+					settings: {
+						dots: true
+					}
+				}
+			]
+
+		});
+		$('.slider-nav').slick({
+			slidesToShow: 3,
+			slidesToScroll: 1,
+			asNavFor: '.slider-for',
+			dots: true,
+			centerMode: true,
+			focusOnSelect: true,
+			responsive: [
+				{
+					breakpoint: 1024,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 3,
+						infinite: true,
+						dots: true
+					}
+				},
+				{
+					breakpoint: 600,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1
+					}
+				},
+				{
+					breakpoint: 480,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1
+					}
+				}
+			]
+		});
+	});
+</script>
+
+<style>
+	h4.info {
+		font-weight:normal; 
+		color: #277f4b; 
+		font-size:24px; 
+		line-height: 30px; 
+		padding: 10px 0 20px; 
+		text-decoration: underline #739a5f;
+	}
+	@media only screen and (max-width: 767px){
+		h4.info {
+			font-size: 1.8rem !important;s
+		}
+</style>
+
+<div class="visual-inner">
+	<section class="">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="slider-for mb10">
+						{# <div class="item">
+						<a href="/user_data/newyear">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_008.jpg" alt="年末年始営業時間" class="img-responsive hidden-xs">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_008_s.jpg" alt="年末年始営業時間" class="img-responsive visible-xs">
+						</a>
+						</div> #}
+						{# <div class="item">
+							<a href="/user_data/seijin">
+								<img src="{{ app.config.front_urlpath }}/img/seijin/seijin_main.jpg" alt="成人式レンタル着物 振袖" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/seijin/seijin_main_s.jpg" alt="成人式レンタル着物 振袖" class="img-responsive visible-xs">
+							</a>
+						</div> #}						
+						{# <div class="item">
+							<a href="/user_data/753" onclick="gtag('event', 'クリック', {'event_category': 'スライダーバナー','event_label': '七五三スライダー画像'});">
+								<img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三 着物 レンタル" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三 着物 レンタル" class="img-responsive visible-xs">
+							</a>
+						</div> #}
+						{# <div class="item">
+							<a href="/user_data/hakama" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': '卒業袴スライダー画像'});">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003_s.jpg" alt="卒業袴レンタル" class="img-responsive visible-xs">
+							</a>
+						</div> #}
+						<div class="item">
+						<a href="/user_data/yukata" onclick="gtag('event', 'クリック', {'event_category': 'スライダーバナー','event_label': '浴衣 レンタル'});">
+							<img src="/template/aki/img/yukata/visual.jpg" alt="浴衣 レンタル" class="img-responsive hidden-xs">
+							<img src="/template/aki/img/yukata/visual_s.jpg" alt="浴衣 レンタル" class="img-responsive visible-xs">
+						</a>
+						</div>
+						<div class="item">
+						<a href="/user_data/summerphotoplan" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'サマーフォトプラン'});">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_021.jpg" alt="サマーフォトプラン" class="img-responsive hidden-xs">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_021_s.jpg" alt="サマーフォトプラン" class="img-responsive visible-xs">
+						</a>
+						</div>
+
+						{# <div class="item">
+						<a href="/user_data/spring" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': '春のイベント参列者向け（パーティ・結婚式）スライダー画像'});">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_012.jpg" alt="春 結婚式・パーティの着物レンタル（訪問着・留袖・振袖）" class="img-responsive hidden-xs">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_012_s.jpg" alt="春 結婚式・パーティの着物レンタル（訪問着・留袖・振袖）" class="img-responsive visible-xs">
+						</a>
+						</div> #}
+						{# <div class="item">
+							<a href="/user_data/photo_plan" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': '卒業袴写真撮影スライダー画像'});">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_016.jpg" alt="卒業袴レンタル写真撮影 思い出フォトプラン" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_016_s.jpg" alt="卒業袴レンタル写真撮影 思い出フォトプラン" class="img-responsive visible-xs">
+							</a>
+						</div> #}
+						<div class="item">
+							<a href="/user_data/petit" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'petit'});">
+								<img src="{{ app.config.front_urlpath }}/img/petit/mainvisual.jpg" alt="着物レンタルあきPETIT" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/petit/mainvisual_s.jpg" alt="着物レンタルあきPETIT" class="img-responsive visible-xs">
+							</a>
+						</div>
+						<div class="item">
+							<a href="/user_data/location_photo" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'ロケーションフォトスライダー画像'});">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_013.jpg" alt="ロケーションフォト　着物 出張撮影" class="img-responsive hidden-xs">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_013_s.jpg" alt="ロケーションフォト　着物 出張撮影" class="img-responsive visible-xs">
+							</a>
+						</div>
+					</div>
+					<div class="slider-nav hidden-xs">
+						<div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/yukata/visual.jpg" alt="浴衣 レンタル 東京" class="img-responsive">
+						</div>						
+						{# <div class="item">
+						<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_008.jpg" alt="年末年始営業時間" class="img-responsive">
+						</div> #}
+						{# <div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/seijin/seijin_main.jpg" alt="成人式レンタル着物 振袖" class="img-responsive">
+						</div> #}
+						{# <div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三 着物 レンタル" class="img-responsive">
+						</div> #}
+						{# <div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル" class="img-responsive">
+						</div> #}
+						<div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_021.jpg" alt="サマーフォトプラン" class="img-responsive">
+						</div>
+						{# <div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_012.jpg" alt="結婚式 パーティ 着物" class="img-responsive">
+						</div> #}
+						{# <div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_016.jpg" alt="卒業袴レンタル記念撮影" class="img-responsive">
+						</div> #}
+						<div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/petit/mainvisual.jpg" alt="着物レンタルあきPETIT" class="img-responsive">
+						</div>
+						<div class="item">
+							<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_013.jpg" alt="ロケーションフォト　着物 出張撮影" class="img-responsive">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="date_search visible-xs mt30">
+				<div class="container">
+					<div class="row pb00">
+						<div class="col-sm-10 col-sm-offset-1">
+							<form name="top_search_form"  action="/products/list">
+								<div class="row pb00">
+									<input type="hidden" name="" value="">
+									<div class="col-sm-5 date">
+										<div class="input-group input-group-lg">
+											<span class="input-group-addon" id="basic-addon1"><i class="zmdi zmdi-calendar-note"></i></span>
+											<input name="date" type="text" class="form-control date datepicker hasDatepicker" value="ご利用日" readonly="readonly" id="">
+										</div>
+									</div>
+									<div class="col-sm-5">
+										<div class="input-group input-group-lg">
+											<span class="input-group-addon" id="basic-addon1"><i class="zmdi zmdi-view-list"></i></span>
+											<select name="category_id" class="form-control">
+												<option value="">利用シーンを選択</option>
+												<optgroup label="成人式">
+													<option value="53">振袖</option>
+													<option value="39">袴（男性用）</option>
+												</optgroup>
+												<optgroup label="卒業式・入学式">
+													<option value="40">卒業袴</option>
+													<option value="53">振袖</option>
+													<option value="50">訪問着</option>
+													<option value="39">袴（男性用）</option>
+												</optgroup>
+												<optgroup label="結婚式">
+													<option value="34">婚礼衣装</option>
+													<option value="53">振袖</option>
+													<option value="52">黒留袖</option>
+													<option value="51">色留袖</option>
+													<option value="50">訪問着</option>
+													<option value="41">男物</option>
+													<option value="39">袴（男性用）</option>
+												</optgroup>
+												<optgroup label="パーティー・お茶会">
+													<option value="53">振袖</option>
+													<option value="50">訪問着</option>
+													<option value="51">色留袖</option>
+													<option value="49">色無地</option>
+													<option value="48">小紋</option>
+													<option value="41">男物</option>
+												</optgroup>
+												<optgroup label="観劇・お食事会">
+													<option value="48">小紋</option>
+													<option value="50">訪問着</option>
+													<option value="41">男物</option>
+												<optgroup label="七五三・お宮参り">
+													<option value="48">産着</option>
+													<option value="37">七五三（三歳祝着）</option>
+													<option value="36">七五三（五歳祝着）</option>
+													<option value="35">七五三（七歳祝着）</option>
+													<option value="158">七五三（十三詣り）</option>
+													<option value="50">訪問着</option>
+													<option value="41">男物</option>
+												</optgroup>
+												<optgroup label="花火・お祭り">
+													<option value="43">浴衣（女性用）</option>
+													<option value="42">浴衣（男性用）</option>
+												</optgroup>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<button class="btn btn-primary btn-block btn-lg" type="submit"><i class="zmdi zmdi-search"></i> 商品を探す</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			</section>
+		</div>
+　
+	<section class="top-info">
+		<div class="container">
+			<div class="col-sm-12 pt10 mb30" style="border: 1px solid #739a5f;">
+				<h4>7月からの営業時間に関して</h4>
+				<p class="pa10 mb20">
+				7月より通常営業時間へ変わります。<br class="visible-xs">
+				詳細は<a href="/user_data/news04" style="color: #337ab7; text-decoration: underline;">こちら</a>をご覧ください。<br>
+				</p>
+				<hr>
+				<h4>会員ポイント配布終了のお知らせ</h4>
+				<p class="pa10 mb20">
+				2023年3月末日をもちまして会員ポイントの配布を終了いたしました。<br>
+				詳細は下記をご確認ください。<br>
+				<a href="/user_data/news20230116" style="color: #337ab7; text-decoration: underline;"> → ポイント配布終了に関して</a>
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="feature hidden-xs">
+		<div class="container">
+			<div class="row col-5">
+				<div class="col-sm-3 text-center">
+					<a href="/user_data/good_point#good01"><img src="{{ app.config.front_urlpath }}/img/top/good_point01.jpg" alt="着物レンタル 首都圏４箇所に直営店を展開" class="img-responsive"></a>
+					<p><a href="/user_data/good_point#good01">首都圏４箇所に<br>直営店を展開</a></p>
+				</div>
+				<div class="col-sm-3 text-center">
+					<a href="/user_data/good_point#good02"><img src="{{ app.config.front_urlpath }}/img/top/good_point02.jpg" alt="着物レンタル 5000点超の商品をフルセットでご提供" class="img-responsive"></a>
+					<p><a href="/user_data/good_point#good02">5000点超の商品を<br>フルセットでご提供</a></p>
+				</div>
+				<div class="col-sm-3 text-center">
+					<a href="/user_data/good_point#good03"><img src="{{ app.config.front_urlpath }}/img/top/good_point03.jpg" alt="着物レンタル ご来店のお客様着付けを無料でご提供" class="img-responsive"></a>
+					<p><a href="/user_data/good_point#good03">ご来店のお客様に<br>着付けを無料でご提供</a></p>
+				</div>
+				<div class="col-sm-3 text-center">
+					<a href="/user_data/good_point#good04"><img src="{{ app.config.front_urlpath }}/img/top/good_point04.jpg" alt="着物レンタル ヘアメイク・写真撮影も承ります" class="img-responsive"></a>
+					<p><a href="/user_data/good_point#good04">ヘアメイク・写真撮影も<br>承ります</a></p>
+				</div>
+				<div class="col-sm-3 text-center">
+					<a href="/user_data/good_point#good05"><img src="{{ app.config.front_urlpath }}/img/top/good_point05.jpg" alt="着物レンタル 出張着付けサービス承ります" class="img-responsive"></a>
+					<p><a href="/user_data/good_point#good05">出張着付けサービス<br>承ります</a></p>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<script type="text/javascript">
+	$(function() {
+		$form = $("form[name=top_search_form]");
+		$form.on("submit", function() {
+			var category_id = $("select[name=category_id]", this).val();
+			var q = [];
+			if (category_id) {
+				q.push("category_id=" + category_id);
+			}
+			var date = $("input[name=date]", this).val();
+			if (date) {
+				q.push("date=" + date.replace(/\//g, '-'));
+			}
+			q = q.join("&");
+			location.href = $form.attr("action") + (q != "" ? "?" + q : "");
+			return false;
+		});
+	});
+</script>

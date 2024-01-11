@@ -1,0 +1,216 @@
+	<div class="sp-nav753 text-center visible-xs" style="padding-top: 120px;">
+		<div class="row pb00">
+			<div class="col-xs-6">
+				<p class="mb00"><a href="/user_data/753#merit">選ばれる理由</a></p>
+			</div>
+			<div class="col-xs-6">
+				<p class="mb00"><a href="/user_data/753#plan">お得な七五三プラン</a></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<p class="mb00"><a href="/user_data/753#osusume">おすすめの七五三商品</a></p>
+			</div>
+			<div class="col-xs-6">
+				<p class="mb00"><a href="/user_data/753#flow">ご利用の流れ</a></p>
+			</div>
+		</div>
+	</div>
+{#<div class="visual-inner mt10">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="main_visual">
+						<div class="item actives">
+						<a href="#main_middle"><img src="{{ app.config.front_urlpath }}/img/753/campaign_shitigosan.jpg" alt="七五三レンタル キャンペーン" class="img-responsive"></a>
+						</div>
+						 <div class="item active visible-xs">
+							<img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル" class="img-responsive visible-xs">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div> #}
+	<div class="visual-inner">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="main_visual">
+						<div class="item active hidden-xs">
+							<img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル" class="img-responsive hidden-xs">
+						</div>
+						<div class="item active visible-xs">
+							<img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル" class="img-responsive visible-xs">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- <section class="top-info">
+		<div class="container">
+			<div class="col-sm-12 pt10 mb30" style="border: 1px solid #739a5f;">
+				<h4>11月 店舗ご予約状況</h4>
+				<p class="pa10 mb20">
+				11月は七五三シーズンの為、大変混雑いたします。<br>
+				ご予約に関しましてはご予約状況をご参照ください。<br>
+				<br>
+				<a href="/user_data/753_schedule" style="color: #337ab7; text-decoration: underline;">→ ご予約状況はこちら</a>
+				</p>
+			</div>
+		</div>
+	</section> -->
+
+	<div class="container">
+		<section class="block hidden-xs">
+			<div class="row">
+				<div class="col-sm-12 feature_753">
+					<h2 class="mt00"><small>七五三 レンタル</small><br><span style="font-size: 30px;">選ばれる理由</span></h2>
+					<div class="col-sm-3">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<img src="/template/aki/img/753/merit01.jpg" alt="親子で七五三レンタル 着付け無料" class="img-responsive">
+								<h3 class="mt10 mb00" style="font-size: 16px;">
+									親子揃ってレンタルできて、<b class="color-red">着付けも無料♪</b><br><br>
+								</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<img src="/template/aki/img/top/good_point03.jpg" alt="ご来店のお客様に着付けを無料でご提供" class="img-responsive">
+								<h3 class="mt10 mb00" style="font-size: 16px;">
+									コーディネート・着物の<b class="color-red">サイズ合わせ無料！(肩上げ・腰上げ)</b>
+								</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<img src="/template/aki/img/top/good_point04.jpg" alt="ヘアメイク・写真撮影も承ります" class="img-responsive">
+								<h3 class="mt10 mb00" style="font-size: 16px;">
+									ヘアメイク、スタジオでの<b class="color-red">記念撮影</b>も承ります<br><br>
+								</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<img src="/template/aki/img/top/good_point01.jpg" alt="首都圏４箇所に直営店を展開" class="img-responsive">
+								<h3 class="mt10 mb00" style="font-size: 16px;">
+									首都圏4か所に店舗があるので、周辺の<b class="color-red">神社へアクセス</b>良好。<a href="/user_data/753#sec05" class="underline">詳しくはこちら</a>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+<script>
+	$(function () {
+		$(".syousai").on("click", function() {
+			if ($(this).parent().prev('.hide-text').is(':hidden')) {
+				$(this).parent().prev('.hide-text').slideDown();
+				$(this).text('閉じる').addClass('close-btn');
+			} else {
+				$(this).parent().prev('.hide-text').slideUp();
+				$(this).text('詳細を見る').removeClass('close-btn');
+			}
+		});
+	});
+
+	$(function () {
+	 var headerHight = 90; //ヘッダの高さ
+	 $('a[href^=#]').click(function(){
+	     var href= $(this).attr("href");
+	       var target = $(href == "#" || href == "" ? 'html' : href);
+	        var position = target.offset().top-headerHight; //ヘッダの高さ分位置をずらす
+	     $("html, body").animate({scrollTop:position}, 550, "swing");
+	        return false;
+	   });
+	});
+</script>
+	<div class="container visible-xs">
+		<div class="row mb20" id="faq01">
+			<section id="merit">
+				<div class="col-sm-12 feature_753">
+					<h2 class="mt00"><small>七五三 レンタル</small><br><b style="font-size: 30px;">選ばれる理由</b></h2>
+					<div class="panel-group">
+						<div class="panel panel-default mb20">
+							<div class="panel-body">
+								<h3 class="panel-title" style="font-size: 16px;">
+									<span style="font-size: 16px;">親子揃ってレンタルできて、<b class="color-red">着付けも無料♪</b></span>
+								</h3>
+								<div class="hide-text">
+									<h4>親子で無料着付け</h4>
+									<p>ご来店されたお客様には当店のベテランスタッフによる美しく、着崩れしずらい着付けもレンタルに含まれます。</p>
+									<p>着替えなどの<strong>荷物もお預かり</strong>いたします</p>
+									<h4>出張着付け</h4>
+									<p>
+										毎日忙しいお母さんのために！出張着付けを承っております。（訪問着 5,000円税別）
+										※お子様のみの出張着付けはご相談ください
+									<p>
+									<div class="row">
+										<div class="col-xs-6">
+											<img src="/template/aki/img/753/index/feature_753_002_002.svg" alt="七五三レンタル特典着付け無料" class="img-responsive">
+										</div>
+										<div class="col-xs-6">
+											<img src="/template/aki/img/753/index/feature_753_002_003.svg" alt="七五三レンタル特典荷物お預かり" class="img-responsive">
+										</div>
+									</div>
+								</div>
+								<p class="text-center mt20"><span class="readmore-btn syousai">詳細を見る</span></p>
+							</div>
+						</div>
+						<div class="panel panel-default mb20">
+							<div class="panel-body">
+								<h3 class="panel-title">
+									コーディネート・着物のサイズ合わせ無料！<b class="color-red">(肩上げ・腰上げ)</b>
+								</h3>
+								<div class="hide-text">
+									<p class="mt20">事前に下見いただければ、お子様の体型に合わせて肩上げや腰上げを無料で行います。ベストサイズで凛々しく美しく！</p>
+								</div>
+								<p class="text-center mt20"><span class="readmore-btn syousai">詳細を見る</span></p>
+							</div>
+						</div>
+						<div class="panel panel-default mb20">
+							<div class="panel-body">
+								<h3 class="panel-title">
+									ヘアメイク、スタジオでの<b class="color-red">記念撮影</b>も承ります。
+								</h3>
+								<div class="hide-text">
+									<p>スタジオでの記念撮影やヘアメイクも随時承ります。詳細は下記をご参照ください。</p>
+									<div class="row">
+										<div class="col-xs-6">
+											<a href="/user_data/service#s01"><img src="/template/aki/img/753/index/feature_753_002_001.svg" alt="七五三レンタル特典ヘアセット対応" class="img-responsive"></a>
+										</div>
+										<div class="col-xs-6">
+											<a href=""><img src="/template/aki/img/753/index/feature_753_002_004.svg" alt="七五三レンタル特典スタジオ写真" class="img-responsive"></a>
+										</div>
+									</div>
+								</div>
+								<p class="text-center mt20"><span class="readmore-btn syousai">詳細を見る</span></p>
+							</div>
+						</div>
+						<div class="panel panel-default mb20">
+							<div class="panel-body">
+								<h3 class="panel-title">
+									首都圏4か所に店舗があるので、周辺の<b class="color-red">神社へアクセス</b>良好
+								</h3>
+								<div class="hide-text">
+									<p class="mt20">周辺には七五三で人気の神社が多数ございます。<br><a href="/user_data/753#rentalflow_step_4">詳しくはこちら</a></p>
+								</div>
+								<p class="text-center mt20"><span class="readmore-btn syousai">詳細を見る</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>

@@ -1,0 +1,112 @@
+{#
+Copyright(c) 2016 MDL Paygent, Inc. All rights reserved.
+http://www.paygent.co.jp/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+<script>
+	$("form").submit(function( event ) {
+            $(".btn").attr("disabled",true);
+    });
+</script>
+    <style type="text/css">
+        .mdl-payment-inner table{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+        .mdl-payment-inner .text-center{
+            text-align: center;
+        }
+        .mdl-payment-inner .text-right{
+            text-align: right;
+        }
+        .mdl-payment-inner .dl_table dd {
+            padding: 8px;
+        }
+        @media only screen and (min-width: 768px){
+            .mdl-payment-inner .dl_table dd {
+                padding: 8px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div id="main_middle">
+    {% if flag == true %}
+        <div class="container-fluid mdl-container">
+            <h2 class="title">ペイジェント 携帯キャリア</h2>
+            	{% if error is not empty %}
+                	<div style = "color: red;">
+                    	<p>{{ error | raw }}</p>
+                	</div>
+            	{% endif %}
+            <div class="mdl-payment-inner">
+                <form name="form1" id="form1" method="post" action="">
+                {{ form_widget(formMobileCarrier._token) }}
+                    <div class="dl_table" id="payment_form_body">
+                        <dl>
+                            <dt>キャリア決済選択</dt>
+                            <dd>
+								{{ form_widget(formMobileCarrier.career_type) }}
+								{{ form_errors(formMobileCarrier.career_type) }}
+                            </dd>
+                        </dl>
+                    </div>
+					<div style="margin-top:10px">
+                        購入代金を、ご選択いただきました携帯電話キャリアの通話料金とまとめてお支払いいただけます。 <br>
+						（各支払い方法は下記一覧をご確認ください）
+						<hr style="background:#D3D3D3; border:0; height:2px">
+					</div>
+					<div style="margin-top:20px">
+                        以上の内容で間違いなければ、下記「次へ」ボタンをクリックしてください。<br>
+						<span style="color:red">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+						<hr style="background:#D3D3D3; border:0; height:1px">
+					</div>
+                 <div class="row no-padding" style="margin-top:10px">
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <p><a href="{{ path('mdl_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><button type="submit" class="btn btn-primary btn-block">次へ</button></p>
+                        </div>
+                    </div>
+				<div class="dl_table">
+					<dl>
+						<dt>ドコモケータイ払い</dt>
+						<dd>
+							画面からネットワーク暗証番号を入力いただくことでお支払が可能です。対応端末は、iモード契約のあるフィーチャー
+							フォン、spモード契約のあるスマートフォン、およびPCの各種端末からもご利用いただけます。
+
+						</dd>
+					</dl>
+					<dl>
+						<dt>auかんたん決済</dt>
+						<dd>
+							画面からau ID/パスワード、続いてセキュリティパスワードを入力いただくことでお支払が可能です。au IDを取得す
+							ることで国内3キャリアのスマートフォンおよびPCの各種端末からもご利用いただけます。
+
+						</dd>
+					</dl>
+					<dl>
+						<dt>ソフトバンクまとめて支払い</dt>
+						<dd>
+							画面から暗証番号（電話料金等を口座引落で決済されている場合）/セキュリティコード（電話料金等をカードで決済さ
+							れている場合）を入力いただくことでお支払が可能です。対応端末は、softbankスマートフォン契約のあるスマートフ
+							ォンとなります<span style="color:red">（フィーチャーフォンには対応しておりません）。</span>
+						</dd>
+					</dl>
+				</div>
+
+                </form>
+            </div>
+
+    </div>
+    {% else %}
+    <div style="text-align: center;">
+    {{ redirectHtml | raw }}
+    </div>
+    {% endif %}
+    </div>
+{% endblock %}

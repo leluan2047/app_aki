@@ -1,0 +1,4 @@
+delivery_id,creator_id,product_type_id,name,service_name,description,confirm_url,rank,del_flg,create_date,update_date
+1,1,1,佐川急便,佐川急便(あき),,http://www.sagawa-exp.co.jp/send/howto-search.html,1,0,"2017-03-07 18:16:55","2017-05-15 11:04:14"
+2,1,1,ヤマト運輸,ヤマト運輸(あき),,http://toi.kuronekoyamato.co.jp/cgi-bin/tneko,2,0,"2017-03-07 18:16:55","2017-05-15 11:03:18"
+3,3,2,来店着付け,来店着付け（あき）,,,3,0,"2017-06-20 15:18:45","2017-06-21 13:15:34"

@@ -1,0 +1,29 @@
+{% extends 'default_frame.twig' %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">お問い合わせ完了</h2>
+			<p>
+				万一、ご回答メールが届かない場合は、トラブルの可能性もありますので<br>
+				大変お手数ではございますがもう一度お問い合わせいただくか、お電話にてお問い合わせください。<br>
+				今後ともご愛顧賜りますようよろしくお願い申し上げます。
+			</p>
+		</div>
+	</div>
+
+	<div id="complete_wrap" class="">
+		<div id="deliveradd_input" class="row">
+			<div id="complete_box" class="col-sm-10 col-sm-offset-1">
+				<div class="well">
+					<div id="complete_box__footer" class="row no-padding">
+						<div id="complete_box__top_button" class="btn_group col-sm-offset-4 col-sm-4">
+							<p><a href="{{ url('index') }}" class="btn btn-primary btn-block">トップページへ</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

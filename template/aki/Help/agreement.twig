@@ -1,0 +1,24 @@
+{% extends 'default_frame.twig' %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">利用規約</h2>
+		</div>
+	</div>
+
+	<div id="contents" class="main_only">
+		<div id="">
+			<div id="agreement_box__body" class="">
+				<div id="agreement_box__customer_agreement" class="row">
+					<div class="col-md-10 col-md-offset-1">
+						{% if help is not null %}
+							{{ help.customerAgreement|raw|nl2br }}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

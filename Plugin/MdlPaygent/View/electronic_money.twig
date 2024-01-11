@@ -1,0 +1,81 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+
+    <style type="text/css">
+        .gmo-payment-inner table{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+        .gmo-payment-inner .text-center{
+            text-align: center;
+        }
+        .gmo-payment-inner .text-right{
+            text-align: right;
+        }
+        .gmo-payment-inner .dl_table dd {
+            padding: 8px;
+        }
+        @media only screen and (min-width: 768px){
+            .gmo-payment-inner .dl_table dd {
+                padding: 8px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div id="main_middle">
+        <div class="container-fluid gmo-container">
+            <h2 class="title">ペイジェント 電子マネー</h2>
+            <div class="gmo-payment-inner">
+                <form name="form1" id="form1" method="post" action="">
+                    <div class="dl_table" id="">
+                        <dl>
+                            <dt>利用決済選択</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    <div style="float:left">
+										{{ form_widget(formElectronicMoney.settlement_select) }}  &nbsp;
+                                        {{ form_errors(formElectronicMoney.settlement_select) }}
+                                    </div>
+                                </div>
+
+                            </dd>
+                        </dl>
+                    </div>
+					<div style="margin-top:10px">
+                       	プリペイドカードおよびウォレットにチャージされている電子マネーからお支払いいただけます。 <br>
+						（各支払い方法は下記一覧をご確認ください）
+						<hr style="background:#D3D3D3; border:0; height:2px">
+					</div>
+					<div style="margin-top:20px">
+                        	以上の内容で間違いなければ、下記「次へ」ボタンをクリックしてください。<br>
+						<span style="color:red">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+						<hr style="background:#D3D3D3; border:0; height:1px">
+					</div>
+                 <div class="row no-padding" style="margin-top:10px">
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <p><a href="" class="btn btn-info btn-block">戻る</a></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><button type="submit" class="btn btn-primary btn-block">次へ</button></p>
+                        </div>
+                    </div>
+				<div class="dl_table">
+					<dl>
+						<dt>WebMoney</dt>
+						<dd>
+							プリペイドカードご利用の場合はカード記載の番号、ウォレットご利用の場合はウォレットID/パスワードに続いてセキュアパスワードを入力することによりお支払が可能です。
+						</dd>
+					</dl>
+				</div>
+                </form>
+            </div>
+
+    </div>
+{% endblock %}

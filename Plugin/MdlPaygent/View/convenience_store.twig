@@ -1,0 +1,163 @@
+{#
+Copyright(c) 2016 MDL Paygent, Inc. All rights reserved.
+http://www.paygent.co.jp/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+
+    <style type="text/css">
+        .gmo-payment-inner table{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+        .gmo-payment-inner .text-center{
+            text-align: center;
+        }
+        .gmo-payment-inner .text-right{
+            text-align: right;
+        }
+        .gmo-payment-inner .dl_table dd {
+            padding: 8px;
+        }
+        @media only screen and (min-width: 768px){
+            .gmo-payment-inner .dl_table dd {
+                padding: 8px;
+            }
+        }
+    </style>
+    <script>
+	    $( "form" ).submit(function( event ) {
+            $(".btn").attr("disabled",true);
+      	});
+    </script>
+{% endblock %}
+
+{% block main %}
+    <div id="main_middle">
+        <div class="container-fluid gmo-container">
+            <h2 class="title">コンビニ(番号方式)</h2>
+            <div class="gmo-payment-inner">
+                <form name="form1" id="form1" method="post" action="" novalidate>
+                {{ form_widget(formConvenience._token) }}
+                	{% if error is not empty %}
+                	<div style = "color: red; float: left;">
+                    	<p>{{ error | raw }}</p>
+                	</div>
+            		{% endif %}                	
+                    <div class="dl_table" id="">
+						<dl>
+                            <dt>コンビニ選択</span></dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    {{ form_widget(formConvenience.cvs_company_id) }}
+                                    {{ form_errors(formConvenience.cvs_company_id) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>利用者</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    <div style="float:left">
+                                        {{ form_widget(formConvenience.customer_family_name) }}  &nbsp;
+                                        {{ form_errors(formConvenience.customer_family_name) }}
+                                    </div>
+                                    <div>
+                                        {{ form_widget(formConvenience.customer_name) }}
+                                        {{ form_errors(formConvenience.customer_name) }}
+                                    </div>
+                                </div>
+
+                            </dd>
+                        </dl>
+						<dl>
+                            <dt>利用者(カナ)</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    <div style="float:left">
+                                        {{ form_widget(formConvenience.customer_family_name_kana) }}  &nbsp;
+                                        {{ form_errors(formConvenience.customer_family_name_kana) }}
+                                    </div>
+                                    <div>
+                                        {{ form_widget(formConvenience.customer_name_kana) }}
+                                        {{ form_errors(formConvenience.customer_name_kana) }}
+                                    </div>
+                                </div>
+								<div>
+                                    <p class="mini">※カナに濁点（゛）や半濁点（゜）がある場合、該当記号のみ除外されます。予めご了承ください。</p>
+                                </div>
+                            </dd>
+                        </dl>
+						<dl>
+                            <dt>お電話番号</dt>
+                            <dd>
+                                {{ form_widget(formConvenience.customer_tel) }}
+                                {{ form_errors(formConvenience.customer_tel) }}
+                            </dd>
+                        </dl>
+                    </div>
+					<div style="margin-top:10px">
+                            ご選択いただきましたコンビニエンスストアでのお支払いが可能です（各支払い方法は下記一覧をご確認ください）。<br>
+							なお、商品はお支払い後のご提供となります。
+							<hr style="background:#D3D3D3; border:0; height:2px">
+					</div>
+					<div style="margin-top:10px">
+                        以上の内容で間違いなければ、下記「次へ」ボタンをクリックしてください。<br>
+						<span style="color:red">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。<span>
+						<hr style="background:#D3D3D3; border:0; height:1px">
+					</div>
+                 <div class="row no-padding" style="margin-top:10px">
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <p><a href="{{ path('mdl_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><button type="submit" class="btn btn-primary btn-block">次へ</button></p>
+                        </div>
+                  </div>
+
+				  <div class="dl_table" id="">
+					<dl>
+						<dt>セブン-イレブン</dt>
+						<dd>
+							セブン-イレブンのレジ店頭にてお支払いが可能です。
+						</dd>
+					</dl>
+					<dl>
+						<dt>ファミリーマート</dt>
+						<dd>
+							ファミリーマート店内に設置されている「Famiポート」で支払番号を入力し、発券される申込券でレジにてお支払が可能です。
+						</dd>
+					</dl>
+					<dl>
+						<dt>ローソン、ミニストップ</dt>
+						<dd>
+							ローソン、ミニストップ店内に設置されている「Loppi」で支払番号を入力し、発券される申込券でレジにてお支払が可能です。
+						</dd>
+					</dl>
+					<dl>
+						<dt>サークルKサンクス</dt>
+						<dd>
+							サークルKサンクス店内に設置されている「カルワザステーション」で支払番号を入力し、発券される申込券でレジにてお支払が可能です。
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>デイリーヤマザキ</dt>
+						<dd>
+							デイリーヤマザキのレジ店頭にてお支払いが可能です。
+						</dd>
+					</dl>
+					<dl>
+						<dt>セイコーマート</dt>
+						<dd>
+							セイコーマート店内に設置されている「クラブステーション」で支払番号を入力し、発券される申込券でレジにてお支払が可能です。
+						</dd>
+					</dl>
+				  </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

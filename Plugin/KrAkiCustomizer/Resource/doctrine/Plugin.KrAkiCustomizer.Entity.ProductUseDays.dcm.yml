@@ -1,0 +1,23 @@
+Plugin\KrAkiCustomizer\Entity\ProductUseDays:
+    type: entity
+    table: plg_product_use_days
+    repositoryClass: Plugin\KrAkiCustomizer\Repository\ProductUseDaysRepository
+    id:
+        product_use_days_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        product_id:
+            type: integer
+            nullable: false
+        after_use_days:
+            type: integer
+            nullable: false
+        before_use_days:
+          type: integer
+          nullable: false
+    lifecycleCallbacks: {  }

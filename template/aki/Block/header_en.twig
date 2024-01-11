@@ -1,0 +1,206 @@
+	<style>
+		#link_text{
+			display: none;
+		}
+	</style>
+<!--
+	<div class="info_area">
+		<div class="container">
+			<a href="/user_data/news02">All shops will be closed temporarily from April 8th to May 6th. We apologize for the inconvenience.</a>
+		</div>
+	</div>
+-->
+	<div class="site_title">
+		<div class="container">
+			<div class="row pb00">
+				<div class="col-sm-7">
+					<h1>{% if PageLayout.url == "homepage" %}KIMONO Rental AKI . Shibuya Ginza Ikebukuro Tokyo and Yokohama Japan
+{% else %}{% if subtitle is defined and subtitle is not empty %}{{ subtitle }} | {% elseif title is defined and title is not empty %}{{ title }} | {% endif %}KIMONO Rental AKI . Shibuya Ginza Ikebukuro Tokyo and Yokohama Japan{% endif %}</h1>
+				</div>
+				<div class="col-sm-5 text-right utility hidden-xs">
+				</div>
+			</div>
+		</div>
+	</div>
+	<nav class="navbar mb00">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="nav-trigger navbar-toggle visible-xs" href="#nav" onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'SPメニュー'});"><i class="zmdi zmdi-menu"></i><span>MENU</span></a>
+                <a href="/cart" class="navbar-toggle visible-xs"><i class="zmdi zmdi-shopping-cart"></i><span> CART</span></a>
+				<a class="navbar-brand pa15 hidden-xs" href="/user_data/english"><img src="{{ app.config.front_urlpath }}/img/common/en_logo.svg" alt="着物レンタルあき"></a>
+                <a class="navbar-brand visible-xs" href="/user_data/english"><img src="{{ app.config.front_urlpath }}/img/common/en_logo_sp.svg" alt="着物レンタルあき"></a>
+				<!--<img src="{{ app.config.front_urlpath }}/img/common/headtitle.jpg" class="hidden-xs mt10" alt="“渋谷・銀座・池袋・横浜に直営店　来店着付け無料・全国配送無料”">-->
+			</div>
+
+			<div class="collapse navbar-collapse hidden-xs" id="bs-example-navbar-collapse-1">
+				<ul class="pull-right mb00 text-right">
+					<li style="color: #df4e22; font-size: 18px; font-weight: bold; font-family: Verdana,Arial,Helvetica,sans-serif;" class="mb05">TEL： +81 3 3476-3341</li>
+					<li>
+						<a style="color: #df4e22; font-size: 18px; font-family: Verdana,Arial,Helvetica,sans-serif;" href="/user_data/china" class="mr40"><b>對於中國網站</b></a>
+						<a href="http://kr-aki.co.jp/wpaki/reservations-en"><img src="{{ app.config.front_urlpath }}/img/common/en_headtel01.png" alt="Reservation"></a>
+						<a href="http://kr-aki.co.jp/wpaki/contact-form-en"><img src="{{ app.config.front_urlpath }}/img/common/en_headtel02.png" alt="inquiries"></a>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</nav>
+
+	<div id="category" class="g_nav drawer_block pc">
+		<nav>
+			<div class="category-top_en">
+				<div class="container">
+					<ul class="hidden-xs">
+						<li><a href="/user_data/english">HOME</a></li>
+						<li class="dropdown">
+							<a href="/user_data/english/rental_plan" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RENTAL PLAN</a>
+							<ul class="dropdown-menu">
+								<li><a href="/user_data/english/rental_plan">One-Day Plan</a></li>
+								<li><a href="/user_data/english/rental_plan">Over Night Plan</a></li>
+							</ul>
+						</li>
+						<li><a href="/user_data/english/rental_flow">RENTAL FLOW</a></li>
+						<li class="dropdown">
+							<a href="/user_data/shop" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ABOUT KIMONO</a>
+							<ul class="dropdown-menu">
+								<li><a href="/user_data/english/woman">WOMAN</a></li>
+								<li><a href="/user_data/english/man">MAN</a></li>
+								<li><a href="/user_data/english/kids">KIDS</a></li>
+								<li><a href="/user_data/english/wedding">WEDDING</a></li>
+							</ul>
+						</li>
+						<li><a href="/user_data/english/faq">FAQ</a></li>
+						<li><a href="/user_data/english/contact_info">ACCESS</a></li>
+					</ul>
+					<div class="visible-xs">
+						<div class="list-group">
+							<a class="list-group-item" href="/user_data/english">HOME</a>
+							<a class="list-group-item" href="/user_data/english/rental_plan">One-Day Plan</a>
+							<a class="list-group-item" href="/user_data/english/rental_plan">Over Night Plan</a>
+							<a class="list-group-item" href="/user_data/english/rental_flow">RENTAL FLOW</a>
+							<a class="list-group-item" href="/user_data/english/woman">WOMAN</a>
+							<a class="list-group-item" href="/user_data/english/man">MAN</a>
+							<a class="list-group-item" href="/user_data/english/kids">KIDS</a>
+							<a class="list-group-item" href="/user_data/english/wedding">WEDDING</a>
+							<a class="list-group-item" href="/user_data/english/faq">FAQ</a>
+							<a class="list-group-item" href="/user_data/english/contact_info">ACCESS</a>
+							<a class="list-group-item" href="/user_data/china" style="color:#D34E29;">對於中國網站</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<div class="visible-xs">
+		<div class="container">
+			<div class="row pa10 well well-sm mb10">
+				<div class="col-xs-12"><p class="mt10 mb00" style="font-size:10px;">Welcome to AKI kimono Rental, Tokyo, Japan.</p></div>
+				<div class="col-xs-10">
+					<a href="tel:+81 3 3476-3341" style="color: #df4e22; font-size:1.9rem; font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold;"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> +81 3 3476 3341</a>
+				</div>
+				<div class="col-xs-2">
+					<a href="/wpaki/contact-form-en" class="" style="font-size:2.5rem;"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12 text-center utility visible-xs">
+		<ul class="list-inline mb10">
+			<li><small><a style="color: #df4e22;" href="/user_data/china" class=""><span class="glyphicon glyphicon-flag" aria-hidden="true"></span><b> 對於中國網站</b></a></small></li>
+			<li><small><a href="/wpaki/reservations-en"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Reservation</a></small></li>
+			<li><small><a href="/wpaki/contact-form-en"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> inquiries</a></small></li>
+		</ul>
+		{# <a class="btn btn-lg float-btn tel-float-btn" data-toggle="modal" data-target="#exampleModal" style="padding: 0;">
+			<img src="/template/aki/img/common/tel_icon_sp02.svg" style="width: 60px; height: 60px; color: white;">
+		</a> #}
+		<a class="btn btn-lg float-btn tel-float-btn" data-toggle="modal" data-target="#exampleModal" style="padding: 0;">
+			<img src="/template/aki/img/common/mail_sp_icon02.svg" style="width: 60px; height: 60px; color: white;">
+		</a>
+		<a href="/wpaki/contact-form-en" class="btn btn-lg float-btn mail-float-btn" style="padding: 0;">
+			<img src="/template/aki/img/common/mail_sp_icon02.svg" style="width: 60px; height: 60px; color: white;">
+		</a>
+
+		<div class="d-flex justify-content-center align-items-center">
+		  <div class="modal" id="exampleModal" role="dialog" aria-hidden="true">
+		    <div class="modal-dialog modal-dialog-centered" role="document">
+		      <div class="modal-content" style="position:static;">
+		        <div class="modal-header text-center">
+		          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+		        </div>
+		        <div class="modal-body" style="padding:80px 15px 30px">
+		          <div class="collapse navbar-collapse visible-xs" id="bs-example-navbar-collapse-1">
+		            <ul class="list-unstyled d-flex justify-content-center mb-4">
+		              <li class="mb20">
+		                <span style="color: #df4e22; font-size: 18px; font-weight: bold; font-family: Verdana,Arial,Helvetica,sans-serif;">TEL： +81 3 3476-3341</span>
+		              </li>
+		              <li class="mb20">
+		                <a style="color: #df4e22; font-size: 18px; font-family: Verdana,Arial,Helvetica,sans-serif;" href="/user_data/china" class=""><b>對於中國網站</b></a>
+		              </li>
+		              <li class="mb20">
+		                <a href="http://kr-aki.co.jp/wpaki/reservations-en">
+		                  <img src="{{ app.config.front_urlpath }}/img/common/en_headtel01.png" alt="Reservation">
+		                </a>
+		              </li>
+		              <li class="mb30">
+		                <a href="http://kr-aki.co.jp/wpaki/contact-form-en">
+		                  <img src="{{ app.config.front_urlpath }}/img/common/en_headtel02.png" alt="inquiries">
+		                </a>
+		              </li>
+		            </ul>
+		          </div>
+		          <button type="button" class="btn btn-secondary btn-primary center-block" data-dismiss="modal">close</button>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		{# <div class="modal" id="exampleModal" role="dialog" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content" style="position:static;">
+					<div class="modal-header text-center">
+						<h5 class="modal-title" id="exampleModalLabel">電話する店舗をお選び下さい</h5>
+						<p class="mb00">全店火曜日定休</p>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">        
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="panel panel-success">
+							<div class="panel-heading pa05" style="font-weight: bold;">
+								渋谷本店
+							</div>
+							<div class="panel-body pa05">
+								<a href="tel:03-3476-3341" style="font-size: 20px; color: #0000ff;">03-3476-3341</a>
+							</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading pa05" style="font-weight: bold;">
+								池袋店
+							</div>
+							<div class="panel-body pa05">
+								<a href="tel:03-6416-0529" style="font-size: 20px; color: #0000ff;">03-6416-0529</a>
+							</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading pa05" style="font-weight: bold;">
+								銀座店
+							</div>
+							<div class="panel-body pa05">
+								<a href="tel:03-5568-0529" style="font-size: 20px; color: #0000ff;">03-5568-0529</a>
+							</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading pa05" style="font-weight: bold;">
+								横浜店
+							</div>
+							<div class="panel-body pa05">
+								<a href="tel:045-441-0529" style="font-size: 20px; color: #0000ff;">045-441-0529</a>
+							</div>
+						</div>
+						<button type="button" class="btn btn-secondary btn-primary center-block" data-dismiss="modal">閉じる</button>
+					</div>
+				</div>
+			</div>
+		</div> #}
+	</div>

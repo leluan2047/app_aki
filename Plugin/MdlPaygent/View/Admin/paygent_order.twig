@@ -1,0 +1,302 @@
+{% block javascript %}
+    <style type="text/css">
+        th {text-align: center;}
+        .attention{color: red;}
+
+        .box-body1 td{border: 1px solid #D1D8D9; padding: 10px;}
+
+		tr.padding20 td {padding-top: 10px; padding-bottom:10px; padding-right: 30px;}
+
+		.td
+		{
+		  padding:10px;
+		}
+		.red{color: red;}
+		
+		#career_amount{
+		width: 20% !important;
+		}
+
+    </style>
+    
+{% endblock %}
+{% block main %}
+
+{% if arrOrderPaygent is not empty and arrOrderPaygent.memo01 == paymentMethod['MDL_PAYGENT_CODE']
+	and(arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT']
+		or arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D']
+		or arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_A']
+		or arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_S']
+		)%}
+<div class="box no-header accordion">
+	<div class="box-header toggle active">
+		<h3 class="box-title">▼{{type}}</h3>
+	</div>
+	<div class="box-body1 accpanel" style="display: block;">
+	<table class="form">
+		<input type="hidden" id ="paygent_type" name="paygent_type" value=""/>
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}ステータス</td>
+				<td>{{ message }}</td>
+		    </tr>
+
+		    {% if arrOrderPaygent.memo05|length > 0  and arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT'] %}
+			    <tr class ="padding20">
+			        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}エラーメッセージ</td>
+			        <td class = "padding20">
+			            <span class="attention">{{ arrOrderPaygent.memo05 }}</span>
+			        </td>
+			    </tr>
+		    {% endif %}
+
+		    {% if arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT'] and arrOrderPaygent.memo06|length > 0
+		    	and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07|length == 0)
+		    	and (arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CREDIT'])
+		    %}
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}オーソリ変更</td>
+		        <td>
+		        	<input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','change_auth'); return false;" value="オーソリ変更">
+            		<span class="attention">※ 金額変更時には、オーソリ変更ボタンをクリックしてください。</span>
+		        </td>
+		    </tr>
+		    {% elseif arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT'] and arrOrderPaygent.memo06|length > 0
+		    	and (arrOrderPaygent.memo07 == '40' or arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07|length == 0)
+		    	and (arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CARD_COMMIT'] or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CARD_COMMIT_REVICE'])
+		     %}
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}売上変更</td>
+		        <td>
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','change_commit'); return false;" value="売上変更">
+		            <span class="attention">※ 金額変更時には、売上変更ボタンをクリックしてください。</span>
+		        </td>
+		    </tr>
+			{% endif %}
+
+			<!--{* 携帯キャリア決済 売上変更ボタン画面表示条件 *}-->
+			{% if (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D'] and arrOrderPaygent.memo06|length > 0
+					and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21')
+					and arrOrderPaygent.memo09|length == 0)
+				or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D'] and arrOrderPaygent.memo06|length > 0
+					and arrOrderPaygent.memo07 == '44'
+					and (arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT']
+						or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE'])) %}
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}売上変更</td>
+		        <td>
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','change_carrer_auth'); return false;" value="売上変更">
+		            <span class="attention">※ 金額変更時には、売上変更ボタンをクリックしてください。</span>
+		        </td>
+		    </tr>
+		    {% endif %}
+		    {% if arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_A'] and arrOrderPaygent.memo06|length > 0
+		    		and arrOrderPaygent.memo07 == '20' and arrOrderPaygent.memo09|length == 0 %}
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}売上変更</td>
+		        <td>
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','change_carrer_auth'); return false;" value="売上変更">
+		            <span class="attention">※ 金額変更時には、売上変更ボタンをクリックしてください。</span>
+		        </td>
+		    </tr>
+		    {% endif %}
+		    
+		    {% if (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_S'] and arrOrderPaygent.memo06|length > 0
+					and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21') and arrOrderPaygent.memo09|length == 0) %}
+		    <tr class ="padding20">
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}売上変更</td>
+		        <td>
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','change_carrer_auth'); return false;" value="売上変更">
+		            <span class="attention">※ 金額変更時には、売上変更ボタンをクリックしてください。</span>
+		        </td>
+		    </tr>
+		    {% endif %}
+		    
+		    <tr>
+		        <td class = "col-sm-3 col-lg-2 padding20">{{ type }}電文送信</td>
+		        <td>
+		        	<!--{* クレジット決済 売上ボタン画面表示条件 *}-->
+		            {% if arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT'] and arrOrderPaygent.memo06|length > 0
+		            		and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07|length == 0)
+		            		and (arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CREDIT'])%}
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','card_commit'); return false;" value="売上">
+		            <!--{* 携帯キャリア決済 売上ボタン画面表示条件 *}-->
+		            {% elseif (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D'] and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21') and arrOrderPaygent.memo09|length == 0)
+		            		or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_A'] and arrOrderPaygent.memo07 == '20' and arrOrderPaygent.memo09|length == 0)
+							or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_S'] and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21') and arrOrderPaygent.memo09|length == 0)%}
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','career_commit'); return false;" value="売上">
+		           	{% else %}
+		            <input type="button" class="btn btn-default" value="売上" disabled="true">
+		            {% endif %}
+					<!--{* クレジット決済 取消ボタン画面表示条件 *}-->
+					{% if arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CREDIT'] and arrOrderPaygent.memo06|length > 0
+							and ((arrOrderPaygent.memo07 != '33' and (arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CREDIT']))
+									or (arrOrderPaygent.memo07 != '41' and arrOrderPaygent.memo09 == '022')
+									or (arrOrderPaygent.memo09 == '029') or (arrOrderPaygent.memo09 == '022'))%}
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','{% if arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CREDIT'] %}auth_cancel{% else %}card_commit_cancel{% endif %}'); return false;" value="取消">
+		            <!--{* 携帯キャリア決済 取消ボタン画面表示条件 *}-->
+		            {% elseif (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D'] and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21') and arrOrderPaygent.memo09|length == 0)
+		            		or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_D'] and arrOrderPaygent.memo07 == '44' and (arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+		            		or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_A'] and arrOrderPaygent.memo07 == '20' and (arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+		            		or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_A'] and arrOrderPaygent.memo07 == '40' and (arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+		            		or (arrOrderPaygent.memo08 == paymentMethod['PAYGENT_CAREER_S'] and (arrOrderPaygent.memo07 == '20' or arrOrderPaygent.memo07 == '21' or arrOrderPaygent.memo07 == '40') and (arrOrderPaygent.memo09|length == 0 or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT'] or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_CAREER_COMMIT_REVICE']))
+		            		%}
+		            <input type="button" class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','career_commit_cancel'); return false;" value="取消">
+		            {% else %}
+		            <input type="button" class="btn btn-default" value="取消" disabled="true">
+		            {% endif %}
+		        </td>
+		    </tr>
+		</table>
+	</div>
+</div>
+{% endif %}
+{% if arrOrderPaygent is not empty and arrOrderPaygent.memo01 == paymentMethod['MDL_PAYGENT_CODE'] and arrOrderPaygent.memo08 == paymentMethod['PAYGENT_LATER_PAYMENT']%}
+<div class="box no-header accordion">
+	<div class="box-header toggle active">
+		<h3 class="box-title">▼{{type}}</h3>
+	</div>
+	<div class="box-body1 accpanel" style="display: block;">
+		<table class="form2">
+			<input type="hidden" id ="paygent_type" name="paygent_type" value=""/>
+		    <tr class ="padding20">
+		        <td class = "col-sm-2 control-label">{{ type }}ステータス</td>
+
+		        <td colspan="4">{{ message }}</td>
+		    </tr>
+		    {% if arrOrderPaygent.memo05|length > 0 %}
+		    <tr class="box-body1">
+		        <td class = "col-sm-2 control-label">{{ type }}エラーメッセージ</td>
+		        <td colspan="4">
+		            <span class="attention">{{ arrOrderPaygent.memo05 }}</span>
+		        </td>
+		    </tr>
+		    {% endif %}
+		    <tr class="box-body1 padding20">
+		        <td class = "col-sm-2 control-label" rowspan="6">{{ type }}電文送信</th>
+		        <td colspan="4">
+					
+					<!--請求書印字データ出力 表示制御-->
+                    {% if arrOrderPaygent.invoice_send_type == paymentMethod['INVOICE_SEND_TYPE_INCLUDE']
+						and (arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED_BEFORE_PRINT'] 
+						or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED']) %}
+						{% set atrDisabledPrint = '' %}
+					{% else %}
+						{% set atrDisabledPrint = 'disabled' %}
+					{% endif %}
+	            	<input {{ atrDisabledPrint }} type="button" name="button_later_payment_print" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_print'); return false;" value="請求書印字データ出力">
+                    <a href="?" onclick="{{ url('admin_order_edit', { id : orderId }) }}"><span class="icon_edit">画面再表示</span></a>
+                   	<div style="margin-top:5px;">※請求書 印字データ出力後は画面を再表示して下さい。</div>
+                </td>
+    		</tr>
+         	<tr class="box-body1 padding20">
+               <td bgcolor="#efefef">オーソリ変更</td>
+               <td bgcolor="#efefef">請求書送付方法</td>
+               <td>
+                    {% if arrError[0] is defined and arrError[0] is not empty and arrError[0]['invoice_send_type'] is defined %}
+		            	<span class="red">{{ arrError[0]['invoice_send_type'] }}</span>
+		            {% endif %}
+		            
+		            <!--オーソリ変更 表示制御-->
+                    {% if arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED_BEFORE_PRINT']
+						or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED'] %}
+						{% set atrDisabledIn = '' %}
+					{% else %}
+						{% set atrDisabledIn = 'disabled' %}
+					{% endif %}
+					
+		            <select {{ atrDisabledIn }} name="invoice_send_type" data-width="100%" class = "form-control">
+		            {% for key,val in arrInvoiceSendType %}
+                        <option value ="{{ key }}" {% if invoiceSendType == key %}selected{% endif %}>{{val}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+                <td>
+                	<input type="button" {{ atrDisabledIn }} class="btn btn-default" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_reduction'); return false;" value="オーソリ変更">
+        		</td>
+		    </tr>
+		    <tr class="box-body1 padding20">
+		        <td bgcolor="#efefef">請求書再発行</td>
+		        <td bgcolor="#efefef">依頼理由</td>
+		        <td>
+		        	{% if arrError[0] is defined and arrError[0] is not empty and arrError[0]['client_reason_code'] is defined %}
+		            <span class="red">{{ arrError[0]['client_reason_code'] }}</span>
+		            {% endif %}
+		            {% if arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR_REQ_FIN'] %}
+		        	<select name="client_reason_code" data-width="100%" class = "form-control">
+		        	{% else %}
+		        	<select name="client_reason_code" disabled data-width="100%" class ="form-control">
+		        	{% endif %}
+                        {% for key,val in arrClientReasonCode %}
+                           {% if arrError[1] is defined and arrError[1]['client_reason_code_key'] == key %}
+	                        	<option value ="{{ key }}">{{val}}</option>
+							{% else %}
+	                           <option value ="{{ key }}">{{val}}</option>
+	                        {% endif %}
+                        {% endfor %}
+                     </select>
+
+
+		        </td>
+		        <td>
+					{% if arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR_REQ_FIN'] %}
+		            <input type="button" class="btn btn-default" name="button_later_payment_bill_reissue" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_bill_reissue'); return false;" value="請求書再発行">
+					{% else %}
+					<input type="button" class="btn btn-default" disabled name="button_later_payment_bill_reissue" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_bill_reissue'); return false;" value="請求書再発行">
+		        	{% endif %}
+		        </td>
+		    </tr>
+		    <tr class="box-body1 padding20">
+		        <td bgcolor="#efefef" rowspan="2">売上</td>
+		        <td bgcolor="#efefef">運送会社コード</td>
+		        <td>
+		        	{% if arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED']
+						or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_SALES_RESERVE'] %}
+						{% set atrDisabled = '' %}
+					{% else %}
+						{% set atrDisabled = 'disabled' %}
+					{% endif %}
+
+					{% if arrError[0] is defined and arrError[0] is not empty and arrError[0]['carriers_company_code'] is defined %}
+		            <span class="red">{{ arrError[0]['carriers_company_code'] }}</span>
+		            {% endif %}
+		            <select {{ atrDisabled }} name="carriers_company_code" data-width="100%" class = "form-control">
+                        {% for key,val in arrCarriersCompanyCode %}
+	                        {% if arrError[1] is defined and arrError[1]['carriers_company_code_key'] == key %}
+	                        	<option value ="{{ key }}" selected>{{val}}</option>
+							{% else %}
+	                           <option value ="{{ key }}">{{val}}</option>
+	                        {% endif %}
+                        {% endfor %}
+                    </select>
+		        </td>
+		        <td rowspan="2">
+		            <input type="button" {{ atrDisabled }} class="btn btn-default" name="button_later_payment_clear" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_clear'); return false;" value="売上">
+		        </td>
+		    </tr>
+		    <tr class="box-body1 padding20">
+		        <td bgcolor="#efefef">配送伝票番号</td>
+		        <td>
+		        	{% if arrError[0] is defined and arrError[0] is not empty and arrError[0]['delivery_slip_number'] is defined %}
+		            <span class="red">{{ arrError[0]['delivery_slip_number'] }}</span>
+		            {% endif %}
+		            	<input type="text" {{ atrDisabled }} name="delivery_slip_number" value="" size="15" class = "form-control">
+		        </td>
+		    </tr>
+		    <tr class="box-body1 padding20">
+		        <td colspan="4">
+		        	{% if arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED_BEFORE_PRINT']
+					or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_AUTHORIZED']
+					or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR_REQ_FIN']
+					or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_SALES_RESERVE']
+					or arrOrderPaygent.memo09 == paymentMethod['PAYGENT_LATER_PAYMENT_ST_CLEAR'] %}
+		            <input type="button" class="btn btn-default" name="button_later_payment_cancel" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_cancel'); return false;" value="取消">
+		            {% else %}
+		            <input type="button" class="btn btn-default" disabled name="button_later_payment_cancel" onclick="setModeAndSubmit('paygent_order','paygent_type','later_payment_cancel'); return false;" value="取消">
+		            {% endif %}
+		        </td>
+		    </tr>
+		</table>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

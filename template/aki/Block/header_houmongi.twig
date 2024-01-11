@@ -1,0 +1,494 @@
+<div class="info_area">
+    <div class="container">
+        <a href="/user_data/news04">7月・8月は休まず営業いたします</a>           
+    </div>
+</div>
+<div class="site_title">
+  <div class="container">
+    <div class="row pb00">
+      <div class="col-sm-5 col-md-5">
+        <h1>
+          {% if PageLayout.url == "homepage" %}着物レンタルあき
+          (来店着付け無料・全国配送無料)(渋谷・池袋・銀座・横浜){% else %}{% if
+          subtitle is defined and subtitle is not empty %}{{ subtitle }} | {%
+          elseif title is defined and title is not empty %}{{ title }} | {%
+          endif %}着物レンタルあき (来店着付け無料・全国配送無料){% endif %}
+        </h1>
+      </div>
+      <div class="col-sm-7 col-md-7 text-right utility hidden-xs">
+        <ul class="list-inline mb00">
+          {% if is_granted('ROLE_USER') %}
+          <li>
+            <a href="{{ url('mypage') }}"
+              ><i class="zmdi zmdi-account-circle"></i> マイページ</a
+            >
+          </li>
+          {% if BaseInfo.option_favorite_product == 1 %}
+          <!--                        <li><a href="{{ url('mypage_favorite') }}"><i class="zmdi zmdi-favorite"></i> お気に入り</a></li>-->
+          {% endif %}
+          <li>
+            <a href="{{ url('logout') }}"
+              ><i class="zmdi zmdi-lock"></i> ログアウト</a
+            >
+          </li>
+          <li>
+            <a href="/cart"><i class="zmdi zmdi-shopping-cart"></i> カート</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{{ url('entry') }}"
+              ><i class="zmdi zmdi-account-circle"></i> 新規会員登録</a
+            >
+          </li>
+          {% if BaseInfo.option_favorite_product == 1 %}
+          <!--                        <li><a href="{{ url('mypage_favorite') }}"><i class="zmdi zmdi-favorite"></i> お気に入り</a></li>-->
+          {% endif %}
+          <li>
+            <a href="{{ url('mypage_login') }}"
+              ><i class="zmdi zmdi-lock"></i> ログイン</a
+            >
+          </li>
+          <li>
+            <a href="/cart"><i class="zmdi zmdi-shopping-cart"></i> カート</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<nav class="navbar mb00">
+  <div class="container">
+    <div class="navbar-header">
+      <!--            <a class="nav-trigger navbar-toggle visible-xs" href="#nav"><i class="zmdi zmdi-menu"></i><span>検索する</span></a>-->
+      <a
+        class="navbar-toggle visible-xs"
+        data-toggle="modal"
+        data-target="#sp-nav-menu"
+        onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'SPメニュー'});"
+      >
+        <i class="zmdi zmdi-menu"></i><span>メニュー</span>
+      </a>
+      <a href="/cart" class="navbar-toggle visible-xs"
+        ><i class="zmdi zmdi-shopping-cart"></i><span>カートの中</span></a
+      >
+      <a href="/" class="navbar-toggle visible-xs"
+        ><i class="zmdi zmdi-home zmdi-hc-fw"></i><span>TOP</span></a
+      >
+      <a class="navbar-brand hidden-xs" href="/"
+        ><img
+          src="{{ app.config.front_urlpath }}/img/common/houmongi_logo.svg"
+          class="logo"
+          alt="着物レンタルあき 訪問着レンタル"
+      /></a>
+      <a class="navbar-brand visible-xs" style="padding: 15px" href="/"
+        ><img
+          src="{{ app.config.front_urlpath }}/img/common/houmongi_logo_sp.svg"
+          class="logo pl15"
+          alt="着物レンタルあき 訪問着レンタル"
+          style="width: 140px"
+      /></a>
+    </div>
+    <div
+      class="collapse navbar-collapse pr05"
+      id="bs-example-navbar-collapse-1"
+    >
+      <ul class="pull-right mb00">
+        <li>
+          <img
+            src="{{
+              app.config.front_urlpath
+            }}/img/common/head_shops_tel_02.png"
+            alt="着物レンタルあき お問い合わせ電話番号"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- 新ナビメニューｓｐ -->
+    <div class="modal fade" id="sp-nav-menu" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content bg-inherit">
+          <div class="modal-body text-center bg-rgba">
+            <div class="modal-header text-center bg-white">
+              <b>ご利用日と着物の種類から検索する</b>
+            </div>
+            <div class="bg-white-rgba pa10">
+              <div class="visible-xs">
+                <div class="list-group">
+                  <div class="list-group-item bg-inherit">
+                    <form name="sp_search_form" action="/products/list">
+                      <div class="form-group date">
+                        <div class="input-group input-group-lg">
+                          <span class="input-group-addon" id="basic-addon1"
+                            ><i class="zmdi zmdi-calendar-note"></i
+                          ></span>
+                          <input
+                            name="date"
+                            type="text"
+                            class="form-control date datepicker hasDatepicker"
+                            placeholder="ご利用日"
+                            readonly="readonly"
+                            id="date"
+                            data-toggle="modal"
+                            data-target="#sp-nav-menu"
+                            onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_ご利用日'});"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group input-group-lg">
+                          <span class="input-group-addon" id="basic-addon1"
+                            ><i class="zmdi zmdi-view-list"></i
+                          ></span>
+                          <select
+                            name="category_id"
+                            class="form-control"
+                            data-toggle="modal"
+                            data-target="#sp-nav-menu"
+                            onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_利用シーンを選択'});"
+                          >
+                            <option value="">利用シーンを選択</option>
+                            <optgroup label="成人式">
+                              <option value="53">振袖</option>
+                              <option value="39">袴（男性用）</option>
+                            </optgroup>
+                            <optgroup label="卒業式・入学式">
+                              <option value="40">卒業袴</option>
+                              <option value="53">振袖</option>
+                              <option value="50">訪問着</option>
+                              <option value="39">袴（男性用）</option>
+                            </optgroup>
+                            <optgroup label="結婚式">
+                              <option value="34">婚礼衣装</option>
+                              <option value="53">振袖</option>
+                              <option value="52">黒留袖</option>
+                              <option value="51">色留袖</option>
+                              <option value="50">訪問着</option>
+                              <option value="41">男物</option>
+                              <option value="39">袴（男性用）</option>
+                            </optgroup>
+                            <optgroup label="パーティー・お茶会">
+                              <option value="53">振袖</option>
+                              <option value="50">訪問着</option>
+                              <option value="51">色留袖</option>
+                              <option value="49">色無地</option>
+                              <option value="48">小紋</option>
+                              <option value="41">男物</option>
+                            </optgroup>
+                            <optgroup label="観劇・お食事会">
+                              <option value="48">小紋</option>
+                              <option value="50">訪問着</option>
+                              <option value="41">男物</option>
+                            </optgroup>
+
+                            <optgroup label="七五三・お宮参り・十三参り">
+                              <option value="48">産着</option>
+                              <option value="37">七五三（三歳祝着）</option>
+                              <option value="36">七五三（五歳祝着）</option>
+                              <option value="35">七五三（七歳祝着）</option>
+                              <option value="158">十三参り</option>
+                              <option value="50">訪問着</option>
+                              <option value="41">男物</option>
+                            </optgroup>
+                            <optgroup label="花火・お祭り">
+                              <option value="43">浴衣（女性用）</option>
+                              <option value="42">浴衣（男性用）</option>
+                            </optgroup>
+                          </select>
+                        </div>
+                      </div>
+                      <button
+                        class="btn btn-primary btn-block btn-lg pa10"
+                        type="submit"
+                        data-target="#sp-nav-menu"
+                        onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': '商品を探す'});"
+                      >
+                        <i class="zmdi zmdi-search"></i> 商品を探す
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row fs11 pb05">
+                <div class="col-xs-4 pr05">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/choose#choose_kinds"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': '着物の種類から探す'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/kimono.svg"
+                          alt="着物の種類から探す"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">着物の種類から<br />探す</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-xs-4 pa00">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/choose#choose_scene"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_ご利用シーンから探す'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/itsukushima-shrine.svg"
+                          alt="ご利用シーンから探す"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">ご利用シーンから<br />探す</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-xs-4 pl05">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/good_point"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_着物あきのこだわり'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/notepad.svg"
+                          alt="着物レンタルあきのこだわり"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">着物あきの<br />こだわり</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row fs11">
+                <div class="col-xs-4 pr05">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/service"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_オプションサービス'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/folder.svg"
+                          alt="オプションサービス"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">オプション<br />サービス</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-xs-4 pa00">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/flow"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_ご利用の流れ'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/data-flow.svg"
+                          alt="ご利用の流れ"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">ご利用の<br />流れ</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-xs-4 pl05">
+                  <div class="panel panel-default mb00">
+                    <a
+                      href="/user_data/faq"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_よくある質問'});"
+                    >
+                      <div class="panel-body pa05">
+                        <img
+                          src="/template/aki/img/sp_nav_svgicon/help.svg"
+                          alt="よくある質問"
+                          class="sp-nav-icon"
+                        />
+                        <p class="mb00">よくある<br />質問</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!--
+								<div class="row pb00">
+									<div class="col-xs-12">
+										<div class="panel panel-default">
+											<a href="/user_data/sotsunyugaku" class="btn-red center-block pa00" data-target="#sp-nav-menu" onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_入園式・入学式におすすめ'});">
+												<div class="panel-body">
+													<p class="mb00">入園式・入学式におすすめ！<br>訪問着と色無地レンタル</p>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+-->
+
+              <div class="row pb00">
+                <div class="col-xs-12">
+                  <div class="panel panel-default">
+                    <a
+                      href="/user_data/shop#sec-store"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_店舗一覧'});"
+                    >
+                      <div class="panel-body">
+                        <p class="mb00">店舗一覧</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-6">
+                  <div class="panel panel-default">
+                    <a
+                      href="/user_data/english"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_english'});"
+                    >
+                      <div class="panel-body pa05">
+                        <p class="mb00">english（英語版）</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div class="panel panel-default">
+                    <a
+                      href="/user_data/china"
+                      data-target="#sp-nav-menu"
+                      onclick="gtag('event', 'クリック', {'event_category': 'SPメニュー内','event_label': 'SPメニュー_中文'});"
+                    >
+                      <div class="panel-body pa05">
+                        <p class="mb00">中文版（中国語版）</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                閉じる
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<!--
+<div class="sp-navhakama text-center visible-xs">
+	<div class="row pb00">
+		<div class="col-xs-6">
+			<p class="mb00"><a href="/user_data/hakama#six-point">選ばれる理由</a></p>
+		</div>
+		<div class="col-xs-6">
+			<p class="mb00"><a href="/user_data/hakama#hakama_sns">SNSキャンペーン</a></p>
+		</div>
+	</div>
+	<div class="row pb00">
+		<div class="col-xs-6">
+			<p class="mb00"><a href="/user_data/hakama#btn_area">おすすめの卒業袴</a></p>
+		</div>
+		<div class="col-xs-6">
+			<p class="mb00"><a href="/user_data/hakama#hakama_flow">ご利用の流れ</a></p>
+		</div>
+	</div>
+</div>
+-->
+
+<div id="category" class="g_nav drawer_block pc">
+  <nav>
+    <div class="category-top_seijin">
+      <div class="container">
+        <ul class="hidden-xs">
+          <li><a href="/">着物レンタルあきTOP</a></li>
+          <li><a href="#houmongi_select">訪問着&nbsp;選び</a></li>
+          <li><a href="#houmongi_service">サービスについて</a></li>
+          <li><a href="#houmongi_flow">ご利用の流れ</a></li>
+        </ul>
+      </div>
+      <div class="category-bottom_seijin">
+        <div class="container">
+          <ul class="hidden-xs">
+            <li><a href="#houmongi_shop">店舗情報</a></li>
+            <li><a href="#houmongi_column">お役立ちコラム</a></li>
+            <li><a href="#houmongi_option">オプション</a></li>
+            <li><a href="#houmongi_voice">お客様の声</a></li>
+            <li><a href="#houmongi_sale">リサイクル販売</a></li>
+          </ul>
+        </div>
+        <div class="visible-xs">
+          <div class="solid">
+            <h4>利用シーンから探す</h4>
+          </div>
+          <div class="list-group">
+            <a class="list-group-item" href="/user_data/choose/adult">成人式</a>
+            <a
+              class="list-group-item"
+              href="/user_data/choose/graduation_entrance"
+              >卒業式・入学式</a
+            >
+            <a class="list-group-item" href="/user_data/choose/wedding"
+              >結婚式</a
+            >
+            <a class="list-group-item" href="/user_data/choose/party"
+              >パーティ・お茶会</a
+            >
+            <a class="list-group-item" href="/user_data/choose/wedding"
+              >観劇・お食事会</a
+            >
+            <a class="list-group-item" href="/user_data/choose/theater_dinner"
+              >七五三・お宮参り</a
+            >
+            <a
+              class="list-group-item"
+              href="/user_data/choose/fireworks_festival"
+              >花火・お祭り</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        $(function () {
+          $form = $("form[name=sp_search_form]");
+          $form.on("submit", function () {
+            var category_id = $("select[name=category_id]", this).val();
+            var q = [];
+            if (category_id) {
+              q.push("category_id=" + category_id);
+            }
+            var date = $("input[name=date]", this).val();
+            if (date) {
+              q.push("date=" + date.replace(/\//g, "-"));
+            }
+            q = q.join("&");
+            location.href = $form.attr("action") + (q != "" ? "?" + q : "");
+            return false;
+          });
+        });
+      </script>
+    </div>
+  </nav>
+</div>

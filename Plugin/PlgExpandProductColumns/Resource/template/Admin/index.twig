@@ -1,0 +1,210 @@
+{% extends 'default_frame.twig' %}
+
+{% block title %}設定{% endblock %}
+{% block sub_title %}商品情報 : 拡張項目管理{% endblock %}
+
+{% set body_class = 'admin_product_expand_column' %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+    .code {
+        font-size: 16px;
+        color: red;
+    }
+
+    .code2 {
+        color: #D55DFF;
+    }
+
+    .ttl {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .ttl2 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+</style>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">商品情報 : 拡張項目管理</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <form name="form1" id="form1" method="post" action="">
+                        <div class="table_list">
+                            <div class="table-responsive with-border">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>項目ID</th>
+                                        <th>項目名</th>
+                                        <th>項目タイプ</th>
+                                        <th>コード例</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for column in ex_columns %}
+                                        <tr>
+                                            <td>{{ column.columnId }}</td>
+                                            <td>{{ column.columnName }}</td>
+                                            <td>{{ column.columnType }}</td>
+                                            <td>{{ '{{ __EX_PRODUCT.' }}{{ column.columnId }}{{ '.name }}' }} , {{ '{{ __EX_PRODUCT.' }}{{ column.columnId }}{{ '.value }}' }}</td>
+                                            <td class="icon_edit">
+                                                <div class="dropdown">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><svg class="cb cb-ellipsis-h"> <use xlink:href="#cb-ellipsis-h" /></svg></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a href="{{ url('plugin_PlgExpandProductColumns_config_edit', { 'id' : column.columnId }) }}" >編集</a></li>
+                                                        <li><a href="{{ url('plugin_PlgExpandProductColumns_config_delete', {id: column.columnId}) }}" {{ csrf_token_for_anchor() }} data-method="delete" data-message="この項目を削除してもよろしいですか？">削除</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.box -->
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+                    <a href="{{ url('plugin_PlgExpandProductColumns_config_new') }}" class="btn btn-primary btn-block btn-lg">新規登録</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box accordion form-horizontal">
+        <div class="box-header toggle">
+            <h3 class="box-title">基本的な使い方 --- 商品情報を追加する ---<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+        </div>
+        <div class="box-body accpanel">
+            <ul>
+                <li class="ttl">&nbsp;＜商品情報項目を追加＞</li>
+                <li>&nbsp;</li>
+                <li>1. 「新規登録」ボタンから追加画面に進む</li>
+                <li>2. 項目名、項目タイプを入力</li>
+                <li>&nbsp;&nbsp;「テキスト」=> 1行の文字情報</li>
+                <li>&nbsp;&nbsp;「テキストエリア」=> 複数行の文字情報</li>
+                <li>&nbsp;&nbsp;「画像」=> 画像情報</li>
+                <li>&nbsp;&nbsp;「セレクトボックス」=> 選択肢型の文字情報</li>
+                <li>3. 「登録」ボタンから保存</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li class="ttl">&nbsp;＜追加した項目に、商品情報を追加＞</li>
+                <li>&nbsp;</li>
+                <li>1. 商品管理 => 商品登録等から、商品の追加 or 編集画面に進む</li>
+                <li>2. 「拡張項目」 欄に追加した項目が表示されているので、入力して保存</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="box accordion form-horizontal">
+        <div class="box-header toggle">
+            <h3 class="box-title">基本的な使い方 --- 商品情報を「商品詳細画面」に表示する ---<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+        </div>
+        <div class="box-body accpanel">
+            <ul>
+                <li class="ttl">&nbsp;＜編集用テンプレートの準備＞</li>
+                <li>&nbsp;</li>
+                <li>1. detail.twigをコピーします[ コピーファイル: src/Eccube/Resource/template/{{ app.config.template_code }}/Product/detail.twig ]</li>
+                <li>2. 1のファイルをペーストします[ ペースト先: app/template/{{ app.config.template_code }}/Product/detail.twig ]</li>
+                <li>&nbsp;&nbsp;以降は、2でペーストしたファイルを編集します！</li>
+                <li>&nbsp;</li>
+                <li class="ttl">&nbsp;＜ソースコードの編集＞</li>
+                <li>&nbsp;</li>
+                <li>表示したい場所に下記のルールに則ってコードを埋め込みます</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;<span class="code">{{ '{{ __EX_PRODUCT.<項目ID>.<表示対象> }}' }}</span></li>
+                <li>&nbsp;</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;例: <span class="code">{{ '{{ __EX_PRODUCT.1.value }}' }}</span></li>
+                <li>&nbsp;</li>
+                <li>&nbsp;&nbsp;項目ID は上の表の一番左の値です </li>
+                <li>&nbsp;&nbsp;表示対象 [ name = 項目名 ] [ value = それぞれの商品に登録した値 ] </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="box accordion form-horizontal">
+        <div class="box-header toggle">
+            <h3 class="box-title">基本的な使い方 --- 商品情報を「商品一覧画面」に表示する ---<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+        </div>
+        <div class="box-body accpanel">
+            <ul>
+                <li class="ttl">&nbsp;＜編集用テンプレートの準備＞</li>
+                <li>&nbsp;</li>
+                <li>1. list.twigをコピーします[ コピーファイル: src/Eccube/Resource/template/{{ app.config.template_code }}/Product/list.twig ]</li>
+                <li>2. 1のファイルをペーストします[ ペースト先: app/template/{{ app.config.template_code }}/Product/list.twig ]</li>
+                <li>&nbsp;&nbsp;以降は、2でペーストしたファイルを編集します！</li>
+                <li>&nbsp;</li>
+                <li class="ttl">&nbsp;＜ソースコードの編集＞</li>
+                <li>&nbsp;</li>
+                <li>表示したい場所に下記のルールに則ってコードを埋め込みます</li>
+                <li>&nbsp;</li>
+                <li class="ttl2">&nbsp;ルール1: コードを埋め込む場所</li>
+                <li>&nbsp;&nbsp;list.twigの以下の場所</li>
+                <li>&nbsp;</li>
+                <li class="code2">&nbsp;&nbsp;{{ '{% for Product in pagination %}' }}</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;この間にコードを埋め込みます!!!</li>
+                <li>&nbsp;</li>
+                <li class="code2">&nbsp;&nbsp;{{ '{% endfor %}' }}</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li class="ttl2">&nbsp;ルール2: コード内容</li>
+                <li>&nbsp;<span class="code">{{ '{{ __EX_PRODUCT_LIST[Product.id].<項目ID>.<表示対象> }}' }}</span></li>
+                <li>&nbsp;</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;例: <span class="code">{{ '{{ __EX_PRODUCT_LIST[Product.id].2.value }}' }}</span></li>
+                <li>&nbsp;</li>
+                <li>&nbsp;&nbsp;項目ID は上の表の一番左の値です </li>
+                <li>&nbsp;&nbsp;表示対象 [ name = 項目名 ] [ value = それぞれの商品に登録した値 ] </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="box accordion form-horizontal">
+        <div class="box-header toggle">
+            <h3 class="box-title">基本的な使い方 --- 商品情報を「管理画面の商品一覧」に表示する ---<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+        </div>
+        <div class="box-body accpanel">
+            <ul>
+                <li class="ttl">&nbsp;＜編集用テンプレートの準備＞</li>
+                <li>&nbsp;</li>
+                <li>1. index.twigをコピーします[ コピーファイル: src/Eccube/Resource/template/admin/Product/index.twig ]</li>
+                <li>2. 1のファイルをペーストします[ ペースト先: app/template/admin/Product/index.twig ]</li>
+                <li>&nbsp;&nbsp;以降は、2でペーストしたファイルを編集します！</li>
+                <li>&nbsp;</li>
+                <li class="ttl">&nbsp;＜ソースコードの編集＞</li>
+
+                <li>これ以降は上記「基本的な使い方 --- 商品情報を「商品一覧画面」に表示する」と同様の手順です</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="box accordion form-horizontal">
+        <div class="box-header toggle">
+            <h3 class="box-title">発展的な使い方<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+        </div>
+        <div class="box-body accpanel">
+            <p class="ttl">＜HTMLを追加する＞</p>
+            <ul>
+                <li>1. 「基本的な使い方 --- 商品情報を追加する ---」を参考に「テキストエリア型」の項目を作成します</li>
+                <li>2. 作成した項目に、商品管理画面からHTMLを登録します</li>
+                <li>3. 下記の例のように通常のコードに「|raw」を追加した形で配置します</li>
+                <li class="code">&nbsp;&nbsp;{{ '{{ __EX_PRODUCT.1.value|raw }}' }}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

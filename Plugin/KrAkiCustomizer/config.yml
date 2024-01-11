@@ -1,0 +1,9 @@
+name: 着物アキ カスタマイズ
+code: KrAkiCustomizer
+version: 1.0.0
+service:
+  - KrAkiCustomizerServiceProvider
+event:
+    KrAkiCustomizerEvent
+orm.path:
+    - /Resource/doctrine

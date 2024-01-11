@@ -1,0 +1,55 @@
+Plugin\KrAkiCustomizer\Entity\OrderDetail:
+    type: entity
+    table: dtb_order_detail
+    repositoryClass: Plugin\KrAkiCustomizer\Repository\OrderDetailRepository
+    id:
+        order_detail_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        order_id:
+            type: integer
+            nullable: false
+        product_id:
+            type: integer
+            nullable: false
+        product_class_id:
+            type: integer
+            nullable: false
+        product_name:
+            type: text
+            nullable: false
+        product_code:
+            type: text
+            nullable: true
+        class_name1:
+            type: text
+            nullable: true
+        class_name2:
+            type: text
+            nullable: true
+        class_category_name1:
+            type: text
+            nullable: true
+        class_category_name2:
+            type: text
+            nullable: true
+        price:
+            type: decimal
+            nullable: false
+        quantity:
+            type: decimal
+            nullable: false
+        tax_rate:
+            type: decimal
+            nullable: false
+        tax_rule:
+            type: integer
+            nullable: false
+        
+
+    lifecycleCallbacks: {  }

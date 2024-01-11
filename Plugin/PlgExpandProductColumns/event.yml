@@ -1,0 +1,18 @@
+eccube.event.render.admin_product_product_edit.before:
+    - [addContentOnProductEdit, NORMAL]
+    - [saveExColValue, NORMAL]
+eccube.event.render.admin_product_product_new.before:
+    - [addContentOnProductEdit, NORMAL]
+    - [saveExColValue, NORMAL]
+eccube.event.controller.product_detail.before:
+    - [setExpandColumns, NORMAL]
+eccube.event.controller.product_list.before:
+    - [setExpandColumns, NORMAL]
+eccube.event.controller.admin_product.before:
+    - [setExpandColumns, NORMAL]
+
+# front page event
+Admin/Product/product.twig:
+    - [onRenderAdminProductNew, NORMAL]
+Admin/Product/csv_product.twig:
+    - [onRenderAdminCsvImport, NORMAL]

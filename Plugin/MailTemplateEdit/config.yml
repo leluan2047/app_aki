@@ -1,0 +1,8 @@
+name: メールテンプレート機能拡張プラグイン
+event: MailTemplateEdit
+code: MailTemplateEdit
+version: 1.0.0
+service: 
+    - MailTemplateEditServiceProvider
+orm.path:
+    - /Resource/doctrine

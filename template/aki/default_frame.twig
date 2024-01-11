@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="google-site-verification" content="PSGbeVfvFIgMbWaDeuKzMd16apUJ4OsiUIyqo3Mc5tA">
+<meta name="facebook-domain-verification" content="qpsjfwb0652wmyai30dv6j6jvxadsm" />
+<title>
+{% if PageLayout.url == "homepage" %}着物レンタルあき (来店着付け無料・全国配送無料)
+{% elseif PageLayout.url == "english" %}AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/rental_plan" %}Kimono Rental plan/AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/rental_flow" %}The steps for renting kimono/AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/woman" %}kimono styles for women /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/man" %}kimono styles for men /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/kids" %}kimono styles for kids /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/wedding" %}kimono Japanese wedding style /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/faq" %}frequently asked questions /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "english/contact_info" %}Access Map and Contact information /AKI Kimono Rental Professional kimono dressing styling
+{% elseif PageLayout.url == "china" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/rental_plan" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/rental_flow" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/woman" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/man" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/kids" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/wedding" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/faq" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/contact" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% elseif PageLayout.url == "china/contact_info" %}{{ title }}/Aki 和服租赁位于交通便利的日本东京市中心
+{% else %}
+    {% if subtitle is defined and subtitle is not empty %}
+        {{ subtitle }}｜着物レンタルあき (来店着付け無料・全国配送無料)
+    {% elseif title is defined and title is not empty %}
+        {{ title }}｜着物レンタルあき (来店着付け無料・全国配送無料)
+    {% endif %}
+{% endif %}
+</title>
+{% if PageLayout.author is not empty %}<meta name="author" content="{{ PageLayout.author }}">{% else %}<meta name="author" content="着物レンタルあき　有限会社ベルコーポレーション">{% endif %}
+{% if PageLayout.keyword is not empty %}<meta name="keywords" content="{{ PageLayout.keyword }}">
+{% else %}
+    {% if PageLayout.url == "homepage" %}
+        <meta name="keywords" content="着物,レンタル,東京,都内23区,成人式,卒業式,入学式,パーティー,お茶会,花火,お祭り,結婚式,振袖,成人式,卒業式,浴衣,七五三,ヘアメイク,写真撮影">
+    {% elseif PageLayout.url == "product_list" %}
+        <meta name="keywords" content="{{ subtitle }}の{{ title }},成人式,入学式,卒業式,結婚式,パーティー,お茶会,観劇,お食事会,七五三,お宮参り,花火,お祭り,目的,種類,用途,シチュエーション,ヘアメイク,写真撮影">
+    {% elseif PageLayout.url == "product_detail" %}
+        <meta name="keywords" content="{{ subtitle }},着物,レンタル,東京,都内23区,成人式,卒業式,入学式,パーティー,お茶会,花火,お祭り,結婚式,振袖,成人式,卒業式,浴衣,七五三">
+    {% else %}
+        {% if subtitle is defined and subtitle is not empty %}
+            <meta name="keywords" content="{{ subtitle }},着物,レンタル,東京,都内23区,成人式,卒業式,入学式,パーティー,お茶会,花火,お祭り,結婚式,振袖,成人式,卒業式,浴衣,七五三">
+        {% elseif title is defined and title is not empty %}
+            <meta name="keywords" content="{{ title }},着物,レンタル,東京,都内23区,成人式,卒業式,入学式,パーティー,お茶会,花火,お祭り,結婚式,振袖,成人式,卒業式,浴衣,七五三">
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+{% if PageLayout.description is not empty %}<meta name="description" content="{{ PageLayout.description }}">
+{% else %}
+    {% if PageLayout.url == "homepage" %}
+        <meta name="description" content="着物のレンタルなら、首都圏4店舗運営(渋谷、銀座、池袋、横浜)の「着物レンタルあき」にお任せください!フルセットレンタルに、来店着付け無料。店舗での、スタジオ撮影、ヘアーメイクも承ります。七五三から訪問着の着物まで、着物のことならお気軽にご相談ください!遠方のお客様は送料・代引き手数料無料でお届けします。">
+    {% elseif PageLayout.url == "product_list" %}
+        <meta name="description" content="{{ subtitle }}の着物のレンタルなら、首都圏4店舗運営(渋谷、銀座、池袋、横浜)の「着物レンタルあき」にお任せください!フルセットレンタルに、来店着付け無料。店舗での、スタジオ撮影、ヘアーメイクも承ります。七五三から訪問着の着物まで、着物のことならお気軽にご相談ください!遠方のお客様は送料・代引き手数料無料でお届けします。">
+    {% elseif PageLayout.url == "product_detail" %}
+        <meta name="description" content="{{ subtitle }}の着物のレンタルなら、首都圏4店舗運営(渋谷、銀座、池袋、横浜)の「着物レンタルあき」にお任せください!フルセットレンタルに、来店着付け無料。店舗での、スタジオ撮影、ヘアーメイクも承ります。七五三から訪問着の着物まで、着物のことならお気軽にご相談ください!遠方のお客様は送料・代引き手数料無料でお届けします。">
+    {% elseif PageLayout.url == "753" %}
+            <meta name="description" content="{{ title }}なら、「着物レンタルあき」にお任せください!お子様のお祝いにぴったりな華やかな着物を多数取り揃えております。首都圏4店舗運営(渋谷、銀座、池袋、横浜)出張着付けからスタジオ写真撮影まで多数のプランをご用意しております。">
+    {% else %}
+        {% if subtitle is defined and subtitle is not empty %}
+            <meta name="description" content="{{ subtitle }}の着物のレンタルなら、首都圏4店舗運営(渋谷、銀座、池袋、横浜)の「着物レンタルあき」にお任せください!フルセットレンタルに、来店着付け無料。店舗での、スタジオ撮影、ヘアーメイクも承ります。七五三から訪問着の着物まで、着物のことならお気軽にご相談ください!遠方のお客様は送料・代引き手数料無料でお届けします。">
+        {% elseif title is defined and title is not empty %}
+            <meta name="description" content="{{ title }}の着物のレンタルなら、首都圏4店舗運営(渋谷、銀座、池袋、横浜)の「着物レンタルあき」にお任せください!フルセットレンタルに、来店着付け無料。店舗での、スタジオ撮影、ヘアーメイクも承ります。七五三から訪問着の着物まで、着物のことならお気軽にご相談ください!遠方のお客様は送料・代引き手数料無料でお届けします。">
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+{% if PageLayout.meta_robots is not empty %}
+<meta name="robots" content="{{ PageLayout.meta_robots }}">
+{% endif %}<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes">
+<link rel="icon" href="{{ app.config.front_urlpath }}/img/common/favicon.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
+<link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/style.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
+<link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/default.css?v=3.0.14">
+<link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/slick.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
+<link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/pg_calendar.css">
+<!-- for original theme CSS -->
+{% block stylesheet %}{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+window.jQuery || document.write('<script src="{{ app.config.front_urlpath }}/js/vendor/jquery-1.11.3.min.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"><\/script>')
+</script>
+{# ▼Head COLUMN #}
+{% if PageLayout.Head %}
+{# ▼上ナビ #}
+{{ include('block.twig', {'Blocks': PageLayout.Head}) }}
+{# ▲上ナビ #}
+{% endif %}
+{# ▲Head COLUMN #}
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T5EE9G3EBX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T5EE9G3EBX');
+</script>
+</head>
+<body id="page_{{ app.request.get('_route') }}" class="{{ body_class|default('other_page') }}">
+    <div id="wrapper">
+        <header id="header">
+            {# ▼HeaderInternal COLUMN #}
+            {% if PageLayout.Header %}
+            {# ▼上ナビ #}
+            {{ include('block.twig', {'Blocks': PageLayout.Header}) }}
+            {# ▲上ナビ #}
+            {% endif %}
+            {# ▲HeaderInternal COLUMN #}
+        </header>
+
+        <article id="contents" class="{{ PageLayout.theme }}">
+            <div id="contents_top">
+                {# ▼TOP COLUMN #}
+                {% if PageLayout.ContentsTop %}
+                {# ▼上ナビ #}
+                {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
+                {# ▲上ナビ #}
+                {% endif %}
+                {# ▲TOP COLUMN #}
+            </div>
+            <div class="container">
+                <div class="row">
+                    {# ▼LEFT COLUMN #}
+                    {% if PageLayout.SideLeft %}
+                    <aside id="" class="col-sm-3 side">
+                        {# ▼左ナビ #}
+                        {{ include('block.twig', {'Blocks': PageLayout.SideLeft}) }}
+                        {# ▲左ナビ #}
+                    </aside>
+                    {% endif %}
+                    {# ▼LEFT COLUMN #}
+
+                    <div id="" class="col-sm-9">
+                        {# ▼メイン上部 #}
+                        {% if PageLayout.MainTop %}
+                        <div id="main_top">
+                            {{ include('block.twig', {'Blocks': PageLayout.MainTop}) }}
+                        </div>
+                        {% endif %}
+                        {# ▲メイン上部 #}
+
+                        <div id="main_middle">
+                            {% block main %}{% endblock %}
+                        </div>
+
+                        {# ▼メイン下部 #}
+                        {% if PageLayout.MainBottom %}
+                            <div id="main_bottom">
+                            {{ include('block.twig', {'Blocks': PageLayout.MainBottom}) }}
+                            </div>
+                        {% endif %}
+                        {# ▲メイン下部 #}
+                    </div>
+                </div>
+                <div id="contents_bottom">
+                    {# ▼BOTTOM COLUMN #}
+                    {% if PageLayout.ContentsBottom %}
+                    {# ▼下ナビ #}
+                    {{ include('block.twig', {'Blocks': PageLayout.ContentsBottom}) }}
+                    {# ▲下ナビ #}
+                    {% endif %}
+                    {# ▲BOTTOM COLUMN #}
+                </div>
+            </div>
+        </article>
+
+        <footer id="footer" class="footer_link">
+        {# ▼Footer COLUMN#}
+        {% if PageLayout.Footer %}
+        {# ▼上ナビ #}
+        {{ include('block.twig', {'Blocks': PageLayout.Footer}) }}
+        {# ▲上ナビ #}
+        {% endif %}
+        {# ▲Footer COLUMN#}
+        </footer>
+        <div id="drawer" class="drawer sp"></div>
+    </div>
+
+<div class="overlay"></div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/todc-bootstrap/3.3.6-3.3.6/js/bootstrap.min.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.ja.min.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script src="{{ app.config.front_urlpath }}/js/function.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script src="{{ app.config.front_urlpath }}/js/eccube.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
+<script>
+$(function () {
+    $('#drawer').append($('.drawer_block').clone(true).children());
+    $.ajax({
+        url: '{{ app.config.front_urlpath }}/img/common/svg.html',
+        type: 'GET',
+        dataType: 'html',
+    }).done(function(data){
+        $('body').prepend(data);
+    }).fail(function(data){
+    });
+    var offset = 4;
+    var dateToday = new Date();
+    var dateMin = new Date(dateToday.getFullYear(), dateToday.getMonth(), dateToday.getDate() + offset);
+    var dateMax = new Date(dateMin.getFullYear(), dateMin.getMonth() + 1, dateMin.getDate() - 1);
+    var dateFormat = "yy/mm/dd";
+    $('.date input.date').datepicker( {
+        format: 'yyyy/mm/dd',
+        language: 'ja',
+        autoclose : true,
+        keyboardNavigation : false,
+        showMonthAfterYear: true,
+        monthNames: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+        todayHighlight : true,
+        startDate: dateMin
+        //endDate: dateMax
+    } );
+});
+</script>
+<!-- User Heat Tag -->
+<script>
+(function(add, cla){window['UserHeatTag']=cla;window[cla]=window[cla]||function(){(window[cla].q=window[cla].q||[]).push(arguments)},window[cla].l=1*new Date();var ul=document.createElement('script');var tag = document.getElementsByTagName('script')[0];ul.async=1;ul.src=add;tag.parentNode.insertBefore(ul,tag);})('//uh.nakanohito.jp/uhj2/uh.js', '_uhtracker');_uhtracker({id:'uhBSZzhS93'});
+</script>
+<!-- End User Heat Tag -->
+
+{% block javascript %}{% endblock %}
+</body>
+</html>

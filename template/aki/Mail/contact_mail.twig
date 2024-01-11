@@ -1,0 +1,25 @@
+{{ data.name01 }} {{ data.name02 }} 様
+
+以下のお問い合わせを受付致しました。
+確認次第ご連絡いたしますので、少々お待ちください。
+
+■特定の店舗にお問い合わせご希望　：{% if data.store == "渋谷本店" %}渋谷本店{% elseif data.store == "銀座店" %}銀座店{% elseif data.store == "池袋店" %}池袋店{% elseif data.store == "横浜店" %}横浜店{% endif %}　
+■お名前　：{{ data.name01 }} {{ data.name02 }}{% if data.kana01 or data.kana02 %} ({{ data.kana01 }} {{ data.kana02 }}){% endif %} 様
+■郵便番号：{% if data.zip01 and data.zip02 %}〒{{ data.zip01 }} - {{ data.zip02 }}{% endif %}　
+■住所　　：{% if data.pref.name is defined %} {{ data.pref.name }}{% endif %}{{ data.addr01 }}{{ data.addr02 }}
+■電話番号：{{ data.tel01 }} - {{ data.tel02 }} - {{ data.tel03 }}
+■メールアドレス：{{ data.email }}
+■返信方法　：{% if data.reply == "メール" %}メール{% elseif data.reply == "電話" %}電話{% endif %}　
+■お問い合わせの内容
+
+{{ data.contents }}
+
+★☆★☆★☆★☆★☆★☆★☆★☆★☆
+着物レンタルあき
+TEL：03-3476-3341～2 （渋谷店）
+TEL：03-5568-0529（銀座店）
+TEL：03-6416-0529（池袋店）
+TEL：045-441-0529 （横浜店）
+http://kr-aki.co.jp/
+e-mail:contact@kr-aki.jp
+★☆★☆★☆★☆★☆★☆★☆★☆★☆

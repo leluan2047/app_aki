@@ -1,0 +1,128 @@
+{% block javascript %}
+    <style type="text/css">
+        th {text-align: center;}
+    </style>
+	<script>
+	    function funcPaymentCommit(){
+	    	if($( "#paymentCommit" ).prop("checked") == true){
+				var totalTr = $(".table").find("tbody tr");
+				for (i = 0; i < totalTr.length; i++) {
+ 				    var arrItem = $(totalTr[i]).find("td.paycommit");
+						var checkBox = arrItem.find("input");
+							$(checkBox).prop("checked", true);
+				}
+	    	}else{
+	    		var totalTr = $(".table").find("tbody tr");
+				for (i = 0; i < totalTr.length; i++) {
+ 				    var arrItem = $(totalTr[i]).find("td.paycommit");
+						var checkBox = arrItem.find("input");
+							$(checkBox).prop("checked", false);
+				}
+	    	}
+	    }
+
+	    function funcPaymentCancel(){
+	    	if($( "#paymentCancel" ).prop("checked") == true){
+				var totalTr = $(".table").find("tbody tr");
+				for (i = 0; i < totalTr.length; i++) {
+ 				    var arrItem = $(totalTr[i]).find("td.paycancel");
+						var checkBox = arrItem.find("input");
+							$(checkBox).prop("checked", true);
+				}
+	    	}else{
+	    		var totalTr = $(".table").find("tbody tr");
+				for (i = 0; i < totalTr.length; i++) {
+ 				    var arrItem = $(totalTr[i]).find("td.paycancel");
+						var checkBox = arrItem.find("input");
+							$(checkBox).prop("checked", false);
+				}
+	    	}
+	    }
+	    $(document).ready(function () {
+	    	var arrOrderId ="";
+			var totalTr = $(".table").find("tbody tr td");
+			for(i = 0; i < totalTr.length; i++){
+				if ($(totalTr[i]).attr('class') != 'icon_edit') {
+					var orderId = $(totalTr[i]).find("a").text();
+					if (orderId != '') {
+						arrOrderId += orderId+",";
+					}
+				}
+			}
+
+			$('#arrOrderId').val(arrOrderId.slice(0, arrOrderId.length - 1));
+		});
+
+
+	    function fnPaygentSubmit(type) {
+	        switch (type) {
+	        	//Commit process
+		        case 'paygent_commit':
+		        	//get order commit
+			        var orderCommit ="";
+					var totalTr = $(".table").find("tbody tr");
+					for (i = 0; i < totalTr.length; i++) {
+					    var arrItem = $(totalTr[i]).find("td.paycommit");
+						var checkBox = arrItem.find("input");
+						if($(checkBox).prop("checked") == true){
+							orderCommit += $(checkBox).val()+"--";
+						}
+					}
+					//check no checkbox checked
+					var chkCommit = orderCommit.match(/\d+/g);
+					if (chkCommit == null) {
+						alert('1件も選択されていません。');
+						return false;
+					}
+					orderCommit = orderCommit.slice(0, orderCommit.length - 2);
+		            var commit_flg = confirm('一括売上処理を実行します。よろしいですか？');
+		            break;
+
+		        //Cancel process
+		        case 'paygent_cancel':
+		        	//get order cancel
+			        var orderCancel="";
+					var totalTr = $(".table").find("tbody tr");
+					for (i = 0; i < totalTr.length; i++) {
+					    var arrItem = $(totalTr[i]).find("td.paycancel");
+						var checkBox = arrItem.find("input");
+						if($(checkBox).prop("checked") == true){
+							orderCancel += $(checkBox).val()+"--";
+						}
+					}
+					//check no checkbox checked
+					var chkCancel= orderCancel.match(/\d+/g);
+					if (chkCancel == null) {
+						alert('1件も選択されていません。');
+						return false;
+					}
+					orderCancel = orderCancel.slice(0, orderCancel.length - 2);
+		            var cancel_flg = confirm('一括削除処理を実行します。よろしいですか？');
+		            break;
+	        }
+
+	        if (commit_flg === true) {
+	        	window.open ("{{path('paygent_order_commit')}}?arrOrderId="+orderCommit+"&mode="+type+" ","mywindow","menubar=1,resizable=1,width=400,height=500");
+	        }
+	        if (cancel_flg === true) {
+	        	window.open ("{{path('paygent_order_commit')}}?arrOrderId="+orderCancel+"&mode="+type+" ","mywindow","menubar=1,resizable=1,width=400,height=500");
+	        }
+	    }
+
+    </script>
+{% endblock %}
+
+{% block main %}
+<span id = "abc">
+<input type="hidden" value="" id="arrOrderId">
+</span>
+<th>ペイジェント <br> 状況</th>
+<th>一括売上 <br>
+<input type="button" value="実行" onclick="fnPaygentSubmit('paygent_commit');"><br>
+<input type="checkbox" id ="paymentCommit" name="paygent_commit" onclick="funcPaymentCommit();">
+</th>
+<th>一括取消 <br>
+<input type="button" value="実行" onclick="fnPaygentSubmit('paygent_cancel');"><br>
+<input type="checkbox" id ="paymentCancel" name="paygent_cancel" onclick="funcPaymentCancel();">
+</th>
+{% endblock %}

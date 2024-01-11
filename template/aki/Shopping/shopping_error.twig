@@ -1,0 +1,32 @@
+{% extends 'default_frame.twig' %}
+{% set body_class = 'cart_page' %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">購入エラー</h2>
+			<p>
+				購入エラーが出ております。お手数ですが、運営事務局まで<a href="/contact">お問い合わせ</a>ください。
+			</p>
+		</div>
+	</div>
+
+	<div id="error_wrap" class="">
+		<div id="error_box" class="row">
+			<div id="error_box__body" class="col-sm-10 col-sm-offset-1">
+				{% for error in app.session.flashbag.get('eccube.front.error')  %}
+				<div id="error_box__error_message-{{ loop.index }}" class="message">
+					{{ error|trans|nl2br }}
+				</div>
+				{% endfor %}
+				<div id="error_box__footer" class="row no-padding">
+					<div id="error_box__button_menu" class="btn_group col-sm-offset-4 col-sm-4">
+						<p id="error_box__top_button"><a href="{{ url('homepage') }}" class="btn btn-info btn-block">トップページへ</a></p>
+						<p id="error_box__back_button"><a href="{{ url('cart') }}" class="btn btn-info btn-block">カートに戻る</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

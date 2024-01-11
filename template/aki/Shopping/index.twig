@@ -1,0 +1,453 @@
+{% extends 'default_frame.twig' %}
+{% block javascript %}
+
+<script>
+$(function() {
+	$('.delivery').on('change', function() {
+		$('#shopping-form').attr('action', '{{ url("shopping_delivery") }}').submit();
+		return false;
+	});
+
+	$('.payment').on('change', function() {
+		$('#shopping-form').attr('action', '{{ url("shopping_payment") }}').submit();
+		return false;
+	});
+
+	$('.btn-shipping').click(function() {
+		$('#shopping-form').attr('action', $(this).attr('href')).submit();
+		$('#shopping-form').attr('action', '{{ url("shopping_confirm") }}');
+		return false;
+	});
+
+	$('.btn-shipping-edit').click(function() {
+		$('#shopping-form').attr('action', $(this).attr('href')).submit();
+		$('#shopping-form').attr('action', '{{ url("shopping_confirm") }}');
+		return false;
+	});
+
+	$('.btn-shipping-multiple').click(function() {
+		$('#shopping-form').attr('action', $(this).attr('href')).submit();
+		$('#shopping-form').attr('action', '{{ url("shopping_confirm") }}');
+		return false;
+	});
+        
+        if(!$('input.payment').is(':checked')){
+                $('ul.payment_list li:first-child input').click();
+        }
+
+	{% if is_granted('ROLE_USER') == false %}
+		var ref = [];
+		var name = [];
+		var input = [];
+		var customerin = [];
+
+		$('#customer').click(function() {
+			// ref = $('.customer-name01');
+			var edit = $('.customer-edit');
+			var hidden = $('.customer-in');
+
+			$(edit).each(function(index) {
+				ref[index] = $(this);
+			});
+
+			$(hidden).each(function(index) {
+				customerin[index] = $(this);
+			});
+
+			$(ref).each(function(index) {
+				name[index] = $(this).text();
+			});
+
+			$(name).each(function(index) {
+				input[index] = $('<input id="edit' + index + '" type="text" />').val(name[index]);
+			});
+
+			$(input).each(function(index) {
+				ref[index].empty().append(input[index]);
+			});
+
+			$('#customer').prop("disabled", true);
+			$('.mod-button').show();
+		});
+
+		$('#customer-ok').click(function() {
+			$(ref).each(function(index) {
+				var nameAfter = input[index].val();
+				ref[index].empty().text(nameAfter);
+				customerin[index].val(nameAfter);
+				input[index].remove();
+			});
+
+			var postData = {};
+			$('.customer-in').each(function() {
+				postData[$(this).attr('name')] = $(this).val();
+			});
+
+			$.ajax({
+				url: "{{ url('shopping_customer') }}",
+				type: 'POST',
+				data: postData,
+				dataType: 'json',
+			}).done(function(){
+			}).fail(function(){
+				alert('更新に失敗しました。入力内容を確認してください。');
+				$(ref).each(function(index) {
+					ref[index].empty().text(name[index]);
+					input[index].remove();
+				});
+			});
+
+			$('#customer').prop("disabled", false);
+			$('.mod-button').hide();
+		});
+
+		$('#customer-cancel').click(function() {
+			$(ref).each(function(index) {
+				ref[index].empty().text(name[index]);
+				input[index].remove();
+			});
+
+			$('#customer').prop("disabled", false);
+			$('.mod-button').hide();
+		});
+	{% endif %}
+		var dateToday = new Date();
+		var dateFormat = "yyyy-mm-dd";
+		$('#shopping_plg_date_visit').datepicker( {
+			format: dateFormat,
+			language: 'ja',
+			autoclose : true,
+			keyboardNavigation : false,
+			showMonthAfterYear: true,
+			monthNames: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+			todayHighlight : true,
+			startDate: dateToday
+		});
+});
+</script>
+{% endblock javascript %}
+
+{% block main %}
+
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">ご注文内容のご確認</h2>
+			<p>
+				ご注文内容と配送先をご確認の上、「注文する」ボタンをクリックしてください。
+			</p>
+		</div>
+	</div>
+
+	<div id="confirm_wrap" class="">
+		<div id="confirm_flow_box" class="row">
+			<div id="confirm_flow_box__body" class="col-md-12">
+				{% if is_granted('ROLE_USER') %}
+				<div id="confirm_flow_box__flow_state" class="flowline step3">
+				{% else %}
+				<div id="confirm_flow_box__flow_state" class="flowline step4">
+				{% endif %}
+					<ul id="confirm_flow_box__flow_state_list" class="clearfix">
+						<li><span class="flow_number">1</span><br>カートの商品</li>
+						{% if is_granted('ROLE_USER') %}
+							<li class="active"><span class="flow_number">2</span><br>ご注文内容確認</li>
+							<li><span class="flow_number">3</span><br>完了</li>
+						{% else %}
+							<li><span class="flow_number">2</span><br>お客様情報</li>
+							<li class="active"><span class="flow_number">3</span><br>ご注文内容確認</li>
+							<li><span class="flow_number">4</span><br>完了</li>
+						{% endif %}
+					</ul>
+				</div>
+				{% for error in app.session.flashbag.get('eccube.front.request.error')  %}
+				<div id="confirm_flow_box__message" class="message">
+					<p class="errormsg bg-danger">
+						<svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>{{ error|trans|nl2br }}
+					</p>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<form id="shopping-form" method="post" action="{{ url('shopping_confirm') }}">
+		{{ form_widget(form._token) }}
+			<div id="shopping_confirm" class="row">
+				<div id="confirm_main" class="col-sm-8">
+					<div id="cart_box" class="cart_item table">
+						<div id="cart_box_list" class="tbody">
+							{% set index = 0 %}
+							{% for orderDetail in Order.orderDetails %}
+							{% if orderDetail.productClass.code == secure_pack_code %}
+								{# 安心パック #}
+							{% else %}
+                                                        {% if OrderDetailAdditionalInfoList[index] is defined and OrderDetailAdditionalInfoList[index] is not null %}
+							{% set addinfo = OrderDetailAdditionalInfoList[index] %}
+							<div id="cart_box_list__item_box--{{ loop.index }}" class="item_box tr">
+								<div id="cart_box_list__item--{{ loop.index }}" class="td table">
+									<div id="cart_box_list__photo--{{ loop.index }}" class="item_photo"><img src="{{ app.config.image_save_urlpath }}/{{ orderDetail.product.MainListImage|no_image_product }}" alt="{{ orderDetail.productName }}" /></div>
+									<dl id="cart_box_list__detail--{{ loop.index }}" class="item_detail">
+										<dt id="cart_box_list__name--{{ loop.index }}" class="item_name text-default">{{ orderDetail.productName }}</dt>
+										<dd>ご予約方法：{% if addinfo.order_type == "deliv" %}宅配着物レンタル{% else %}来店着付けレンタル{% endif %}</dd>
+										<dd>ご利用日：{{ addinfo.wear_date }}</dd>
+										{% if addinfo.order_type == "visit" %}
+											<dd>着付けご来店希望店舗：{{ addinfo.visit_store }}</dd>
+{# 20160601 非表示
+											<dd>着付けご来店日：{{ addinfo.date_visit }}</dd>
+#}
+											<dd>ご出発予定時間：{{ addinfo.time_departure }}</dd>
+										{% endif %}
+										<dd>用途：{{ addinfo.purpose }}</dd>
+										<dd>身長：{{ addinfo.body_height }}</dd>
+										<dd>足のサイズ：{{ addinfo.foot_size }}</dd>
+										<dd>年代：{{ addinfo.decade }}</dd>
+										{% if addinfo.body_type|length  > 0 %}
+											<dd>体型：{% for body_type in addinfo.body_type %}{{body_type}}<br />{% endfor %}</dd>
+										{% endif %}
+										{% if addinfo.secure_pack|length  > 0 %}
+										<dd>安心パック：{% for secure_pack in addinfo.secure_pack %}{{secure_pack}}<br />{% endfor %}</dd>
+										{% endif %}
+										{% if addinfo.order_type == "visit" %}
+											<dd>フォト：{{ addinfo.need_photo }}</dd>
+											<dd>ヘア・メイクの有無：{{ addinfo.need_hair_make }}</dd>
+										{% endif %}
+										<dd id="cart_box_list__class_category--{{ loop.index }}" class="item_pattern small">
+											{% if orderDetail.productClass.classCategory1 %}
+												{{ orderDetail.productClass.classCategory1.className }}：{{ orderDetail.productClass.classCategory1 }}
+											{% endif %}
+											{% if orderDetail.productClass.classCategory2 %}
+												<br>{{ orderDetail.productClass.classCategory2.className }}：{{ orderDetail.productClass.classCategory2 }}
+											{% endif %}
+										</dd>
+										<dd id="cart_box_list__price--{{ loop.index }}" class="item_price">{{ orderDetail.priceIncTax|price }}</dd>
+										{% set sub_total = orderDetail.totalPrice %}
+										{% if addinfo.secure_pack|length  > 0 %}
+											{% set sub_total = sub_total + secure_pack_price %}
+										{% endif %}
+										<dd id="cart_box_list__subtotal--{{ loop.index }}" class="item_subtotal">小計：{{ sub_total|price }}</dd>
+									</dl>
+								</div>
+							</div>
+                                                        {% endif %}            
+							{% set index = index + 1 %}
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+					<p><a id="confirm_box__quantity_edit_button" href="{{ url('cart') }}" class="btn btn-default btn-sm">数量を変更または削除する</a></p>
+					{% if orderType == "visit" %}
+					{% for key, value in form_settings.pay_method %}
+                                                {% if depositable %}
+                                                        {% if key == "deposit" %}
+                                                        <p><label><input id="shopping_plg_pay_method_{{loop.index}}"  name="shopping[plg_pay_method]" type="radio" value="{{key}}" checked /> {{value}}</label></p>
+                                                        {% endif %}
+                                                {% else %}
+                                                        {% if key == "prepay" %}
+                                                        <p><label><input id=""  name="" type="radio" value="{{key}}" checked /> {{value}}</label></p>
+                                                        <small style="color: #18360c;">※上記金額は、商品代金+安心パック（ご選択の場合）となります。　各種オプションがある場合はご来店時にお支払いください。</small>
+                                                        {% endif %}
+                                                {% endif %}
+					{% endfor %}
+					{% endif %}
+					<h2 class="heading02">お客様情報</h2>
+					<div id="customer_detail_box" class="column is-edit">
+						<p id="customer_detail_box__customer_address" class="address">
+							<span class="customer-edit customer-name01">{{ Order.name01 }}</span> <span class="customer-edit customer-name02">{{ Order.name02 }}</span> 様<br>
+							〒<span class="customer-edit customer-zip01">{{ Order.zip01 }}</span>-<span class="customer-edit customer-zip02">{{ Order.zip02 }}</span> <span class="customer-edit customer-pref">{{ Order.pref }}</span><span class="customer-edit customer-addr01">{{ Order.addr01 }}</span><span class="customer-edit customer-addr02">{{ Order.addr02 }}</span><br>
+							<span class="customer-edit customer-tel01">{{ Order.tel01 }}</span>-<span class="customer-edit customer-tel02">{{ Order.tel02 }}</span>-<span class="customer-edit customer-tel03">{{ Order.tel03 }}</span>
+						</p>
+
+						{% if is_granted('ROLE_USER') == false %}
+						<div class="customer-edit customer-email">{{ Order.email }}</div>
+						<div class="customer-edit customer-company_name">{{ Order.companyName }}</div>
+						<div class="mod-button" style="display:none;">
+							<span id="customer-ok"><button type="button" class="btn btn-default btn-sm">OK</button></span>
+							<span id="customer-cancel"><button type="button" class="btn btn-default btn-sm">キャンセル</button></span>
+						</div>
+						<p class="btn_edit"><button type="button" id="customer" class="btn btn-default btn-sm">変更</button></p>
+						<input type="hidden" id="customer-name01" class="customer-in" name="customer_name01" value="{{ Order.name01 }}">
+						<input type="hidden" id="customer-name02" class="customer-in" name="customer_name02" value="{{ Order.name02 }}">
+						<input type="hidden" id="customer-zip01" class="customer-in" name="customer_zip01" value="{{ Order.zip01 }}">
+						<input type="hidden" id="customer-zip02" class="customer-in" name="customer_zip02" value="{{ Order.zip02 }}">
+						<input type="hidden" id="customer-pref" class="customer-in" name="customer_pref" value="{{ Order.pref }}">
+						<input type="hidden" id="customer-addr01" class="customer-in" name="customer_addr01" value="{{ Order.addr01 }}">
+						<input type="hidden" id="customer-addr02" class="customer-in" name="customer_addr02" value="{{ Order.addr02 }}">
+						<input type="hidden" id="customer-tel01" class="customer-in" name="customer_tel01" value="{{ Order.tel01 }}">
+						<input type="hidden" id="customer-tel02" class="customer-in" name="customer_tel02" value="{{ Order.tel02 }}">
+						<input type="hidden" id="customer-tel03" class="customer-in" name="customer_tel03" value="{{ Order.tel03 }}">
+						<input type="hidden" id="customer-email" class="customer-in" name="customer_email" value="{{ Order.email }}">
+						<input type="hidden" id="customer-company-name" class="customer-in" name="customer_company_name" value="{{ Order.companyName }}">
+						{% endif %}
+					</div>
+
+					{% if orderType == "deliv" %}
+					{% else %}
+						<div style="display:none;">
+					{% endif %}
+						<h2 class="heading02">配送情報</h2>
+						{% set index = 0 %}
+						{% for shipping in Order.shippings %}
+						
+							{% set idx = loop.index0 %}
+							<div id="shipping_confirm_box--{{ idx }}" class="column is-edit">
+								<h3 class="heading03">お届け先{% if Order.multiple %}({{ loop.index }}){% endif %}</h3>
+                                                                
+                                                                <p id="shopping_confirm_box__shipping_address_detail--{{ idx }}" class="address">{{ shipping.name01 }} {{ shipping.name02 }} 様<br>
+								〒{{ shipping.zip01 }}-{{ shipping.zip02 }} {{ shipping.pref }}{{ shipping.addr01 }}{{ shipping.addr02 }}<br>
+								{{ shipping.tel01 }}-{{ shipping.tel02 }}-{{ shipping.tel03 }}</p>
+                                                                
+								<div id="shipping_confirm_box__body--{{ idx }}" class="cart_item table" style="display:none">
+									<div id="shipping_confirm_box__list--{{ idx }}" class="tbody">
+										{% for shipmentItem in shipping.shipmentItems %}
+										
+										{% if shipmentItem.productClass.code == secure_pack_code %}
+											{# 安心パック #}
+										{% else %}
+                                                                                {% set addinfo = OrderDetailAdditionalInfoList[index] %}
+                                                                                <div class="wrap_confirm_box">
+										<div id="shipping_confirm_box__item--{{ idx }}_{{ shipmentItem.id }}" class="item_box tr">
+											<div id="shipping_box__body_inner--{{ idx }}_{{ shipmentItem.id }}" class="td table">
+												<div id="shipping_box__photo--{{ idx }}_{{ shipmentItem.id }}" class="item_photo"><img src="{{ app.config.image_save_urlpath }}/{{ shipmentItem.product.MainListImage|no_image_product }}" alt="{{ shipmentItem.productName }}" /></div>
+												<dl id="shipping_box__detail--{{ idx }}_{{ shipmentItem.id }}" class="item_detail">
+													<dt id="shipping_box__name--{{ idx }}_{{ shipmentItem.id }}" class="item_name text-default">{{ shipmentItem.productName }}</dt>
+													<dd id="shipping_box__class_category--{{ idx }}_{{ shipmentItem.id }}" class="item_pattern small">
+														{% if shipmentItem.productClass.classCategory1 %}
+														{{ shipmentItem.productClass.classCategory1.className }}：{{ shipmentItem.productClass.classCategory1 }}
+														{% endif %}
+														{% if shipmentItem.productClass.classCategory2 %}
+														<br>{{ shipmentItem.productClass.classCategory2.className }}：{{ shipmentItem.productClass.classCategory2 }}
+														{% endif %}
+													</dd>
+													
+													{% if orderType == "deliv" %}
+													<dd>ご利用日：{{ addinfo.wear_date }}</dd>
+													<dd><strong>お届け日：{{ addinfo.wear_date|date_modify("-2 day")|date("Y-m-d") }}</strong></dd>
+                                                                                                        {% endif %}
+												</dl>
+											</div>
+										</div>
+										{% set index = index + 1 %}
+                                                                                </div>
+									  {% endif %}
+										{% endfor %}
+									</div>
+								</div>
+
+								<div id="shopping_confirm_box__shipping_delivery--{{ idx }}" class="form-inline form-group" style="display:none">
+									<label>配送方法</label>
+										{{ form_widget(form.shippings[idx].delivery, {'attr': {'class': 'delivery'}}) }}
+										{{ form_errors(form.shippings[idx].delivery) }}
+								</div>
+								<div id="shopping_confirm_box__shipping_delivery_date_time--{{ idx }}" class="form-inline form-group">
+									{#<label>お届け日</label>
+									{{ form_widget(form.shippings[idx].shippingDeliveryDate) }}<br class="sp">#}
+                                                                        <label>お届け日はご利用日の2日前となります。</label><br>
+									<label>お届け時間</label>
+									{{ form_widget(form.shippings[idx].deliveryTime) }}
+								</div>
+
+								{% if is_granted('ROLE_USER') %}
+								<p id="shopping_confirm_box__edit_button--{{ idx }}" class="btn_edit"><a href="{{ url('shopping_shipping_change', {'id': shipping.id}) }}" class="btn btn-default btn-sm btn-shipping">変更</a></p>
+								{% else %}
+								<p id="shopping_confirm_box__edit_button--{{ idx }}" class="btn_edit"><a href="{{ url('shopping_shipping_edit_change', {'id': shipping.id}) }}" class="btn btn-default btn-sm btn-shipping-edit">変更</a></p>
+								{% endif %}
+							</div>
+							{% if loop.last == false%}<hr>{% endif %}
+						{% endfor %}
+						{% if BaseInfo.optionMultipleShipping %}
+							<hr>
+							<div><a id="shopping_confirm_box__button_edit_multiple"  href="{{ url('shopping_shipping_multiple_change') }}" class="btn btn-default btn-sm btn-shipping-multiple">お届け先を追加する</a></div>
+						{% endif %}
+						{% if orderType == "deliv" %}
+						{% else %}
+					</div>
+						{% endif %}
+
+					<h2 class="heading02">お支払方法</h2>
+					<div id="payment_list" class="column">
+						<div id="payment_list__body" class="form-group">
+							<ul id="payment_list__list" class="payment_list">
+								{% for key, child in form.payment %}
+									{% if (form.payment.vars.choices[key].data == '代金引換') and (orderType == "visit") %}
+                                    {% else %}
+                                    <li>
+                                    {{ form_widget(child, {'attr': {'class': 'payment' }}) }}
+                                    {% if form.payment.vars.choices[key].data.payment_image is not null %}
+                                        <img src="{{ app.config.image_save_urlpath }}/{{ form.payment.vars.choices[key].data.payment_image }}">
+                                    {% endif %}
+                                    </li>
+                                    {% endif %}
+								{% endfor %}
+								{{ form_errors(form.payment) }}
+							</ul>
+						</div>
+					</div>
+				
+					<h2 class="heading02">お問い合わせ欄</h2>
+					<div id="contact_message" class="column">
+						{{ form_widget(form.message, {'attr': {'placeholder': 'お問い合わせ事項がございましたら、こちらにご入力ください。(3000文字まで)', 'rows': '6'}}) }}
+						{{ form_errors(form.message) }}
+					</div>
+					<!-- div class="extra-form column">
+						{% for f in form.getIterator %}
+							{% if f.vars.name matches '[^plg*]' %}
+								{{ form_row(f) }}
+							{% endif %}
+						{% endfor %}
+					</div -->
+					</div>
+
+				<div id="confirm_side" class="col-sm-4">
+					<div id="summary_box__total_box" class="total_box">
+						<dl id="summary_box__subtotal">
+							<dt>小計</dt>
+							<dd class="text-primary">{{ Order.subtotal|price }}</dd>
+						</dl>
+						{# <dl id="summary_box__quantity_price">
+							<dt>手数料</dt>
+							<dd>{{ Order.charge|price }}</dd>
+						</dl>
+						<dl id="summary_box__shipping_price">
+							<dt>送料</dt>
+							<dd>{{ Order.deliveryFeeTotal|price }}</dd>
+						</dl> #}
+						{% if Order.discount > 0 %}
+						<dl id="summary_box__discount_price">
+							<dt>値引き</dt>
+							<dd>{{ (0 - Order.discount)|price}}</dd>
+						</dl>
+						{% endif %}
+						
+						<dl id="summary_box__deposit_price" style="display:none;">
+							<dt>内金</dt>
+							<dd>&yen; <span>0</span></dd>
+						</dl>
+						<dl id="summary_box__shop_price" style="display:none;">
+							<dt>ご来店時支払い</dt>
+							<dd>&yen; <span>0</span></dd>
+						</dl>
+						<small style="color: #18360c;">※上記金額は、商品代金＋安心パック（ご選択の場合）となります。各種オプション料金はご来店時にお支払いください。</small>
+						<div id="summary_box__result" class="total_amount">
+							<p id="summary_box__total_amount" class="total_price">合計 <strong class="text-primary">{{ Order.total|price }}<span class="small">税込</span></strong></p>
+							<p id="summary_box__confirm_button"><button id="order-button" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">注文する</button></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script>
+$(function() {
+	var total = {{ Order.total }};
+	var deposit = {{ deposit_price }};
+	var diff = total - deposit;
+	if($('input[name="shopping[plg_pay_method]"][value="deposit"]').is(':checked')){
+                var deposit_price = deposit;
+                $("#summary_box__deposit_price").show().find("dd span").html(numeral(deposit).format("0,0"));
+                $("#summary_box__shop_price").show().find("dd span").html(numeral(diff).format("0,0"));
+                $("#summary_box__total_amount .text-primary").html("&yen; " + numeral(deposit).format("0,0"));
+        }
+});
+</script>
+{% endblock %}

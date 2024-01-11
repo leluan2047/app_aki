@@ -1,0 +1,118 @@
+{{ header }}
+
+************************************************
+　ご注文商品明細
+************************************************
+{% set order_type = "" %}
+{% set has_deposit = false %}
+{% set deposit_price = 0 %}
+{% set actual_total_price = 0 %}
+{% for OrderDetail in Order.OrderDetails %}
+{# OrderDetail.productClass.code != settings.secure_pack.product_code #}
+{% if OrderDetail.productClass.code != settings.secure_pack.product_code and OrderDetail.productClass.code != settings.deposit.product_code %}
+商品名: {{ OrderDetail.product_name }}  {{ OrderDetail.classcategory_name1 }}  {{ OrderDetail.classcategory_name2 }}
+{% for addinfo in orderDetailAdditionalInfoList %}
+{% if addinfo.productClassId == OrderDetail.productClass.id %}
+ご予約方法：{% if addinfo.order_type == "deliv" %}宅配着物レンタル{% else %}来店着付けレンタル{% endif %} 
+
+ご利用日：{{ addinfo.wear_date }} 
+{% set order_type = addinfo.order_type %}
+{% if addinfo.order_type == "visit" %}
+着付けご来店希望店舗：{{ addinfo.visit_store }}
+{# 20170601 非表示
+着付けご来店日：{{ addinfo.date_visit }}
+#}
+ご出発予定時間：{{ addinfo.time_departure }}
+{% endif %}
+用途：{{ addinfo.purpose }}
+身長：{{ addinfo.body_height }}
+足のサイズ：{{ addinfo.foot_size }}
+年代：{{ addinfo.decade }}
+{% if addinfo.body_type|length  > 0 %}
+体型：{% for body_type in addinfo.body_type %}{{body_type}} {% endfor %}
+{% endif %} 
+安心パック：{% if addinfo.secure_pack is empty %}なし{% else %}{{addinfo.secure_pack}}{% endif %} 
+{% set order_type = addinfo.order_type %}
+{% if addinfo.order_type == "visit" %}
+フォト：{{ addinfo.need_photo }}
+ヘア・メイクの有無：{{ addinfo.need_hair_make }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% set actual_total_price = actual_total_price + OrderDetail.productClass.price02 %}
+単価： {{ calc_inc_tax(OrderDetail.price, OrderDetail.tax_rate, OrderDetail.tax_rule)|price }}
+-------------------------------------------------
+{% endif %}
+{% if  OrderDetail.productClass.code == settings.deposit.product_code %}
+{% set has_deposit = true %}
+{% set deposit_price = OrderDetail.price %}
+{% endif %}
+{% endfor %}
+
+小　計 {{ actual_total_price|price }}
+
+{% if Order.charge != 0 %}手数料 {{ Order.charge|price }}{% endif %}
+{% if Order.delivery_fee_total != 0 %}送　料 {{ Order.delivery_fee_total|price}}{% endif %}
+{% if Order.discount > 0 %}
+値引き {{ (0 - Order.discount)|price}}
+{% endif %}
+{% if has_deposit %}
+内金 {{deposit_price|price}}
+{% set actual_total_price = actual_total_price - deposit_price %}
+店舗支払い {{ actual_total_price|price }}
+{% endif %}
+============================================
+合　計 {{ Order.payment_total|price }}
+
+************************************************
+　ご注文者情報
+************************************************
+お名前　：{{ Order.name01 }}{{ Order.name02 }}　様
+{% if Order.company_name %}
+会社名　：{{ Order.company_name }}
+{% endif %}
+{% if app.config.form_country_enable %}
+国　　　：{{ Order.Country }}
+ZIPCODE ：{{ Order.zip_code }}
+{% endif %}
+郵便番号：〒{{ Order.zip01 }}-{{ Order.zip02 }}
+住所　　：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}
+電話番号：{{ Order.tel01 }}-{{ Order.tel02 }}-{{ Order.tel03 }}
+FAX番号 ：{{ Order.fax01 }}-{{ Order.fax02 }}-{{ Order.fax03 }}
+
+メールアドレス：{{ Order.email }}
+
+{% if order_type == "deliv" %}
+************************************************
+　配送情報
+************************************************
+
+{%  for Shipping in Order.Shippings %}
+◎お届け先{% if Order.multiple %}{{ loop.index }}{% endif %}
+
+お名前　：{{ Shipping.name01 }}{{ Shipping.name02 }}　様
+{% if Shipping.company_name %}
+会社名　：{{ Shipping.company_name }}
+{% endif %}
+{% if app.config.form_country_enable %}
+　国　　　：{{ Shipping.Country.name }}
+　ZIPCODE ：{{ Shipping.zip_code }}
+{% endif %}
+郵便番号：〒{{ Shipping.zip01 }}-{{ Shipping.zip02 }}
+住所　　：{{ Shipping.Pref.name }}{{ Shipping.addr01 }}{{ Shipping.addr02 }}
+電話番号：{{ Shipping.tel01 }}-{{ Shipping.tel02 }}-{{ Shipping.tel03 }}
+FAX番号 ：{{ Shipping.fax01 }}-{{ Shipping.fax02 }}-{{ Shipping.fax03 }}
+
+お届け日：{{ Shipping.shipping_delivery_date is empty ? '指定なし' : Shipping.shipping_delivery_date|date_format }}
+お届け時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}
+
+{%  for ShipmentItem in Shipping.ShipmentItems %}
+商品コード: {{ ShipmentItem.product_code }}
+商品名: {{ ShipmentItem.product_name }}  {{ ShipmentItem.classcategory_name1 }}  {{ ShipmentItem.classcategory_name2 }}
+数量：{{ ShipmentItem.quantity|number_format }}
+
+{% endfor %}
+{% endfor %}
+
+{% endif %}
+{{ footer }}

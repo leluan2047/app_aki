@@ -1,0 +1,4 @@
+admin.mailtemplateedit.save.complete: メールテンプレートを保存しました。
+admin.mailtemplateedit.save.error: メールテンプレートを保存できませんでした。
+admin.mailtemplateedit.delete.complete: メールテンプレートを削除しました。
+admin.mailtemplateedit.delete.error: メールテンプレートを削除できませんでした。

@@ -1,0 +1,97 @@
+<div class="topic_path">
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="/">着物レンタルあき</a></li>
+			{% if PageLayout.url == "product_list" %}
+				{% if Category is not null %}
+					{% for Path in Category.path %}
+						{% if not loop.last %}
+							<li><a href="{{ url('product_list') }}?category_id={{ Path.id }}">{{ Path.name }}</a></li>
+						{% else %}
+							<li>{{ Path.name }}</li>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<li>全商品の商品一覧</li>
+				{% endif %}
+            
+            {% elseif PageLayout.url == "shop/shibuya" %}
+            <li>渋谷本店｜七五三の祝着、成人式の振袖レンタルなら着物レンタルあき</li>
+            {% elseif PageLayout.url == "shop/ginza" %}
+            <li>銀座店｜七五三の祝着、成人式の振袖レンタルなら着物レンタルあき</li>
+            {% elseif PageLayout.url == "shop/ikebukuro" %}
+            <li>池袋店｜七五三の祝着、成人式の振袖レンタルなら着物レンタルあき</li>
+            {% elseif PageLayout.url == "shop/yokohama" %}
+            <li>横浜店｜七五三の祝着、成人式の振袖レンタルなら着物レンタルあき</li>
+			{% elseif PageLayout.url == "product_detail" %}
+				{% if Product.belongsToCategory(158) %}
+					<li><a href="{{ url('product_list') }}?category_id=158">十三参り 着物 レンタル</a></li>
+				{% elseif Product.belongsToCategory(157) %}
+					<li><a href="{{ url('product_list') }}?category_id=157">喪服・その他</a></li>
+				{% elseif Product.belongsToCategory(156) %}
+					<li><a href="{{ url('product_list') }}?category_id=156">四階訪問着 レンタル</a></li>
+				{% elseif Product.belongsToCategory(155) %}
+					<li><a href="{{ url('product_list') }}?category_id=155">コート・羽織 レンタル</a></li>
+				{% elseif Product.belongsToCategory(154) %}
+					<li><a href="{{ url('product_list') }}?category_id=154">花嫁の振袖 レンタル</a></li>
+				{% elseif Product.belongsToCategory(172) %}
+					<li><a href="{{ url('product_list') }}?category_id=172">還暦お祝い着</a></li>
+				{% elseif Product.belongsToCategory(53) %}
+					<li><a href="{{ url('product_list') }}?category_id=53">振袖 レンタル</a></li>
+				{% elseif Product.belongsToCategory(52) %}
+					<li><a href="{{ url('product_list') }}?category_id=52">黒留袖 レンタル</a></li>
+				{% elseif Product.belongsToCategory(51) %}
+					<li><a href="{{ url('product_list') }}?category_id=51">色留袖 レンタル</a></li>
+				{% elseif Product.belongsToCategory(50) %}
+					<li><a href="{{ url('product_list') }}?category_id=50">訪問着 レンタル</a></li>
+				{% elseif Product.belongsToCategory(49) %}
+					<li><a href="{{ url('product_list') }}?category_id=49">色無地 レンタル</a></li>
+				{% elseif Product.belongsToCategory(48) %}
+					<li><a href="{{ url('product_list') }}?category_id=48">小紋 レンタル</a></li>
+				{% elseif Product.belongsToCategory(47) %}
+					<li><a href="{{ url('product_list') }}?category_id=47">つむぎ レンタル</a></li>
+				{% elseif Product.belongsToCategory(46) %}
+					<li><a href="{{ url('product_list') }}?category_id=46">大きいサイズの着物 レンタル</a></li>
+				{% elseif Product.belongsToCategory(45) %}
+					<li><a href="{{ url('product_list') }}?category_id=45">ひとえ レンタル</a></li>
+				{% elseif Product.belongsToCategory(44) %}
+					<li><a href="{{ url('product_list') }}?category_id=44">夏物 着物 レンタル</a></li>
+				{% elseif Product.belongsToCategory(43) %}
+					<li><a href="{{ url('product_list') }}?category_id=43">ゆかた(女性用) レンタル</a></li>
+				{% elseif Product.belongsToCategory(42) %}
+					<li><a href="{{ url('product_list') }}?category_id=42">ゆかた(男性用) レンタル</a></li>
+				{% elseif Product.belongsToCategory(41) %}
+					<li><a href="{{ url('product_list') }}?category_id=41">男物 着物 レンタル</a></li>
+				{% elseif Product.belongsToCategory(40) %}
+					<li><a href="{{ url('product_list') }}?category_id=40">卒業袴 レンタル</a></li>
+				{% elseif Product.belongsToCategory(39) %}
+					<li><a href="{{ url('product_list') }}?category_id=39">袴(男性用) レンタル</a></li>
+				{% elseif Product.belongsToCategory(38) %}
+					<li><a href="{{ url('product_list') }}?category_id=38">お宮参り 着物 レンタル</a></li>
+				{% elseif Product.belongsToCategory(37) %}
+					<li><a href="{{ url('product_list') }}?category_id=37">七五三(三歳祝着) レンタル</a></li>
+				{% elseif Product.belongsToCategory(36) %}
+					<li><a href="{{ url('product_list') }}?category_id=36">七五三(五歳祝着) レンタル</a></li>
+				{% elseif Product.belongsToCategory(35) %}
+					<li><a href="{{ url('product_list') }}?category_id=35">七五三(七歳祝着)  レンタル</a></li>
+				{% elseif Product.belongsToCategory(34) %}
+					<li><a href="{{ url('product_list') }}?category_id=34">婚礼衣装 着物 レンタル</a></li>
+				{% else %}
+				{% endif %}
+				{% if Product.belongsToCategory(217) %}
+					<li><a href="{{ url('product_list') }}?category_id=217">渋谷本店</a></li>
+				{% elseif Product.belongsToCategory(218) %}
+					<li><a href="{{ url('product_list') }}?category_id=218">銀座店</a></li>
+				{% elseif Product.belongsToCategory(219) %}
+					<li><a href="{{ url('product_list') }}?category_id=219">池袋店</a></li>
+				{% elseif Product.belongsToCategory(220) %}
+					<li><a href="{{ url('product_list') }}?category_id=220">横浜店</a></li>
+				{% else %}
+				{% endif %}
+				<li>{{ Product.name }}の着物レンタル</li>
+			{% else %}
+			<li>{{ title }}</li>
+			{% endif %}
+		</ol>
+	</div>
+</div>

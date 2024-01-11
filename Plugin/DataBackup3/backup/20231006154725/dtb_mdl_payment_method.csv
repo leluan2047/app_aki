@@ -1,0 +1,5 @@
+payment_id,payment_method,del_flg,create_date,update_date,memo01,memo02,memo03,memo04,memo05,memo06,memo07,memo08,memo09,memo10,plugin_code
+16,"ペイジェント クレジット",0,"2017-10-04 11:43:26","2017-10-04 11:43:26",20640,bellCorporationtest,1,2BY7Xdok,"a:7:{s:16:""payment_division"";a:1:{i:0;i:10;}s:13:""security_code"";i:0;s:9:""credit_3d"";i:0;s:10:""stock_card"";i:0;s:9:""token_pay"";i:0;s:9:""token_env"";i:0;s:9:""token_key"";N;}",,,,,,MdlPaygent
+17,"ペイジェント コンビニ(番号方式)",1,"2017-10-04 11:09:32","2017-10-04 11:42:51",20640,bellCorporationtest,2,2BY7Xdok,"a:1:{s:18:""payment_limit_date"";s:2:""15"";}",,,,,,MdlPaygent
+18,"ペイジェント ATM決済",0,"2017-10-04 11:43:26","2017-10-04 11:43:26",20640,bellCorporationtest,4,2BY7Xdok,"a:2:{s:14:""payment_detail"";s:15:""キモノアキ"";s:18:""payment_limit_date"";s:2:""30"";}",,,,,,MdlPaygent
+19,"ペイジェント 銀行ネット",0,"2017-10-04 11:43:26","2017-10-04 11:43:26",20640,bellCorporationtest,5,2BY7Xdok,"a:5:{s:10:""claim_kana"";s:15:""キモノアキ"";s:11:""claim_kanji"";s:15:""キモノアキ"";s:16:""asp_payment_term"";s:1:""7"";s:10:""copy_right"";s:10:""kimono aki"";s:9:""free_memo"";s:30:""ありがとうございます"";}",,,,,,MdlPaygent

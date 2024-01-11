@@ -1,0 +1,46 @@
+# フロント共通（DEBUG用）
+eccube.event.front.response:
+    - [onEccubeEventFrontResponse, NORMAL]
+# フロントコントローラー
+front.product.detail.initialize:
+    - [onFrontProductDetailInitialize, NORMAL]
+front.product.detail.complete:
+    - [onFrontProductDetailComplete, NORMAL]
+front.cart.remove.complete:
+    - [onFrontCartRemoveComplete, NORMAL]
+front.cart.down.complete:
+    - [onFrontCartDownComplete, NORMAL]
+eccube.event.controller.shopping_confirm.before:
+    - [onControllerShoppingConfirmBefore, FIRST]
+front.shopping.confirm.processing:
+    - [onFrontShoppingConfirmProcessing, NORMAL]
+front.shopping.index.initialize:
+    - [onFrontShoppingIndexInitialize, NORMAL]
+front.shopping.payment.initialize:
+    - [onFrontShoppingPaymentInitialize, NORMAL]
+front.shopping.confirm.initialize:
+    - [onFrontShoppingConfirmInitialize, NORMAL]
+front.shopping.complete.initialize:
+    - [onFrontShoppingCompleteInitialize, NORMAL]
+front.product.index.initialize:
+    - [onFrontProductIndexInitialize, NORMAL]
+front.product.index.search:
+    - [onFrontProductIndexSearch, NORMAL]
+# front page event
+Product/detail.twig:
+    - [onRenderProductDetail, NORMAL]
+Shopping/index.twig:
+    - [onRenderShoppingIndex, NORMAL]
+Cart/index.twig:
+    - [onRenderCartIndex, NORMAL]
+# 管理画面
+admin.product.edit.initialize:
+    - [onAdminProductEditInitialize, NORMAL]
+admin.product.edit.complete:
+    - [onAdminProductEditComplete, NORMAL]
+admin.order.edit.index.initialize:
+    - [onAdminOrderEditIndexInitialize, NORMAL]
+Admin/Order/edit.twig:
+    - [onRenderAdminOrderEdit, NORMAL]
+admin.order.edit.index.complete:
+    - [onAdminOrderEditIndexComplete , NORMAL]

@@ -1,0 +1,73 @@
+Plugin\KrAkiCustomizer\Entity\OrderDetailAdditionalInfo:
+    type: entity
+    table: plg_order_detail_additional_info
+    repositoryClass: Plugin\KrAkiCustomizer\Repository\OrderDetailAdditionalInfoRepository
+    id:
+        order_detail_additional_info_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        order_id:
+            type: integer
+            nullable: false
+        order_detail_id:
+            type: integer
+            nullable: false
+        product_class_id:
+            type: integer
+            nullable: false
+        order_type:
+            type: text
+            nullable: false
+        wear_date:
+            type: text
+            nullable: false
+        purpose:
+            type: text
+            nullable: false
+        body_height:
+            type: text
+            nullable: false
+        foot_size:
+            type: text
+            nullable: false
+        decade:
+            type: text
+            nullable: false
+        body_type:
+            type: text
+            nullable: false
+        secure_pack:
+            type: text
+            nullable: true
+        need_hair_make:
+          type: text
+          nullable: false
+# 20170601 非表示
+#        date_visit:
+#         type: text
+#         nullable: false
+        time_departure:
+          type: text
+          nullable: false
+        visit_store:
+          type: string
+          nullable: false
+        actual_price:
+          type: decimal
+          nullable: false
+        need_photo:
+          type: text
+          nullable: true
+        before_use_days:
+          type: integer
+          nullable: true
+        after_use_days:
+            type: integer
+            nullable: true
+
+    lifecycleCallbacks: {  }

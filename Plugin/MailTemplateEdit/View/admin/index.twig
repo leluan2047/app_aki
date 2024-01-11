@@ -1,0 +1,76 @@
+{# ActiveFusions 2015/11/11 17:52 #}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['setting', 'admin_mailtemplateedit'] %}
+
+{% block title %}メールテンプレート管理{% endblock %}
+{% block sub_title %}メールテンプレート一覧{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+    <script>
+        function changeAction(action) {
+            document.form1.action = action;
+        }
+    </script>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">メールテンプレート管理</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <form name="form1" id="form1" method="post" action="">
+                        <div class="table_list">
+                            <div class="table-responsive with-border">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>テンプレート名</th>
+                                        <th>件名</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for MailTemplate in MailTemplates %}
+                                    <tr>
+                                        <td>{{ MailTemplate.name }}</td>
+                                        <td>{{ MailTemplate.subject }}</td>
+                                        <td class="icon_edit">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><svg class="cb cb-ellipsis-h"> <use xlink:href="#cb-ellipsis-h" /></svg></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a href="{{ url('admin_mailtemplateedit_edit', { 'id' : MailTemplate.id }) }}" >編集</a></li>
+                                                    {% if MailTemplate.id < 6 or MailTemplate.count9 > 0 %}
+                                                        <!--li><a>削除</a></li>-->
+                                                    {% else %}
+                                                        <li><a href="{{ url('admin_mailtemplateedit_delete', {id: MailTemplate.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete">削除</a></li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.box -->
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+                    <a href="{{ url('admin_mailtemplateedit_new') }}" class="btn btn-primary btn-block btn-lg">
+                            新規登録
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

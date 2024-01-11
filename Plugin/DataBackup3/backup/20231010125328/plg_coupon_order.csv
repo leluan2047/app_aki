@@ -1,0 +1,2 @@
+id,coupon_id,coupon_cd,coupon_name,user_id,email,order_id,pre_order_id,order_date,discount,del_flg,order_change_status,create_date,update_date
+1,1,97jw16svnako,早割卒業袴,2660,,1220,53f2eea8be990b6885f4db9c4f61e8bb9b7ef152,,14256,0,0,"2020-06-15 19:04:15","2020-06-15 19:04:15"

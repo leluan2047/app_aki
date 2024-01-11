@@ -1,0 +1,73 @@
+<div class="topic_path">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="/">着物レンタルあき</a></li>
+             {% if PageLayout.url == "753" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/fullset" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/recommend" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/faq" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/hair_makeup" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/rental_step" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/voice" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/basic_knowledge" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/spot" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/2016" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/2015" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "753/2014" %}
+            <li><a href="/user_data/753">七五三レンタル</a></li>
+			{% elseif PageLayout.url == "753/img_point" %}
+			<li><a href="/user_data/753">七五三レンタル</a></li>
+			{% elseif PageLayout.url == "753/recommend" %}
+			<li><a href="/user_data/753">七五三レンタル</a></li>
+            {% elseif PageLayout.url == "yukata" %}
+            <li><a href="/user_data/yukata">浴衣レンタル</a></li>
+            {% elseif PageLayout.url == "yukata/2016" %}
+            <li><a href="/user_data/yukata">浴衣レンタル</a></li>
+            {% elseif PageLayout.url == "yukata/2017" %}
+            <li><a href="/user_data/yukata">浴衣レンタル</a></li>
+            {% elseif PageLayout.url == "seijin" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "seijin/2016" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "seijin/2017" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "seijin/speed" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "seijin/knowledge" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "seijin/fullset" %}
+            <li><a href="/user_data/seijin">成人式振袖レンタル</a></li>
+            {% elseif PageLayout.url == "hakama" %}
+            <li><a href="/user_data/hakama">卒業袴レンタル</a></li>
+            {% elseif PageLayout.url == "sotsunyugaku" %}
+            <li><a href="/user_data/sostunyugaku">卒園・入学式の訪問着レンタル</a></li>
+            {% else %}
+            {% endif %}
+            {% if PageLayout.url == "product_list" %}
+                {% if Category is not null %}
+                    {% for Path in Category.path %}
+                        {% if not loop.last %}
+                            <li><a href="{{ url('product_list') }}?category_id={{ Path.id }}">{{ Path.name }}</a></li>
+                        {% else %}
+                            <li>{{ Path.name }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+            <li>{{ title }}</li>
+            {% endif %}
+        </ol>
+    </div>
+</div>
+

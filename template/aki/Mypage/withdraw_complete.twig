@@ -1,0 +1,35 @@
+{% extends 'default_frame.twig' %}
+{% set mypageno = 'withdraw' %}
+{% set body_class = 'mypage' %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">マイページ/退会手続き</h2>
+		</div>
+	</div>
+
+	<div id="complete_wrap" class="">
+		<div id="complete_box" class="unsubscribe_box">
+			<div id="complete_box__body" class="row no-padding">
+				<div id="complete_box__message" class="col-sm-6 col-sm-offset-3">
+					<h3>退会が完了いたしました</h3>
+					<p>ご利用いただき誠にありがとうございました。<br>
+					またのご来店をお待ちしております。</p>
+				</div>
+			</div>
+			<div id="complete_box__top_button" class="row">
+				<div class="col-md-12">
+					<div class="well">
+						<div class="row pb00">
+							<div class="btn_group col-sm-offset-4 col-sm-4">
+								<a href="{{ url('homepage') }}" class="btn btn-primary btn-block">トップページへ</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

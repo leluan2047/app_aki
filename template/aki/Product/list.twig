@@ -1,0 +1,842 @@
+{% extends 'default_frame.twig' %}
+{% set body_class = 'product_page' %}
+{% block javascript %}
+<script>
+// 並び順を変更
+function fnChangeOrderBy(orderby) {
+	eccube.setValue('orderby', orderby);
+	eccube.setValue('pageno', 1);
+	eccube.submitForm();
+}
+
+// 表示件数を変更
+function fnChangeDispNumber(dispNumber) {
+	eccube.setValue('disp_number', dispNumber);
+	eccube.setValue('pageno', 1);
+	eccube.submitForm();
+}
+</script>
+{% if app.request.get('category_id_0') or app.request.get('category_id_1') or app.request.get('category_id_2') or app.request.get('category_id_3') or app.request.get('category_id_4') %}
+    <script>
+        $('#search_filter a').removeClass('collapsed');
+        $('#search_filter_1').addClass('in');
+        //Check selected checkbox in search filter
+        $checked_id = [];
+        {% if app.request.get('category_id_0') %}
+            {% for id in app.request.get('category_id_0') %}
+            $checked_id.push('{{ id }}');
+            {% endfor %}
+        {% endif %}
+        {% if app.request.get('category_id_1') %}
+            {% for id in app.request.get('category_id_1') %}
+            $checked_id.push('{{ id }}');
+            {% endfor %}
+        {% endif %}
+        {% if app.request.get('category_id_2') %}
+            {% for id in app.request.get('category_id_2') %}
+            $checked_id.push('{{ id }}');
+            {% endfor %}
+        {% endif %}
+        {% if app.request.get('category_id_3') %}
+            {% for id in app.request.get('category_id_3') %}
+            $checked_id.push('{{ id }}');
+            {% endfor %}
+        {% endif %}
+        {% if app.request.get('category_id_4') %}
+            {% for id in app.request.get('category_id_4') %}
+            $checked_id.push('{{ id }}');
+            {% endfor %}
+        {% endif %}
+        $('#search_filter_1 .checkbox input').each(function(){
+           if($.inArray($(this).val(), $checked_id) !== -1){
+               $(this).prop('checked', true);
+           }
+        });
+    </script>
+{% endif %}
+
+{% endblock %}
+
+{% block main %}
+
+
+	<div class="row">
+		<div class="col-sm-12 text-center sp-left">
+			<h2 class="title">{{ subtitle }}の{{ title }}</h2>
+			<p>
+				{% if Category is not null %}
+					{% if Category.id == 1 %}
+					{% elseif Category.id == 34 %}
+						花嫁様のハレの日の装い、白無垢に綿帽子、色打掛、引き着など多数ご用意いたしました。<br>
+						ヘア（かつらもご用意あり）、メイク、着つけ、写真撮影まで全て承ります。詳細はご相談ください。
+					{% elseif Category.id == 35 %}
+						七五三は成長の節目の数え年三歳、五歳、七歳の見祝いです。<br>
+						千歳飴を手に11月15日に氏神様にお参りしますが、天候やお子様の体調を考慮した日程でもよろしいでしょう。<br>
+						<br>
+						七歳の女児は「帯解の祝い」と言われ、着物のつけ紐を取り、帯を結ぶ儀式です。<br>
+						七歳は、花嫁の子供バージョンになります。新日本髪に結って、三点セットの髪飾りで華やかに装いましょう。
+					{% elseif Category.id == 36 %}
+						七五三は成長の節目の数え年三歳、五歳、七歳の見祝いです。<br>
+						千歳飴を手に11月15日に氏神様にお参りしますが、天候やお子様の体調を考慮した日程でもよろしいでしょう。<br>
+						<br>
+						男児は五歳になると幼年から少年になったことを祝い、初めて袴をつける儀式で「袴着の祝い」といわれます。<br>
+						凛々しい袴スタイルのお祝い着を多数ご用意いたしました。
+					{% elseif Category.id == 37 %}
+						七五三は成長の節目の数え年三歳、五歳、七歳の見祝いです。<br>
+						千歳飴を手に11月15日に氏神様にお参りしますが、天候やお子様の体調を考慮した日程でもよろしいでしょう。<br>
+						<br>
+						かつては数え年三歳の男女は、髪を伸ばし、すが糸を白髪になぞらえて子供の頭にのせ、<br>
+						健康と長寿を祝う儀式「髪置の祝い」を行っていました。三歳のお子様は、可愛らしい被布セットがお楽でしょう。
+					{% elseif Category.id == 38 %}
+						新生児の健康と長寿を祈るお宮参りは、地方によって異なる場合もありますが、<br>
+						男児は生後30日、女児は32日に氏神様にお参りします。<br>
+						<br>
+						この前後で天候や日の良い日程に行ってもよろしいでしょう。<br>
+						「着物レンタルあき」では、晴れの日にふさわしい男児、女児のお祝い着をご用意いたしました。
+					{% elseif Category.id == 39 %}
+						男性の正礼装は紋付袴です。伝統的な黒紋付からスタイリッシュなカラーの紋付、<br>
+						袴は仙台平からアバンギャルドな殿様袴まで多数取り揃えております。<br>
+						<br>
+						「着物レンタルあき」の袴はメディア関連のご利用も多くテレビ、雑誌の撮影、<br>
+						イベントなどで多くのタレントさんにご利用頂いております。<br>
+						紋付袴はその他、結婚式、成人式、卒業式、パーティ等にお召しください。
+					{% elseif Category.id == 40 %}
+						旅立ちの春、それぞれ思い入れの袴姿で卒業式に臨みましょう。<br>
+						教え子を見送る先生はじめ大学生、専門学校生の他、小学生、中学生、高校生のご利用も多くなりました。<br>
+						「着物レンタルあき」では、皆様の個性を尊重したコーディネートのアドバイスをさせて頂いています。<br>
+					{% elseif Category.id == 41 %}
+						男性の着物姿が人気上昇中です。いつものスーツスタイルから変身して<br>
+						一味違った男らしさで周囲を魅了しましょう。<br>
+						<br>
+						着物と羽織の着流しに袴を着用すれば、<br>
+						お茶会（羽織は着用しません）、結婚式、パーティ等に略礼装としてお召し頂けます。
+					{% elseif Category.id == 42 %}
+						浴衣は、平安時代に高貴な人が湯浴みをする時に、麻で作った単衣の着物を着用したのが始まりで、<br>
+						江戸時代になって湯上りに着るようになりました。現代では夏のおしゃれ着として若い人々に人気です。<br>
+						<br>
+						カンサイ等のデザイナーズブランドはもちろん、涼しげな棉麻のクオリティの高いメンズ浴衣を<br>
+						ご用意いたしました。 <br>
+						<br>
+						<span class="font-bold">おすすめの浴衣を掲載した特集ページもご用意しております。<br>
+						<a href="/user_data/yukata" class="underline">浴衣レンタルの特集ページはこちら</a><br></span>
+						<br>
+						※浴衣は所属店舗のみでの取り扱いとなります
+					{% elseif Category.id == 43 %}
+						浴衣は、平安時代に高貴な人が湯浴みをする時に、麻で作った単衣の着物を着用したのが始まりで、<br>
+						江戸時代になって湯上りに着るようになりました。現代では夏のおしゃれ着として若い人々に人気です。<br>
+						<br>
+						今年も個性的なツモリチサト、大島優子、松田聖子、カンサイ等の人気デザイナーズブランドを<br>
+						コレクションしました。<br>
+						<br>
+						<span class="font-bold">おすすめの浴衣を掲載した特集ページもご用意しております。<br>
+						<a href="/user_data/yukata" class="underline">浴衣レンタルの特集ページはこちら</a><br></span>
+						<br>
+						※浴衣は所属店舗のみでの取り扱いとなります
+					{% elseif Category.id == 44 %}
+						日本の着物は、都が永らく京都にあった関係で、夏暑く冬寒い京都の気候風土の影響を<br>
+						受けたワンピース形式の南方系衣服です。<br>
+						夏物は、うす物とも言われ7月と8月の盛夏に着用します。<br>
+						<br>
+						絽や紗、羅等の透ける材質、あるいはセミの羽のように薄い麻の着物など、<br>
+						周囲に一陣の涼風を与える夏の装いをお楽しみください。
+					{% elseif Category.id == 45 %}
+						日本の着物には約束事があります。更衣（ころもがえ）もその一つです。<br>
+						「ころもがえ」は季節に合わせて着物を着替えると言う意味です。<br>
+						6月と9月には裏のついた袷（あわせ）から裏を取った単衣（ひとえ）を着用します。<br>
+						<br>
+						軽やかな単衣を纏って、ワンランク上のおしゃれを楽しみましょう。<br>
+						単衣の着物に合わせる帯は月の前半と後半では変わります。<br>
+						帯のコーディネートにつきましては、ご相談の上決めさせて頂きます。
+					{% elseif Category.id == 47 %}
+						小紋が白生地から染めた染の着物に対して、つむぎ（紬）は糸を先に染めて紡いで織った織の着物です。<br>
+						小紋よりはカジュアルになります。丈夫な材質はお稽古着や街着、家庭着として重宝します。<br>
+						<br>
+						しかし一方でつむぎ（紬）の訪問着もありますが、おしゃれ着として観劇やパーティ、グレードの高いお食事会にいかがでしょうか。
+					{% elseif Category.id == 48 %}
+						反物の柄全体に同じ模様が連続して描かれたカジュアルな着物です。<br>
+						伝統的なお茶や踊りのお稽古やママ友同士のお食事会など、気軽なお出かけにお召し頂ける普段使いの着物です。<br>
+						しかし武士の裃が発生の起源とする鮫小紋等の江戸小紋は別格で、色無地と同格と考えてよろしいでしょう。
+					{% elseif Category.id == 49 %}
+						色無地は、袋帯を合わせて結婚式、パーティ、お茶会等の略礼装として、<br>
+						名古屋帯を合わせて観劇や街着にお召し頂いたり、あるいは黒共帯を合わせて、<br>
+						お通夜、法事などの半喪の装いとして幅広くお召し頂けます。<br>
+						<br>
+						半喪としてご利用の場合は、色彩や地紋に配慮しましょう。
+					{% elseif Category.id == 50 %}
+						訪問着は明治時代に考案され大正時代に普及しました。<br>
+						絵羽模様は衣桁にかけると一幅の絵のような柄付けです。<br>
+						<br>
+						略礼装として結婚式披露宴、お茶会、パーティなど既婚・未婚の別なくお召し頂ける応用範囲の広い着物です。
+					{% elseif Category.id == 51 %}
+						黒留袖同様、比翼仕立てであること、染め抜き五つ紋、裾は引き返し等の条件を満たしていれば、<br>
+						黒留袖と同格の正礼装になります。しかし紋の数や比翼を省略すれば、着用範囲が広がります。<br>
+						<br>
+						宮中では黒は喪の色とされるため、園遊会、叙勲その他の宮中参内には色留袖を着用します。
+					{% elseif Category.id == 52 %}
+						留袖は既婚女性の正礼装です。江戸時代は女性が結婚すると袖を短くして脇に留めたのが留袖の由来です。<br>
+						江戸褄模様の模様付けから、江戸褄とも言われます。<br>
+						<br>
+						かつては主に親族が着用していましたが、最近では、新郎・新婦のお母様、仲人夫人が着用し、<br>
+						その他の既婚女性親族は色留袖を着用するケースが多いようです。
+					{% elseif Category.id == 53 %}
+						振袖は未婚女性の正礼装です。永い人生の中で一度きりの成人式。<br>
+						ご両親様はもとよりご家族の皆様にとっても感慨深いものがあると思います。<br>
+						<br>
+						振袖は成人式の他にも、結婚式、ご結納、パーティ、メディア関係等巾広いシーンでご利用頂いております。<br>
+						「着物レンタルあき」ではハレの日の装いにふさわしい振袖を多数ご用意いたしました。
+					{% elseif Category.id == 157 %}
+						お通夜、告別式、以降の法事に際し、どのような装いをしたら良いかお迷いではないでしょうか。<br>
+						喪の装いは地方により違う場合もありますが、一般的には喪主や親族は通夜、告別式とも黒喪服を着用します。<br>
+						お悔やみに参列される方はお通夜は半喪の装い、告別式は黒喪服が一般的です。<br>
+						<br>
+						法事や追悼茶会は半喪の装いとなります。半喪の装いとは、蓮などが描かれた着物、<br>
+						色無地又は鮫小紋に黒共帯を合わせ紫の喪用の帯を合わせます。
+					{% elseif Category.id == 158 %}
+						最初の厄年を迎える数え年13歳の身祝いです。<br>
+						広く知られるところでは、京都嵐山の虚空蔵菩薩法輪寺にお参りし、渡月橋を渡り切るまで後ろを向かないと<br>
+						智恵を授けられるとの言い伝えがあります。主に関西を中心に行われて来ましたが<br>
+						最近では虚空蔵菩薩に限定せず、近くの氏神様にお参りするなど全国的に広まってきたようです。
+					{% else %}
+				{% endif %}
+			{% endif %}
+			</p>
+		</div>
+	</div>
+	<form name="form1" id="form1" method="get" action="?" class="main-search-product-form">
+		{{ form_widget(search_form) }}
+		<input type="hidden" name="category_id" value="{% if Category is not null %}{{ Category.id }}{% endif %}">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="panel-group mb00" id="accordion_search" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-primary">
+						<div class="panel-heading" role="tab" id="search_filter">
+							<h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion_search" href="#search_filter_1" aria-expanded="false" aria-controls="search_filter_1" class="collapsed serchTab" style="background-color: #dbecc7;" onclick="gtag('event', 'クリック', {'event_category': '条件検索関連','event_label': '条件検索を開くボタン'});">
+                            サイズ・予算・店舗から絞り込む（クリックするとメニューが開きます）</a></h4>
+						</div>
+						<div id="search_filter_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="search_filter" aria-expanded="false">
+							<div class="panel-body">
+									<div class="row">
+										<div class="col-12 col-md-6">
+											<div class="form-group date">
+												<div class="input-group input-group-lg">
+													<span class="input-group-addon" id="basic-addon1"><i class="zmdi zmdi-calendar-note"></i></span>
+													<input name="date" type="text" class="productListDate form-control date datepicker hasDatepicker" placeholder="ご利用日" readonly="readonly" id="useDateMainForm" data-id="date-main-form">
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-md-6">
+											{% include 'Product/partials/filter_category.twig' %}
+										</div>
+										<div class="col-12 col-md-12 my-2 text-center">
+											<a href="/products/list" class="btn btn-default">検索条件をクリア</a>
+										</div>
+										<div class="col-md-12">
+											<p>ご利用いただく着物の条件を選択してください</p>
+										</div>
+										<div class="col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-heading">価格</div>
+												<div class="panel-body">
+													<div class="checkbox"><label><input type="checkbox" name="category_id_0[]" value="179" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '10,000円以下'});">10,000円以下</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_0[]" value="180" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '10,001円〜30,000円'});">10,001円〜30,000円</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_0[]" value="185" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '30,001円〜50,000円'});">30,001円～50,000円</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_0[]" value="186" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '50,001円～100,000円'});">50,001円～100,000円</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_0[]" value="191" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '100,000円以上'});">100,000円以上</label></div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">大きさ（身長）</div>
+												<div class="panel-body">
+													<div class="checkbox"><label><input type="checkbox" name="category_id_1[]" value="187" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'Sサイズ(女性149cm以下/男性160以下)'});">Sサイズ(女性149cm以下/男性160以下)</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_1[]" value="188" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'Mサイズ(女性150-167cm/男性161-170cm)'});">Mサイズ(女性150-167cm/男性161-170cm)</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_1[]" value="189" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'Lサイズ(女性168-173cm/男性171-180cm)'});">Lサイズ(女性168-173cm/男性171-180cm)</label></div>
+													<div class="checkbox"><label><input type="checkbox" name="category_id_1[]" value="190" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '大きいサイズ(女性174cm以上/男性181cm以上)'});">大きいサイズ(女性174cm以上/男性181cm以上)</label></div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="panel panel-default">
+												<div class="panel-heading">イメージ</div>
+												<div class="panel-body">
+													<div class="checkbox">
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_2[]" value="198" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'かわいい'});">かわいい</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_2[]" value="199" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '華やか'});">華やか</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_2[]" value="200" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'おしとやか'});">おしとやか</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_2[]" value="201" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '古典'});">古典</label>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">カラー</div>
+												<div class="panel-body">
+													<div class="checkbox">
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="175" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '青・紺・水色'});">青・紺・水色</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="176" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '赤・ピンク・紫'});">赤・ピンク・紫</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="177" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '白'});">白</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="192" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '黄色・オレンジ'});">黄色・オレンジ</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="193" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '緑'});">緑</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="194" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '黒'});">黒</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="195" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'グレー'});">グレー</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_3[]" value="196" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': 'クリーム・ベージュ・茶色'});">クリーム・ベージュ・茶色</label>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">取扱店舗</div>
+												<div class="panel-body">
+													<div class="checkbox">
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_4[]" value="217" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '渋谷本店'});">渋谷本店</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_4[]" value="218" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '銀座店'});">銀座店</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_4[]" value="219" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '池袋店'});">池袋店</label>
+														<label class="checkbox-inline"><input type="checkbox" name="category_id_4[]" value="220" onclick="gtag('event', 'クリック', {'event_category': '条件検索分岐','event_label': '横浜店'});">横浜店</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 text-center mt20">
+											<div class="well mb00">
+												<button class="btn btn-primary" type="submit" onclick="gtag('event', 'クリック', {'event_category': '条件検索関連','event_label': '選択した条件で検索ボタン'});"><i class="zmdi zmdi-search"></i>　選択した条件で検索</button>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--卒業袴-->
+		{% if Category is not null %}
+		{% if Category.id == 40 %}
+<!--
+		<a href="user_data/hakama"><img src="/template/aki/img/hakama/top-page-hakama.jpg" alt="卒業袴レンタル 2019" class="img-responsive hidden-xs">
+			<img src="/template/aki/img/side/lp_sotugyou.jpg" alt="卒業袴レンタル 2019" class="img-responsive visible-xs">
+		</a>
+-->
+		{% endif %}
+		{% endif %}
+		<!--卒業袴-->
+		<!--</div>-->
+		<!-- ▼topicpath▼ -->
+		<div class="well">
+			<div class="row pb00">
+				<div id="topicpath" class="col-md-5 col-sm-12 mt05">
+					<ol id="list_header_menu" class="list-inline mb00">
+						<li><a href="{{ url('product_list') }}">全商品</a></li>
+						{% if Category is not null %}
+							{% for Path in Category.path %}
+								<li><a href="{{ url('product_list') }}?category_id={{ Path.id }}">{{ Path.name }}</a></li>
+							{% endfor %}
+						{% endif %}
+						{% if search_form.vars.value.name %}
+							<li>「{{ search_form.vars.value.name }}」の検索結果</li>
+						{% endif %}
+						<li><strong><span id="productscount">{{ pagination.totalItemCount }}</span>件</strong>の商品</li>
+					</ol>
+				</div>
+                <div id="result_info_box__menu_box" class="col-md-6 col-sm-12">
+                    <ul id="result_info_box__menu" class="pagenumberarea clearfix row pb00 mb00">
+                        <li id="result_info_box__disp_menu" class="col-sm-6 col-xs-6">
+                            <div class="row pb00">
+                                <div class="col-sm-5 pt05 pr00">表示件数</div>
+                                <div class="col-sm-5 pl00">{{ form_widget(disp_number_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeDispNumber(this.value);"}}) }}</div>
+                            </div>
+                        </li>
+                        <li id="result_info_box__order_menu" class="col-sm-6 col-xs-6">
+                            <div class="row pb00">
+                                <div class="col-sm-5 pt05 pr00">並べ替え</div>
+                                <div class="col-sm-7 pl00">{{ form_widget(order_by_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeOrderBy(this.value);"}}) }}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+				{% for f in disp_number_form.getIterator %}
+				{% if f.vars.name matches '[^plg*]' %}
+					{{ form_label(f) }}
+					{{ form_widget(f) }}
+					{{ form_errors(f) }}
+				{% endif %}
+				{% endfor %}
+
+				{% for f in order_by_form.getIterator %}
+				{% if f.vars.name matches '[^plg*]' %}
+					{{ form_label(f) }}
+					{{ form_widget(f) }}
+					{{ form_errors(f) }}
+				{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</form>
+	<!-- ▲topicpath▲ -->
+    {% if pagination.totalItemCount > 0 %}
+        {% include "pagination.twig" with { 'pages' : pagination.paginationData } %}
+    {% endif %}
+	<!-- ▼item_list▼-->
+	<div id="item_list">
+		<div class="row">
+			<ul class="thumbnails list-unstyled">
+				{% for Product in pagination %}
+                    <li id="result_list_box--{{ Product.id }}" class="col-md-3 col-sm-4 col-xs-6">
+						<div class="thumbnail" id="result_list__detail--{{ Product.id }}">
+							<a href="{{ url('product_detail', {'id': Product.id}) }}">
+								<div class="inline_block_before">
+									<img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}" alt="{{ Product.name }}" class="img-responsive">
+								</div>
+							</a>
+							<div class="caption">
+								
+								
+								<h3 id="result_list__name--{{ Product.id }}"><a href="{{ url('product_detail', {'id': Product.id}) }}">{{ Product.name }}</a></h3>
+								<ul class="caption-price">
+								{% if Product.hasProductClass %}
+									{% if Product.getPrice02Min == Product.getPrice02Max %}
+										<li><strong id="result_list__price02_inc_tax--{{ Product.id }}">kore{{ Product.getPrice02IncTaxMin|price }}</strong></li>
+									{% else %}
+										<li><strong id="result_list__price02_inc_tax--{{ Product.id }}">{{ Product.getPrice02IncTaxMin|price }} ～ {{ Product.getPrice02IncTaxMax|price }}	</strong></li>
+									{% endif %}
+								{% else %}
+                                    <li><strong id="result_list__price02_inc_tax--{{ Product.id }}">{{ Product.getPrice02IncTaxMin|number_format }}円</strong></li>
+								{% endif %}
+									{% if __EX_PRODUCT_LIST[Product.id].4.value %}
+										<li>素材：{{__EX_PRODUCT_LIST[Product.id].4.value}}</li>
+									{% else %}
+										<li>&nbsp;</li>
+									{% endif %}
+								<li>商品コード : <span id="item_code_default" data-id="{{ Product.id }}">{{ Product.code_min }}{% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}</span></li>
+								<li>
+									{% if Product.belongsToCategory(217) %}
+										取扱店舗 :<a href="/user_data/shop/shibuya">渋谷本店</a>
+									{% elseif Product.belongsToCategory(218) %}
+										取扱店舗 :<a href="/user_data/shop/ginza">銀座店</a>
+									{% elseif Product.belongsToCategory(219) %}
+										取扱店舗 :<a href="/user_data/shop/ikebukuro">池袋店</a>
+									{% elseif Product.belongsToCategory(220) %}
+										取扱店舗 :<a href="/user_data/shop/yokohama">横浜店</a>
+									{% else %}
+									{% endif %}
+								</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+    <!-- ▲item_list▲ -->
+	{% if pagination.totalItemCount > 0 %}
+		{% include "pagination.twig" with { 'pages' : pagination.paginationData } %}
+	{% endif %}
+	{% if Category is not null %}
+		
+		{% if Category.id == 37 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+						<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+						<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_05.png" class="img-responsive">
+						<a href="/products/list?category_id=41" class="btn btn-block btn-lg btn-yellowgreen">男物の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 38 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+						<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+						<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_05.png" class="img-responsive">
+						<a href="/products/list?category_id=41" class="btn btn-block btn-lg btn-yellowgreen">男物の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 36 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_01.png" class="img-responsive">
+						<a href="/products/list?category_id=37" class="btn btn-block btn-lg btn-orange">三歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+						<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_05.png" class="img-responsive">
+						<a href="/products/list?category_id=41" class="btn btn-block btn-lg btn-yellowgreen">男物の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 35 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col-sm-3 mb10">
+							<img src="/template/aki/img/753/common/btn_01.png" class="img-responsive">
+							<a href="/products/list?category_id=37" class="btn btn-block btn-lg btn-orange">三歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+						</div>
+						<div class="col-sm-3 mb10">
+							<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+							<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+						</div>
+						<div class="col-sm-3 mb10">
+							<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+							<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+						</div>
+						<div class="col-sm-3 mb10">
+							<img src="/template/aki/img/753/common/btn_05.png" class="img-responsive">
+							<a href="/products/list?category_id=41" class="btn btn-block btn-lg btn-yellowgreen">男物の七五三レンタル<br>商品一覧ページへ</a>
+						</div>	
+				</div>
+			</section>
+			{% elseif Category.id == 49 %}
+			<section class="block">
+				<div class="row">
+					<!-- <div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/sotsunyugaku/mainvisual.png" alt="卒入学のお母さんの着物" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/sotsunyugaku/mainvisual_s.png" alt="卒入学のお母さんの着物" class="img-responsive visible-xs"></a>
+						</div>
+					</div> -->
+					<div class="col-sm-12">
+						<h2 class="title">色無地ってどんな着物？</h2>
+
+						<p>色無地とは黒以外の1色で染められた柄のない無地染めの着物で、帯の取り合わせにより、様々な機会に着用可能な応用範囲の広い着物です。</p>
+
+						<h2 class="title">色無地は、訪問着や小紋とどう違う？</h2>
+
+						<p>
+							訪問着は略礼装であり、小紋は街着やお稽古着としてカジュアルな着物になります。<br>
+							紋付色無地は、訪問着同様略礼装として結婚式披露宴、お茶会等にお召し頂けます。<br>
+							一方紋のついていない色無地の内、紺や茶色等色彩によっては、名古屋帯を合わせ街着やお稽古着となります。
+						</p>
+
+
+						<h2 class="title">色無地は多様なシーンで活用されます。</h2><br>
+
+						<h3 class="title">シーン１ パーティー</h3>
+						<p>格調高い名古屋帯を合わせると、セミカジュアルな装いになります。
+							気軽な結婚式2次会やパーティーシーンにオススメです。</p>
+
+						<h3 class="title">シーン2 結婚式・お茶会</h3>
+						<p>
+							紋付色無地に袋帯を合わせると、略礼装として結婚式披露宴やお茶会にお召し頂けます。
+							お茶会の濃茶席の席主側は紋付色無地が一般的です。
+						</p>
+
+						<h3 class="title">シーン3 お通夜、法事</h3>
+						<p>地紋が吉祥文様以外で、色彩も地味めな寒色系の色無地に黒共帯を合わせるとお通夜、法事などの半喪の装いになります。</p>
+
+						<h2 class="title">色無地の魅力はどこにある？</h2>
+						<p>
+							色無地は柄がないため、装う人本来の美しさを引き出します。
+							また、訪問着の柄と帯の文様の調和が取れない場合には、
+							色無地にその帯を合わせると、帯が引き立ちます。
+						</p>
+
+
+						<h2 class="title">色無地は紋の数で格が変わります。</h2>
+						<p>
+							最近は、紋について余りこだわらない傾向にありますが、紋の数の違いで着物の格が変わります。お茶会、結婚式参列であれば一つ紋の色無地を、三つ紋の色無地ですと、より格調高くなります。
+							色無地は合わせる帯（袋帯、名古屋帯、黒共帯）により、装いの格が変化します。
+							ＴＰＯにより合わせる帯を選びましょう。
+						</p>
+
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 50 %}
+			<section class="block">
+				<div class="row">
+					<!-- <div class="col-sm-12">
+						<a href="/user_data/spring">
+							<img src="/template/aki/img/top/slide/slide_012.jpg" alt="春 結婚式・パーティの着物レンタル（訪問着・留袖・振袖）" class="img-responsive hidden-xs">
+							<img src="/template/aki/img/top/slide/slide_012_s.jpg" alt="春 結婚式・パーティの着物レンタル（訪問着・留袖・振袖）" class="img-responsive visible-xs">
+						</a>
+					</div> -->
+					<div class="col-sm-12">
+						<h2 class="title">訪問着とは</h2>
+						<p>
+							現代で一番着る機会が多い着物が訪問着ではないでしょうか。
+							参列者として出席する場合の結婚式、パーティーやお茶会、観劇、親として参加する卒業式や入学式など訪問着を着る機会は本当にたくさんあります。
+							留袖と違うところは胸元と袖に柄があり、華やかな印象を与えるのが訪問着です。
+						</p>
+						<h2 class="title">どんな色の訪問着を着たらいいのか</h2>
+						<p>
+							最近では着物の下に着る長襦袢は白の半襟が多いようです。
+							そのためどんな色の着物を着たとしても、顔と着物の間に白い衿が入ることで
+							着物の色がダイレクトに顔に映るのではなく、顔と着物の間にワンクション置くことになりますので、どのような色も似合うと思います。
+							従ってご自分のお好みの色彩の着物を着て楽しんで頂けたら良いと思います。
+							ただ、一つ大事なことをお伝えすると"TPOを考慮して着物を選んでいただくこと”です。結婚式の参列者なのに、あまり目立ちすぎる着物は控えた方がよろしいですね。入学式卒業式などの時もあまり派手すぎるものを選ばず、落ち着いたものを選んで主役であるお子様を引き立たせてあげましょう。
+						</p>
+						<h2 class="title">着物を着る季節や場所を意識されると楽しくなります。</h2>
+						<p>
+							訪問着には様々な種類の色合い、模様があります。
+							着る機会に合わせて以前着た訪問着とは趣きの違う着物をレンタルしていただくのも一つの楽しみになるかもしれません。
+							例えば、歌舞伎を観に行く際に着ていく着物にはその演目に合ったような柄を選んだり、刻々と変わる四季に合わせて色彩や柄を変えたりすると、ご自身も豊かな気持ちになります。
+							当店でレンタルされる際には、着物をお召しになるシーンをお伝えください。それに合わせた着物をご提案させていただきます。
+						</p>
+					</div>
+				</div>
+			</section>
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_01.png" class="img-responsive">
+						<a href="/products/list?category_id=37" class="btn btn-block btn-lg btn-orange">三歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+						<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_05.png" class="img-responsive">
+						<a href="/products/list?category_id=41" class="btn btn-block btn-lg btn-yellowgreen">男物の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 51 %}
+			<section class="block">
+				<div class="row">
+					<div class="col-sm-12">
+						<h2 class="title">色留袖とは</h2>
+						<p>
+							江戸時代に結婚をすると振袖の袖丈を短くして、袖を脇に留めて縫い付けたことが名前の由来になった留袖。腰から下にのみ模様が入っている模様付けを江戸褄模様（エドヅマモヨウ）といいますが、この模様付けから留袖を「江戸褄」とも言います。黒地の留袖以外のことを表す色留袖は訪問着と違って着るシチュエーションが限られ、結婚式等で既婚の方がお召しになります。柄もおめでたい席にふさわしい吉祥模様が多く、着用範囲は限られるものの、着物の約束事を守れば間違った着物を着てマナー違反となることもありません。既婚の親族は、色留袖を着用しますが、新郎新婦のお母様は黒留袖をお召しになるのが一般的です。
+						</p>
+						<h2 class="title">どのような色を選ぶべきか</h2>
+						<p>
+							色留袖はピンクやクリーム色、水色等の比較的淡い地色が多く、松竹梅や菊、蘭、おしどり、その他吉祥模様が描かれています。特に結婚式などの機会には縁起がいいのでそういった色、柄を着用して、お目出度い気持ちを表現すれば場も華やかになり、お招きなさった側のご親族もお喜びになります。
+						</p>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 41 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_01.png" class="img-responsive">
+						<a href="/products/list?category_id=37" class="btn btn-block btn-lg btn-orange">三歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+						<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+						<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 158 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/mainvisual_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_01.png" class="img-responsive">
+						<a href="/products/list?category_id=37" class="btn btn-block btn-lg btn-orange">三歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_02.png" class="img-responsive">
+						<a href="/products/list?category_id=36" class="btn btn-block btn-lg btn-emerald">五歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_03.png" class="img-responsive">
+						<a href="/products/list?category_id=35" class="btn btn-block btn-lg btn-pink">七歳祝着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+					<div class="col-sm-3 mb10">
+						<img src="/template/aki/img/753/common/btn_04.png" class="img-responsive">
+						<a href="/products/list?category_id=50" class="btn btn-block btn-lg btn-purple">訪問着の七五三レンタル<br>商品一覧ページへ</a>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 53 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007.jpg" alt="成人式レンタル、振袖、袴" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007_s.jpg" alt="成人式レンタル、振袖、袴" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 39 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual text-center">
+						<p>↓卒業式の卒業袴のレンタルはこちらから！↓</p>
+						<div class="item active">
+							<a href="/user_data/hakama">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル" class="img-responsive hidden-xs">
+								<img src="/template/aki/img/top/slide/slide_003_s.jpg" alt="卒業袴レンタル" class="img-responsive visible-xs">
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual text-center">
+						<p>↓成人式の着物レンタルはこちらから！↓</p>
+						<div class="item active">
+							<a href="/user_data/seijin">
+								<img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007.jpg" alt="成人式 振袖 袴 レンタル" class="img-responsive hidden-xs">
+								<img src="/template/aki/img/seijin/seijin_main_s.jpg" alt="成人式 振袖 袴 レンタル" class="img-responsive visible-xs">
+							</a>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{% elseif Category.id == 40 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/hakama"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル" class="img-responsive hidden-xs"></a>
+							<a href="/user_data/hakama"><img src="/template/aki/img/top/slide/slide_003_s.jpg" alt="卒業袴レンタル" class="img-responsive visible-xs"></a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="block">
+				<div class="row">
+					<div class="col-sm-12">
+						<h2 class="title">卒業袴とは</h2>
+						<p>
+							女子学生が袴を着用するようになったのは、明治のはじめ頃までさかのぼります。
+							その後、女子教育のための女学校が次々と開校されて以降の明治30年代、女学生の間では、海老茶色の袴、革靴、庇（ひさし）髪に大きなリボンや花をあしらった袴姿が流行していたそうです。
+							時代の先端を行く感覚で袴を着た知的な女性達は、紫式部と海老茶の袴にならって「海老茶式部」と呼ばれることがあり、多くの女性から憧れの対象として注目されていました。
+							以来、幾度かの時代の変遷を経て現在では小学生から大学生まで卒業式に袴姿で臨む方が多くなりました。
+							「成人式の振袖に袴を合わせて卒業式に着る事が出来ますか？」というご質問をよくいただきますが、当店ではあまりオススメしておりません。振袖の一番綺麗な上前の模様が袴で隠れてしまいますし、振袖は袖が長いので袴とのバランスがあまり美しくないのです。そのため、卒業袴には、振袖よりお袖の短い中振袖をお選びいただくことをお勧めしています。
+						</p>
+						<h2 class="title">どんな色を選べばいいのかしら？</h2>
+						<p>
+							中振袖と袴の色は基本的に自由で、好きな色をお選びいただけます。
+							最初にお顔に近い中振袖の色をまず決めてから袴の色を決めることをオススメします。
+							お好きな色柄やお顔映りが良い色を選び、それにあった袴の色を決めて全体的な調和を見るとよろしいでしょう。
+							中振袖の柄として多いのは花柄ですが、矢絣（やがすり）の柄も人気上昇中です。
+							また、袴もグラデーションや無地、刺繍が入ったものなどいろいろあります。
+							華やかな袴に無地の着物を合わせたり、学生らしく抑えた色彩で上下のトーンを統一する等、皆様それぞれの個性に合わせたオリジナルコーディネートでコーディネートをさせて頂きます。
+							「着物レンタルあき」各店舗のベテランスタッフが、様々な組み合わせをご提案させていただきます。どうぞお気軽にご相談ください。
+						</p>
+						<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=175&disp_number=20&orderby=2">青・紺・水色</a>　　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=176&disp_number=20&orderby=2">赤・ピンク・紫</a>　　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=177&disp_number=20&orderby=2">白</a>　　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=192&disp_number=20&orderby=2">黄色・オレンジ</a>　	<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=193&disp_number=20&orderby=2">緑</a>　　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=194&disp_number=20&orderby=2">黒</a>　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=195&disp_number=20&orderby=2">グレー</a>　　<a class="underline" href="/products/list?mode=&category_id=40&name=&pageno=&disp_number=20&orderby=2&date=visit&category_id=40&category_id_3%5B%5D=196&disp_number=20&orderby=2">クリーム・ベージュ・茶色</a>
+					
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 43 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/yukata" class="img-responsive visible-xs"><img src="/template/aki/img/top/slide/slide_005_s.jpg" alt="浴衣レンタル"></a>
+							<a href="/user_data/yukata" class="img-responsive hidden-xs" ><img src="/template/aki/img/yukata/visual.png" alt="浴衣レンタル"></a>
+						</div>
+					</div>
+				</div>
+			</section>
+			{% elseif Category.id == 42 %}
+			<section class="block" id="sec02">
+				<div class="row">
+					<div class="main_visual">
+						<div class="item active">
+							<a href="/user_data/yukata" class="img-responsive visible-xs"><img src="/template/aki/img/top/slide/slide_005_s.jpg" alt="浴衣レンタル"></a>
+							<a href="/user_data/yukata" class="img-responsive hidden-xs" ><img src="/template/aki/img/yukata/visual.png" alt="浴衣レンタル"></a>
+						</div>
+					</div>
+				</div>
+			</section>
+			{% endif %}
+		{% endif %}
+
+{% endblock %}

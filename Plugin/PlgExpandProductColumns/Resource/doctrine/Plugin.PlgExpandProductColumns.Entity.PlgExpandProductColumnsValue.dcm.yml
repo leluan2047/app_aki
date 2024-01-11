@@ -1,0 +1,37 @@
+Plugin\PlgExpandProductColumns\Entity\PlgExpandProductColumnsValue:
+    type: entity
+    table: plg_expand_product_columns_value
+    repositoryClass: Plugin\PlgExpandProductColumns\Repository\PlgExpandProductColumnsValueRepository
+    id:
+        productId:
+            type: integer
+            nullable: false
+            unsigned: false
+            default: '0'
+            id: true
+            column: product_id
+        columnId:
+            type: integer
+            nullable: false
+            unsigned: true
+            default: '0'
+            id: true
+            column: column_id
+    fields:
+        value:
+            type: text
+            nullable: true
+            length: 65535
+            fixed: false
+    ManyToOne:
+        Product:
+            targetEntity: Eccube\Entity\Product
+            joinColumn:
+                name: product_id
+                referencedColumnName: product_id
+        PlgExpandProductColumns:
+            targetEntity: Plugin\PlgExpandProductColumns\Entity\PlgExpandProductColumns
+            joinColumn:
+                name: column_id
+                referencedColumnName: column_id
+    lifecycleCallbacks: {  }

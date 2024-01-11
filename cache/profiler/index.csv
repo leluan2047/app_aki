@@ -1,0 +1,3 @@
+7ea3b5,::1,GET,http://localhost:8080/products/list,1696929929,,200
+965657,127.0.0.1,GET,http://localhost:8080/block/news,1696929932,7b9386,200
+7b9386,::1,GET,http://localhost:8080/,1696929933,,200

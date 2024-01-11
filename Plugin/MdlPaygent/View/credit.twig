@@ -1,0 +1,440 @@
+{#
+Copyright(c) 2016 MDL Paygent, Inc. All rights reserved.
+http://www.paygent.co.jp/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+    <script>
+        $( "form" ).submit(function( event ) {
+            $(".btn").attr("disabled",true);
+      });
+	  $(document).ready(function () {
+		  if ($('#stock').prop('checked')) {
+			  	$("#stockFlag").val("1");
+				$("#deletecard").val("1");
+			  	$('#expireYear').hide();
+				$('#cardSaved').hide();
+				$('#cardNo').hide();
+				$('#cardName').hide();
+				$('#registCard').hide();
+			}else{
+				$("#deletecard").val("0");
+				$("#stockFlag").val("0");
+				$('#expireYear').show();
+				$('#cardSaved').show();
+				$('#cardNo').show();
+				$('#cardName').show();
+				$('#registCard').show();
+			}
+			 $('#stock').change(function(){
+				if (this.checked) {
+					$("#stockFlag").val("1");
+					$("#deletecard").val("1");
+					$('#expireYear').hide();
+					$('#cardSaved').hide();
+					$('#cardNo').hide();
+					$('#cardName').hide();
+					$('#registCard').hide();
+				} else {
+					$("#deletecard").val("0");
+					$("#stockFlag").val("0");
+					$('#expireYear').show();
+					$('#cardSaved').show();
+					$('#cardNo').show();
+					$('#cardName').show();
+					$('#registCard').show();
+				}
+			});
+			//
+			$('#btnRemove').click(function(){
+				$("#deletecard").val("1");
+			});
+
+			$('#btnNext').click(function(){
+				$("#deletecard").val("0");
+			});
+		});
+
+    </script>
+    <style type="text/css">
+        .gmo-payment-inner table{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+        .gmo-payment-inner .text-center{
+            text-align: center;
+        }
+        .gmo-payment-inner .text-right{
+            text-align: right;
+        }
+        .gmo-payment-inner .dl_table dd {
+            padding: 8px;
+        }
+        @media only screen and (min-width: 768px){
+            .gmo-payment-inner .dl_table dd {
+                padding: 8px;
+            }
+        }
+    </style>
+    
+    {% if token_env == 1 %}
+      <script type="text/javascript" src="https://token.paygent.co.jp/js/PaygentToken.js" charset="UTF-8"></script>
+    {% else %}
+      <script type="text/javascript" src="https://sandbox.paygent.co.jp/js/PaygentToken.js" charset="UTF-8"></script>
+    {% endif %}
+    
+    <script type="text/javascript">//<![CDATA[
+var send = false;
+
+var merchant_id= {{ merchant_id }};
+var token_key= "{{ token_key }}";
+
+function callCreateToken() {
+	$("#deletecard").val("0");
+    //二重注文制御
+    if(send) {
+        alert("只今、処理中です。しばらくお待ち下さい。");
+        return false;
+    } else {
+
+        send = true;
+
+        var form = document.form1;
+
+        //登録カード使用の場合はトークン生成処理を実行しない
+        if (form.stock != null && form.stock.checked == true) {
+            var form = document.form1;
+            form.submit();
+            return;
+        }
+
+        //セキュリティーコードの必須チェック
+        if (form.security_code != null && form.security_code.value == '') {
+            alert("セキュリティーコードが入力されていません。");
+            send = false;
+            return;
+        }
+        //カード名義の必須チェック
+        if (form.card_name02.value == '' || form.card_name01.value == '') {
+            alert("カード名義が入力されていません。");
+            send = false;
+            return;
+        }
+
+        var paygentToken = new PaygentToken();
+
+        //カード登録有無により第四引数のコールバックメソッドを切り替える
+        if (form.stock_new != null && form.stock_new.checked == true) {
+            paygentToken.createToken(
+                merchant_id,
+                token_key,
+                {
+                    card_number:form.card_no01.value +  form.card_no02.value +  form.card_no03.value +  form.card_no04.value,
+                    expire_year:form.card_year.value,
+                    expire_month: form.card_month.value,
+                    cvc:(form.security_code != null) ? form.security_code.value : '',
+                    name:form.card_name01.value + ' ' + form.card_name02.value
+                },callCreateTokenStock
+            );
+        } else {
+            paygentToken.createToken(
+                merchant_id,
+                token_key,
+                {
+                    card_number:form.card_no01.value +  form.card_no02.value +  form.card_no03.value +  form.card_no04.value,
+                    expire_year:form.card_year.value,
+                    expire_month: form.card_month.value,
+                    cvc:(form.security_code != null) ? form.security_code.value : '',
+                    name:form.card_name01.value + ' ' + form.card_name02.value
+                },execSubmit
+            );
+        }
+    }
+}
+
+function callCreateTokenStock(response) {
+
+    if (response.result == '0000') {
+
+        var form = document.form1;
+
+        //取得したトークンをhiddenのinput要素にセット
+        form.card_token_stock.value = response.tokenizedCardObject.token;
+
+        var paygentToken = new PaygentToken();
+
+        paygentToken.createToken(
+            merchant_id,
+            token_key,
+            {
+                card_number:form.card_no01.value +  form.card_no02.value +  form.card_no03.value +  form.card_no04.value,
+                expire_year:form.card_year.value,
+                expire_month: form.card_month.value,
+                cvc:(form.security_code != null) ? form.security_code.value : '',
+                name:form.card_name01.value + ' ' + form.card_name02.value
+            },execSubmit
+        );
+    } else {
+        showErrorMessage(response.result);
+        send = false;
+    }
+}
+
+function execSubmit(response) {
+
+    if (response.result == '0000') {
+
+        var form = document.form1;
+
+        //入力値をクリアする(これをしないとカード情報が加盟店に渡ってしまってトークン決済の意味を成さない)
+        form.card_no01.removeAttribute('name');
+        form.card_no02.removeAttribute('name');
+        form.card_no03.removeAttribute('name');
+        form.card_no04.removeAttribute('name');
+        form.card_month.removeAttribute('name');
+        form.card_year.removeAttribute('name');
+        form.card_name02.removeAttribute('name');
+        form.card_name01.removeAttribute('name');
+
+        if (form.security_code != null) {
+            form.security_code.removeAttribute('name');
+        }
+
+        //取得したトークンをhiddenのinput要素にセット
+        form.card_token.value = response.tokenizedCardObject.token;
+
+        form.submit();
+
+    } else {
+        showErrorMessage(response.result);
+        send = false;
+    }
+}
+
+function showErrorMessage(result_code) {
+
+    var error_message = "";
+
+    switch (result_code){
+      case "1300":
+        error_message = 'カード番号が入力されていません。';
+        break;
+      case "1301":
+        error_message = 'カード番号の書式が不正です。';
+        break;
+      case "1400":
+        error_message = '有効期限(年)が入力されていません。';
+        break;
+      case "1401":
+        error_message = '有効期限(年)の書式が不正です。';
+        break;
+      case "1500":
+        error_message = '有効期限(月)が入力されていません。';
+        break;
+      case "1501":
+        error_message = '有効期限(月)の書式が不正です。';
+        break;
+      case "1502":
+        error_message = '有効期限(年月)が不正です。';
+        break;
+      case "1600":
+        error_message = 'セキュリティコードの書式が不正です。';
+        break;
+      case "1700":
+        error_message = 'カード名義の書式が不正です。';
+        break;
+      case "7000":
+        error_message = '非対応のブラウザです。';
+        break;
+      case "8000":
+        error_message = 'システムメンテナンス中です。';
+        break;
+      default:
+        error_message = 'システムエラー (' + result_code + ')';
+        break;
+    }
+
+    alert(error_message);
+}
+
+//]]>
+</script>
+    
+{% endblock %}
+
+{% block main %}
+    <div id="main_middle">
+        <div class="container-fluid gmo-container">
+            <h2 class="title">ペイジェント クレジット</h2>
+            <div class="gmo-payment-inner">
+                <form name="form1" id="form1" method="post" action="">
+                    {{ form_widget(formCredit._token) }}
+                    {% if error is defined and error is not empty %}
+                	<div style = "color: red; float: left;">
+                    	<p>{{ error | raw  }}</p>
+                	</div>
+            		{% endif %}
+                    <input type="hidden" name="mode" value="next"/>
+                    <input type="hidden" id ="deletecard" name="deletecard" value=""/>
+                    <input type="hidden" id = "stockFlag" name="stockFlag" value=""/>
+                    <input type="hidden" name="card_token" value="">
+  					<input type="hidden" name="card_token_stock" value="">
+
+                    <div class="dl_table" id="payment_form_body" style="">
+						<dl>
+                            <dt>支払回数</span></dt>
+                            <dd>
+                                <div class="form-group form-inline {% if formCredit.payment_class.vars.errors is not empty %}has-error{% endif %}">
+                                    {{ form_widget(formCredit.payment_class) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        {% if list_data is not empty %}
+						<dl>
+                            <dt>登録カード</span></dt>
+                            <dd>
+                            	{% if error_card is defined and error_card is not empty %}
+			                    	<p style="color: red;">{{ error_card | raw  }}</p>
+			            		{% endif %}
+								<div>
+                                    {{ form_widget(formCredit.stock) }}
+                                </div>
+                                <div style="margin-top:10px">
+                                    <table class="table table-bordered">
+										<thead>
+										  <tr>
+											<th>選択</th>
+											<th>カード番号</th>
+											<th>有効期限</th>
+											<th>カード名義</th>
+										  </tr>
+										</thead>
+										<tbody>
+										{% for data in list_data %}
+										  <tr id='tblRow{{data.cardSeq }}'>
+											<td>
+												<input type="radio" name="cardSeq" value="{{ data.cardSeq }}" />
+											</td>
+											<td>{{data.card_number}}</td>
+											<td>{{data.card_valid_term}}</td>
+											<td>{{data.cardholder_name}}</td>
+										  </tr>
+										{% endfor %}
+										</tbody>
+									</table>
+                                </div>
+								<div class="col-sm-2">
+									<p><button type="submit" class="btn" id="btnRemove">選択カードの削除</button></p>
+								</div>
+                            </dd>
+                        </dl>
+						{% endif %}
+                        <dl id="cardNo">
+                            <dt>カード番号</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    <div style="float:left; width: 100%;" >
+                                    	{{ form_errors(formCredit.card_no01) }}
+                                        {{ form_errors(formCredit.card_no02) }}
+                                        {{ form_errors(formCredit.card_no03) }}
+                                        {{ form_errors(formCredit.card_no04) }}
+                                     </div>
+                                     <div style="float:left;" class = "{% if formCredit.card_no01.vars.errors is not empty %}has-error{% endif %}">
+                                     	{{ form_widget(formCredit.card_no01) }}  &nbsp; - &nbsp;
+                                     </div>
+                                     <div style="float:left;" class = "{% if formCredit.card_no02.vars.errors is not empty %}has-error{% endif %}">
+                                     	{{ form_widget(formCredit.card_no02) }}  &nbsp; - &nbsp;
+                                     </div>
+                                     <div style="float:left;" class = "{% if formCredit.card_no03.vars.errors is not empty %}has-error{% endif %}">
+                                     	{{ form_widget(formCredit.card_no03) }}  &nbsp; - &nbsp;
+                                     </div>
+                                     <div style="float:left; class = "{% if formCredit.card_no04.vars.errors is not empty %}has-error{% endif %}">
+                                     	{{ form_widget(formCredit.card_no04) }}  &nbsp;
+                                     </div>
+                                     <div style="clear:left;"></div>
+                                     <div>
+	                                    <p><span style="color:red; margin-top: 10px;">ご本人名義のカードをご使用ください。</span><br>
+	                                   	 半角入力（例：1234-5678-9012-3456）</p>
+                                	</div>
+                                </div>
+
+                            </dd>
+                        </dl>
+                        {% if arrData.security_code is defined and arrData.security_code == 1 %}
+                            <dl id="securityCode">
+                                <dt>セキュリティコード</dt>
+                                <dd>
+                                    <div class="form-group form-inline {% if formCredit.security_code.vars.errors is not empty %}has-error{% endif %}">
+                                        {{ form_errors(formCredit.security_code) }}
+                        				{{ form_widget(formCredit.security_code) }}
+                                    </div>
+                                </dd>
+                            </dl>
+                         {% endif %}
+
+                        <dl id="expireYear">
+                            <dt>有効期限</dt>
+                            <dd>
+                                <div class="form-group form-inline {% if formCredit.card_month.vars.errors is not empty or formCredit.card_year.vars.errors is not empty %}has-error{% endif %}">
+                         		{{ form_errors(formCredit.card_month) }}
+                                {{ form_errors(formCredit.card_year) }}
+                         		{{ form_widget(formCredit.card_month) }}月 / {{ form_widget(formCredit.card_year) }}年
+
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl id="cardName">
+                            <dt>カード名義<br>（ローマ字）</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                     <div style="float:left; width: 100%;" >
+										{{ form_errors(formCredit.card_name01) }}
+	                                    {{ form_errors(formCredit.card_name02) }}
+                                     </div>
+                                     <div style="float:left;" class = "{% if formCredit.card_name01.vars.errors is not empty %}has-error{% endif %}">{{ form_widget(formCredit.card_name01) }}  &nbsp;  &nbsp; - &nbsp;</div>
+                                     <div class = "{% if formCredit.card_name02.vars.errors is not empty %}has-error{% endif %}"> {{ form_widget(formCredit.card_name02) }} </div>
+                                     <div style="margin-top: 10px;">（例：TARO YAMADA） </div>
+                                </div>
+
+                            </dd>
+                        </dl>
+						{% if arrData.stock_flg is defined and arrData.stock_flg == 1 %}
+						<dl id="registCard">
+                            <dt>カード登録</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                        {{ form_widget(formCredit.stock_new) }}
+                                </div>
+								<div>
+									<p>カード情報を登録しておくと、次回以降の購入時にカード情報入力が省略でき、大変便利です。<br>
+										最大5件まで登録できます。
+									</p>
+								</div>
+                            </dd>
+                        </dl>
+                        {% endif %}
+						<!-- <hr style="background:#D3D3D3; border:0; height:1px"> -->
+                    </div>
+					<div style="margin-top:10px">
+						以上の内容で間違いなければ、下記「ご注文完了ページへ」ボタンをクリックしてください。<br>
+						<span style="color:red">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+						<hr style="background:#D3D3D3; border:0; height:2px">
+					</div>
+                    <div class="row no-padding" style="">
+                        <div class="col-sm-offset-2 col-sm-4">
+                        {% if token_pay == 1 %}
+                          <p><button onclick="callCreateToken();return false" id="btnNext" class="btn btn-primary btn-block">ご注文完了ページへ</button></p>
+                        {% else %}
+                          <p><button type="submit" id="btnNext" class="btn btn-primary btn-block">ご注文完了ページへ</button></p>
+                        {% endif %}
+                        </div>
+                        <div class="col-sm-4">
+                            <p><a href="{{path('mdl_shopping_payment_back')}}" class="btn btn btn-info btn-block ">戻る</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

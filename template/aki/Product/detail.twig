@@ -1,0 +1,1165 @@
+{% extends 'default_frame.twig' %}
+{% set body_class = 'product_page' %}
+{% block stylesheet %}
+<style>
+	.errormsg {
+		display: none;
+	}
+	#detail_cart_box__cart_quantity {
+		display: none;
+	}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(window).on('load', function() {
+   $('.slides img').each(function() {
+           if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                   $(this).parent().remove();
+           }
+   });
+        
+	eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
+
+	// 規格2に選択肢を割り当てる。
+	function fnSetClassCategories(form, classcat_id2_selected) {
+		var $form = $(form);
+		var product_id = $form.find('input[name=product_id]').val();
+		var $sele1 = $form.find('select[name=classcategory_id1]');
+		var $sele2 = $form.find('select[name=classcategory_id2]');
+		eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+	}
+
+	{% if form.classcategory_id2 is defined %}
+		fnSetClassCategories(
+			document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+		);
+	{% endif %}
+
+	$(function(){
+		var switchSelect;
+		
+	(switchSelect = function() {
+			if ($("#plg_order_type").val() == "visit") {
+				$(".only_visit").show();
+				$(".only_visit input, .only_visit select").removeAttr("disabled");
+			} else {
+				$(".only_visit").hide();
+				$(".only_visit, .only_visit select").attr("disabled", "disabled");
+			}
+		})();
+		switchSelect();
+                
+		$("#plg_order_type").on("change", switchSelect);
+                
+		$('#add-cart').attr('disabled', 'disabled');
+
+		$('#check').click(function() {
+			if ( $(this).prop('checked') == false ) {
+				$('#add-cart').attr('disabled', 'disabled');
+			} else {
+				$('#add-cart').removeAttr('disabled');
+			}
+		});
+
+		$('.carousel').slick({
+			infinite: false,
+			speed: 300,
+			prevArrow:'<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+			nextArrow:'<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+			slidesToShow: 4,
+			slidesToScroll: 4,
+			responsive: [
+				{
+					breakpoint: 768,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 3
+					}
+				}
+			]
+		});
+
+		$('.slides').slick({
+			dots: true,
+			arrows: false,
+			speed: 100,
+			lazyLoad: 'progressive',
+			customPaging: function(slider, i) {
+				if ($('p').attr('id') == 'text') {
+				}
+				return '<button class="thumbnail" type="button">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
+			}
+		});
+
+		$('#favorite').click(function() {
+			$('#mode').val('add_favorite');
+		});
+
+		$("#plg_order_type, #plg_wear_date, #plg_purpose, #plg_body_height, #plg_foot_size, #plg_decade, #plg_time_departure").on("change", function() {
+			if ($(this).val()) {
+				$(this).next().hide();
+			}
+		});
+		$("#add-cart").on("click", function(e) {
+			e.preventDefault();
+			var is_valid = true;
+			if (!$("#plg_order_type").val()) {
+				$("#plg_order_type").next().show();
+				is_valid = false;
+			}
+			if ($("#plg_wear_date").val() == '選択してください。') {
+				$("#plg_wear_date").next().show();
+				is_valid = false;
+			}
+			if (!$("#plg_purpose").val()) {
+				$("#plg_purpose").next().show();
+				is_valid = false;
+			}
+			if (!$("#plg_body_height").val()) {
+				$("#plg_body_height").next().show();
+				is_valid = false;
+			}
+			if (!$("#plg_foot_size").val()) {
+				$("#plg_foot_size").next().show();
+				is_valid = false;
+			}
+                        if (!$("#plg_decade").val()) {
+				$("#plg_decade").next().show();
+				is_valid = false;
+			}
+			// 来店着付けレンタルの場合
+			if ($("#plg_order_type").val() == "visit") {
+				// 着付けご来店希望店舗	
+				if (!$("#plg_visit_store").val()) {
+					$("#plg_visit_store").next().show();
+					is_valid = false;
+				}
+				// 着付けご来店日	
+/* 20160601 非表示
+				if (!$("#plg_date_visit").val()) {
+					$("#plg_date_visit").next().show();
+					is_valid = false;
+				}
+*/
+				// ご出発予定時間
+				if (!$("#plg_time_departure").val()) {
+					$("#plg_time_departure").next().show();
+					is_valid = false;
+				}
+			}
+			console.log(is_valid);
+			if (is_valid) {
+				$('#mode').val('add_cart');
+				$("#cart_form").submit();
+			}
+		});
+		// bfcache無効化
+		$(window).bind('pageshow', function(event) {
+			if (event.originalEvent.persisted) {
+				location.reload(true);
+			}
+		});
+	});
+	$(function() {
+		function date_format (date) {
+			var mm = date.getMonth() + 1;
+			var dd = date.getDate();
+			return [date.getFullYear(),
+				(mm>9 ? '' : '0') + mm,
+				(dd>9 ? '' : '0') + dd
+			].join('-');
+		}
+		//var dateToday = new Date();
+		var dateFormat = "yyyy-mm-dd";
+		var options = {
+			format: dateFormat,
+			language: 'ja',
+			autoclose : true,
+			keyboardNavigation : false,
+			showMonthAfterYear: true,
+			monthNames: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+			todayHighlight : true,
+			startDate: '+4d',
+			beforeShowDay: function(date, da) {
+					var string = date_format(date);
+					return  [{%- for d in not_available_dates %}"{{d}}", {% endfor -%}].indexOf(string) == -1;
+			},
+		};
+		$('#plg_wear_date').datepicker(options);
+		$('#plg_wear_date_detail').datepicker(options);
+/* 20160601 非表示
+		$('#plg_date_visit').datepicker(options);
+*/
+	});
+});
+</script>
+{% endblock %}
+{% block main %}
+
+{% if maker_name is not defined %}
+{% set maker_name = "" %}
+{% endif %}
+
+<form action="?" method="post" id="cart_form" name="form1">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">{{ Product.name }}</h2>
+		</div>
+	</div>
+
+	<!-- ▼item_detail▼ -->
+	<div id="item_detail">
+		<div id="detail_wrap" class="row">
+			<!--★画像★-->
+			<div class="col-sm-6">
+				<div id="item_photo_area">
+					<div id="detail_image_box__slides" class="slides">
+						{% if Product.ProductImage|length > 0 %}
+							{% for ProductImage in Product.ProductImage %}
+								<div id="detail_image_box__item--{{ loop.index }}"><img src="{{ app.config.image_save_urlpath }}/{{ ProductImage| no_image_product }}" alt="{{ Product.name }}"/></div>
+							{% endfor %}
+						{% else %}
+							<div id="detail_image_box__item"><img src="{{ app.config.image_save_urlpath }}/{{ ''| no_image_product }}" alt="{{ Product.name }}"/></div>
+						{% endif %}
+					</div>
+				</div>
+				<div class="col-sm-12 hidden-xs">
+					<h3 class="title">ご返却日(レンタル泊数)について</h3>
+					<h4>・ご来店レンタルの方</h4>
+					<p>ご利用日（ご予約日）または<b>翌日</b>にご返却をお願い致します。(計１泊)</p>
+					<h4>・宅配レンタルの方</h4>
+					<p>ご利用日（ご予約日）2日前に商品が到着します。<br>ご利用日またはご利用日の<b>翌日</b>にご返却をお願い致します。(計３泊)</p>
+				</div>
+			</div>
+			
+			<section id="item_detail_area" class="col-sm-6">
+				<!--★商品名★-->
+				<h3 id="detail_description_box__name" class="item_name">{{ Product.name }}</h3>
+				<div id="detail_description_box__body" class="item_detail">
+					<!--▼商品コード-->
+					<p id="detail_description_box__item_range_code" class="item_code pt00">
+						商品コード： <span id="item_code_default">
+						{{ Product.code_min }}
+						{% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}
+						</span>
+						
+					</p>
+					<!--▲商品コード-->
+
+
+					<!--★通常価格★-->
+					{# {% if Product.hasProductClass -%}
+						{% if Product.getPrice01Min is not null and Product.getPrice01IncTaxMin == Product.getPrice01IncTaxMax %}
+							<p id="detail_description_box__class_normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">(税込)</span></p>
+						{% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+							<p id="detail_description_box__class_normal_range_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }} ～ {{ Product.getPrice01IncTaxMax|price }}</span> <span class="small">(税込)</span></p>
+						{% endif %}
+					{% else -%}
+						{% if Product.getPrice01Max is not null %}
+							<p id="detail_description_box__normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">(税込)</span></p>
+						{% endif %}
+					{% endif -%} #}
+
+					<!--★販売価格★-->
+					{% if Product.hasProductClass -%}
+						{% if Product.getPrice02IncTaxMin == Product.getPrice02IncTaxMax %}
+							<p id="detail_description_box__class_sale_price" class="sale_price text-danger"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">(税込)</span></p>
+						{% else %}
+							<p id="detail_description_box__class_range_sale_price" class="sale_price text-danger"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }} ～ {{  Product.getPrice02IncTaxMax|price }}</span> <span class="small">(税込)</span></p>
+						{% endif %}
+					{% else -%}
+						<p id="detail_description_box__sale_price" class="sale_price text-danger"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">(税込)</span></p>
+					{% endif -%}
+
+					<!--★商品説明★-->
+					<p id="detail_not_stock_box__description_detail" class="item_comment">{{ Product.description_detail|raw|nl2br }}</p>
+					<!--★女の子画像★-->
+					<div class="pb00">
+							{% if Product.belongsToCategory(37) or Product.belongsToCategory(36) or Product.belongsToCategory(35) or Product.belongsToCategory(158) %}
+								<img src="{{ app.config.front_urlpath }}/img/753/yuki.jpg" width="50%" class="img-responsive mb10">
+							{% endif %}
+					</div>
+
+					<div class="alert alert-danger">
+						<ul class="mb00">
+						{% if Product.belongsToCategory(40) %}
+							<li></li>
+						{% elseif Product.belongsToCategory(42) %}
+							<li>浴衣は所属店舗のみのお取扱いとなります。</li>
+						{% elseif Product.belongsToCategory(43) %}
+							<li>浴衣は所属店舗のみのお取扱いとなります。</li>
+						{% else %}
+						{% endif %}
+						{% if Product.belongsToCategory(39) %}
+							{% set title='紋付袴は複数サイズがございます。そのためカレンダーが予約済みとなっていてもレンタルが可能な場合がございます。詳細は下記所属店舗までご連絡下さい。' %}
+						{% else %}
+							{% set title='商品のお問合せは、下記所属店舗までご連絡下さい。' %}
+						{% endif %}
+						
+						{% if Product.belongsToCategory(217) %}
+							<li>{{ title }}</li>
+							<li><strong>渋谷本店:03-3476-3341</strong></li>
+							<li>※着付予約のない場合、毎週火曜は定休日となります。</li>
+							<li>※2万円以下の商品は他支店での着付け、宅配レンタル、火曜日（定休日）等の対応を行っておりません。</li>
+							<li>※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）</li>
+						{% elseif Product.belongsToCategory(218) %}
+							<li>{{ title }}</li>
+							<li><strong>銀座店:03-5568-0529</strong></li>
+							<li>※着付予約のない場合、毎週火曜は定休日となります。</li>
+							<li>※2万円以下の商品は他支店での着付け、宅配レンタル、火曜日（定休日）等の対応を行っておりません。</li>
+							<li>※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）</li>
+						{% elseif Product.belongsToCategory(219) %}
+							<li>{{ title }}</li>
+							<li><strong>池袋店:03-6416-0529</strong></li>
+							<li>※着付予約のない場合、毎週火曜は定休日となります。</li>
+							<li>※2万円以下の商品は他支店での着付け、宅配レンタル、火曜日（定休日）等の対応を行っておりません。</li>
+							<li>※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）</li>
+						{% elseif Product.belongsToCategory(39) %}
+							<li>紋付袴は複数サイズがございます。そのためカレンダーが予約済みとなっていてもレンタルが可能な場合がございます。詳細は上記所属店舗までご連絡下さい。</li>
+							<li>※2万円以下の商品は他支店での着付け、宅配レンタル、火曜日（定休日）等の対応を行っておりません。</li>
+							<li>※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）</li>
+						{% elseif Product.belongsToCategory(220) %}
+							<li>{{ title }}</li>
+							<li><strong>横浜店:045-441-0529</strong></li>
+							<li>※着付予約のない場合、毎週火曜は定休日となります。</li>
+							<li>※2万円以下の商品は他支店での着付け、宅配レンタル、火曜日（定休日）等の対応を行っておりません。</li>
+							<li>※店舗での受付時に現住所の確認できる身分証（免許証や保険証など）をご提示ください。ご提示いただけない場合は保証金を別途お預かりいたします。（浴衣・小紋5,000円、その他の着物1万円）</li>
+						{% else %}
+						{% endif %}
+						</ul>
+					</div>
+					<div class="mb30">
+						<!--<ul class="mb00">-->
+						{% if Product.belongsToCategory(217) %}
+							<p class="text-center">所属店舗の営業時間、住所等は下記にてご確認ください。</p>
+							<p class="text-center"><a href="/user_data/shop/shibuya">着物レンタルあき　渋谷本店</a></p>
+						{% elseif Product.belongsToCategory(218) %}
+							<p class="text-center">所属店舗の営業時間、住所等は下記にてご確認ください。</p>
+							<p class="text-center"><a href="/user_data/shop/ginza">着物レンタルあき　銀座店</a></p>
+						{% elseif Product.belongsToCategory(219) %}
+							<p class="text-center">所属店舗の営業時間、住所等は下記にてご確認ください。</p>
+							<p class="text-center"><a href="/user_data/shop/ikebukuro">着物レンタルあき　池袋店</a></p>
+						{% elseif Product.belongsToCategory(220) %}
+							<p class="text-center">所属店舗の営業時間、住所等は下記にてご確認ください。</p>
+							<p class="text-center"><a href="/user_data/shop/yokohama">着物レンタルあき　横浜店</a></p>
+						{% else %}
+						{% endif %}
+						<!--</ul>-->
+					</div>
+					<!--▼買い物かご-->
+					<div id="detail_cart_box" class="cart_area">
+						<h3 class="title reserv pa00">予約状況</h3>
+						<p class="mb10 hidden-xs">直近（3日以内）でのご利用希望の方は店舗迄ご連絡下さい。</p>
+						<p class="mb40 visible-xs">直近（3日以内）でのご利用希望の方は店舗迄ご連絡下さい。</p>
+					{% if Product.stock_find %}
+						{# 規格 #}
+						{% if form.classcategory_id1 is defined %}
+							<ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
+								{# 規格1 #}
+								<li>
+									{{ form_widget(form.classcategory_id1) }}
+									{{ form_errors(form.classcategory_id1) }}
+								</li>
+								{# 規格2 #}
+								{% if form.classcategory_id2 is defined %}
+								<li>
+									{{ form_widget(form.classcategory_id2) }}
+									{{ form_errors(form.classcategory_id2) }}
+								</li>
+								{% endif %}
+							</ul>
+						{% endif %}
+
+							{# 数量 #}
+							<dl id="detail_cart_box__cart_quantity" class="quantity">
+								<dt>数量</dt>
+								<dd>
+									{{ form_widget(form.quantity,{'attr': {'value': '1'}}) }}
+									{{ form_errors(form.quantity) }}
+								</dd>
+							</dl>
+
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="plg_wear_date_detail" class="calendar clickable"></div>
+								</div>
+								<div class="col-sm-12 mt10">
+									※宅配レンタルの方、商品の所属店舗と異なる店舗で着付ける場合（例：渋谷店の着物を銀座店で着付ける場合）は、4日後からお選び下さい。<br>
+									<a href="/user_data/service#s07">※早朝からの着付け承ります。</a><br>
+<!--									<a href="/user_data/tax_notice">※【重要】消費税増税に関して（9月末までの全額支払いなら8％♪）</a>	-->
+								</div>
+							</div>
+							<div class="extra-form">
+								{# HTML上には出力しておく必要がありそうなので、HTMLのコメントアウト#}
+								<!--
+
+								{% for f in form.getIterator %}
+									{% if f.vars.name matches '[^plg*]' %}
+										{{ form_row(f) }}
+									{% endif %}
+								{% endfor %}
+							-->
+							</div>	
+
+
+
+							{# カートボタン #}
+							<div id="detail_cart_box__button_area" class="btn_area">
+								<div  id="detail_cart_box__insert_button" class="" role="group" aria-label="...">
+									
+									<button id="detail_cart_modal" type="button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#ModalCart">予約に進む</button>
+								</div>
+							</div>
+						{% else %}
+							{# 在庫がない場合は品切れボタンのみ表示 #}
+							<div id="detail_cart_box__button_area" class="btn_area hidden-xs">
+								<div  id="detail_cart_box__insert_button" class="btn-group btn-group-justified" role="group" aria-label="...">
+									<div class="btn-group" role="group">
+										<button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+
+					<div class="row pb00">
+						<div class="col-sm-12">
+							<h3 class="title">サイズ</h3>
+							{% if Product.belongsToCategory(187) %}
+								<p>Sサイズ(女性149cm以下/男性160-170cm)</p>
+							{% endif %}
+							{% if Product.belongsToCategory(188) %}
+								<p>Mサイズ(女性150-167cm/男性165-175cm)</p>
+							{% endif %}
+							{% if Product.belongsToCategory(189) %}
+								<p>Lサイズ(女性168-173cm/男性170-180cm)</p>
+							{% endif %}
+							{% if Product.belongsToCategory(190) %}
+								<p>大きいサイズ(女性174cm以上/男性180cm以上)</p>
+							{% endif %}
+							<p>※表示サイズは目安となります。着付けにて多少の調整は可能となります。身長の高い方でも、まずは<a href="/contact">お問合せ</a>ください。</p>		
+						</div>
+						<div class="col-sm-12">
+							{% if __EX_PRODUCT.4.value %}
+								<h3 class="title">素材</h3>
+								<p>{{ __EX_PRODUCT.4.value }}</p>
+							{% else %}
+							{% endif %}
+						</div>
+						<div class="col-sm-12 visible-xs mb20">
+							<h3 class="title">ご返却日(レンタル泊数)について</h3>
+							<h4>・ご来店レンタルの方</h4>
+							<p>ご利用日（ご予約日）または<b>翌日</b>にご返却をお願い致します。(計１泊)</p>
+							<h4>・宅配レンタルの方</h4>
+							<p>ご利用日（ご予約日）2日前に商品が到着します。<br>ご利用日またはご利用日の<b>翌日</b>にご返却をお願い致します。(計３泊)</p>
+						</div>
+						<div class="col-sm-12">
+							<h3 class="title">ご利用の注意</h3>
+							<ul>
+								<li>※PCモニターと実際の商品では、色味に若干の違いがある場合がございます。ご了承下さい。</li>
+								<li>※決済システムのメンテナンスが行われる際にはご注文いただけない場合がございます。</li>
+								<li>※商品が到着しましたら、同梱されているレンタルチェック表を元に商品のご確認をお願いします。</li>
+								<li>※画像はコーディネート例となります。帯や小物はお下見時にお客様と一緒にコーディネートさせていただきます。</li>
+								<li>※宅配レンタルのお客様は原則画像のコーディネートとなります。</li>
+							</ul>
+                        </div>
+						<div class="col-sm-12">
+							<h3 class="title">付属品の内容</h3>
+							<!--★商品説明拡張エリア★-->
+							<div class="row pb00">
+								<div class="col-sm-12">
+									{% if Product.belongsToCategory(53) %}
+										<!--振袖-->
+										<img src="{{ app.config.front_urlpath }}/img/included/furisode_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達衿:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯枕:1
+											三重紐:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(52) %}
+										<!--黒留袖-->
+										<img src="{{ app.config.front_urlpath }}/img/included/kurotomesode_fu.png" class="img-responsive mb10"> 
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											末広:1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(51) %}
+										<!--色留袖-->
+										<img src="{{ app.config.front_urlpath }}/img/included/irotomesode_fu.png" class="img-responsive mb10"> 
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚げ・帯締:各1
+											末広:1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(50) %}
+										<!--訪問着-->
+										<img src="{{ app.config.front_urlpath }}/img/included/houmonngi_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(38) %}
+										<!--産着-->
+										<img src="{{ app.config.front_urlpath }}/img/included/ubugi_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+									{% elseif Product.belongsToCategory(37) %}
+										<!--七五三(三歳祝着)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/hitigosansan_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											タオル:1
+											腰紐:2
+											襦袢:1
+											巾着:1
+											髪飾り:1
+											草履:1
+											※下着は洋服用のUまたはVネックのシャツをご用意ください
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(36) %}
+										<!--七五三(五歳祝着)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/hitigosanngo_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											タオル:1
+											腰紐:2
+											襦袢:1
+											帯:1
+											懐剣:1
+											お守り:1
+											羽織紐:1
+											末広:1
+											雪駄:1
+											※下着は洋服用のUまたはVネックのシャツをご用意ください
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(35) %}
+										<!--七五三(七歳祝着)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/hitigosannhichi_fu.png" class="img-responsive mb10" alt="七五三(七歳祝着)">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											タオル:1
+											腰紐:4
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯揚・帯締:各1
+											しごき:1
+											はこせこ:1
+											末広:1
+											草履・バック:各1
+											※下着は洋服用のUまたはVネックのシャツをご用意ください
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(34) %}
+										<!--婚礼衣装-->
+										<img src="{{ app.config.front_urlpath }}/img/included/konrei.png" class="img-responsive mb10" alt="婚礼衣装">
+										<p>付属品あります。<br>
+										※参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+									{% elseif Product.belongsToCategory(158) %}
+										<!--十三詣り-->
+										<img src="{{ app.config.front_urlpath }}/img/included/hitigosannhichi_fu.png" class="img-responsive mb10" alt="十三詣り">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											長襦袢
+											帯
+											帯揚
+											帯締
+											しごき
+											付属品一式(足袋を含む)
+											小物一式
+											ハンドバッグ
+											草履
+											※髪飾りは有料にて承ります。
+											※下着は洋服用のUまたはVネックのシャツをご用意ください。
+										</p>
+									{% elseif Product.belongsToCategory(49) %}
+										<!--色無地-->
+										<img src="{{ app.config.front_urlpath }}/img/included/iromuzi_fu.png" class="img-responsive mb10" alt="色無地">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(40) %}
+										<!--卒業袴-->
+										<img src="{{ app.config.front_urlpath }}/img/included/shakama_fu.png" class="img-responsive mb10" alt="卒業袴">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											タオル:1
+											衿芯:1
+											腰紐:4
+											襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											半幅帯:1
+											草履・巾着:各1
+											※下着は洋服用のUまたはVネックのシャツをご用意ください
+											※ブーツをご希望の場合は別途￥3,300（税込み）頂きます。
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(41) %}
+										<!--男物-->
+										<img src="{{ app.config.front_urlpath }}/img/included/otokomono_fu.png" class="img-responsive mb10" alt="男物">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											タオル:1
+											腰紐:4
+											長襦袢:1
+											巾着:1
+											雪駄:1
+											※下着は洋服用のUまたはVネックのシャツをご用意ください
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(39) %}
+										<!--袴(男性用)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/mhakama_fu.png" class="img-responsive mb10" alt="袴(男性用)">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											長襦袢:1枚
+											角帯:1本
+											履物:1足
+											小物:1式
+										</p>
+									{% elseif Product.belongsToCategory(48) %}
+										<!--小紋-->
+										<img src="{{ app.config.front_urlpath }}/img/included/komon_fu.png" class="img-responsive mb10">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(47) %}
+										<!--つむぎ-->
+										<img src="{{ app.config.front_urlpath }}/img/included/tumugi_fu.png" class="img-responsive mb10" alt="つむぎ">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(43) %}
+										<!--ゆかた(女性用)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/wyukata_fu.png" class="img-responsive mb10" alt="つむぎ">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											タオル:2
+											腰紐:2
+											伊達締:1
+											コーリンベルト:1
+											帯板:1
+											半幅帯:1
+											下駄・巾着:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(42) %}
+										<!--ゆかた(男性用)-->
+										<img src="{{ app.config.front_urlpath }}/img/included/myukata_fu.png" class="img-responsive mb10" alt="浴衣(男性用)">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											タオル:1
+											腰紐:2
+											角帯:1
+											下駄・巾着:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% elseif Product.belongsToCategory(157) %}
+										<!--喪服-->
+										<img src="{{ app.config.front_urlpath }}/img/included/mofuku_fu.png" class="img-responsive mb10" alt="喪服">
+										<p>参考画像となりますので、ご利用いただく付属品は色など異なる場合がございます。</p>
+										<p>
+											足袋:1
+											下着:1
+											タオル:2
+											腰紐:4
+											衿芯:1
+											長襦袢:1
+											伊達締:2
+											コーリンベルト:1
+											帯板:1
+											帯止め金具:1
+											帯枕:1
+											帯揚・帯締:各1
+											草履・バック:各1
+											※着付けに必要な一式すべて含みます。
+										</p>
+									{% else %}
+										<img src="{{ app.config.front_urlpath }}/img/included/houmonngi_fu.png" class="img-responsive mb10">
+										<p>※上記画像は訪問着の例となります。他の着物にはそれぞれ専用のフルセット内容が付きます。詳細についてはお問い合わせください。</p>
+										<!--婚礼衣装-->
+										<!--ひとえ-->
+										<!--夏物-->
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<!-- /.item_detail -->
+			</section>
+			<!--詳細ここまで-->
+		</div>
+	</div>
+
+	{# フリーエリア #}
+	{% if Product.freearea %}
+	<div id="sub_area" class="row">
+		<div class="col-sm-10 col-sm-offset-1">
+			<div id="detail_free_box__freearea" class="freearea">{{ include(template_from_string(Product.freearea)) }}</div>
+		</div>
+	</div>
+	{% endif %}
+
+
+<div class="modal" id="ModalCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title text-center" id="myModalLabel">ご予約内容確認</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">ご予約方法<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_order_type" id="plg_order_type" class="form-control">
+										{% if order_type is not empty %}
+											{% if order_type == 'visit' %}
+												<option value="visit">来店着付けレンタル</option>
+											{% elseif order_type == 'deliv' %}
+												{% if Product.getPrice02IncTaxMax >= 20000 %}
+													<option value="deliv">宅配着物レンタル</option>
+												{% else %}
+													<option value="">予約できません</option>
+												{% endif %}
+											{% endif %}
+										{% else %}
+											<option value="visit">来店着付けレンタル</option>
+											{% if Product.getPrice02IncTaxMax >= 20000 %}
+												<option value="deliv">宅配着物レンタル</option>
+											{% endif %}
+										{% endif %}
+									</select>
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">ご利用日選択<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<input name="plg_wear_date" type="text" class="form-control date hasDatepicker" value="選択してください。" placeholder="ご利用日" readonly="readonly" id="plg_wear_date">
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+									<small>※火曜定休　2万円以上の商品は定休日でもご利用いただけます。</small><br>
+									<small>※宅配レンタルの方、商品の所属店舗と異なる店舗で着付ける場合（例：渋谷店の着物を銀座店で着付ける場合）は、4日後からお選び下さい。</small>
+								</div>
+							</div>
+							<div class="form-group only_visit">
+								<label for="inputEmail3" class="col-sm-5 control-label">着付けご来店希望店舗<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									{% if Product.getPrice02IncTaxMax >= 20000 %}
+									<select name="plg_visit_store" id="plg_visit_store" class="form-control  only_visit">
+										{% for key, visit_store in form_settings.visit_store %}
+											<option value="{{visit_store}}" {% if maker_name == visit_store %}selected{% endif %}>{{visit_store}}</option>
+										{% endfor %}
+									</select>
+									{% else %}
+										{% if Product.belongsToCategory(36) or Product.belongsToCategory(37) or Product.belongsToCategory(38) %}
+											<select name="plg_visit_store" id="plg_visit_store" class="form-control  only_visit">
+												{% for key, visit_store in form_settings.visit_store %}
+													<option value="{{visit_store}}" {% if maker_name == visit_store %}selected{% endif %}>{{visit_store}}</option>
+												{% endfor %}
+											</select>
+										{% else %}
+											<input type="text" value="{{maker_name}}" readonly name="plg_visit_store" id="plg_visit_store" class="form-control  only_visit">
+										{% endif %}
+									{% endif %}
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								    <small>※2万円以下の商品は他支店での着付け、宅配レンタルを行っておりません</small>
+								</div>
+							</div>
+{# //20160601 非表示
+							<div class="form-group only_visit">
+								<label for="plg_date_visit" class="col-sm-5 control-label">着付けご来店日</label>
+								<div class="col-sm-7">
+									<input name="plg_date_visit" type="text" class="form-control date hasDatepicker only_visit" placeholder="ご来店日" value="{{ search_date }}" readonly="readonly" id="plg_date_visit">
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								</div>
+							</div>
+#}
+							<div class="form-group only_visit">
+								<label for="plg_time_departure" class="col-sm-5 control-label">ご出発予定時間<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_time_departure" id="plg_time_departure" class="form-control only_visit">
+										<option value="">時間を選択ください</option>
+										{% for key, time_departure in form_settings.time_departure %}
+											<option value="{{key}}">{{time_departure}}</option>
+										{% endfor %}
+									</select>
+                                    <div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+									<small>※こちらは「店舗からのご出発希望時間」となります。<br>ご来店時間は出発時間より逆算の上、後にお送りするご注文確定メールにてお知らせいたします。</small>
+                                    <small>※10：00以前のご利用は早朝料金が別途発生いたします。<br><a href="{{ url('homepage') }}user_data/service#off-hours" target="_blank">詳細はこちら</a></small><br>
+								</div>
+							</div>
+
+							<div class="form-group ">
+								<label for="inputEmail3" class="col-sm-5 control-label">用途<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_purpose" id="plg_purpose" class="form-control">
+											<option value="">用途をお教え下さい</option>
+										{% for key, purpose in form_settings.purpose %}
+											<option value="{{key}}">{{purpose}}</option>
+										{% endfor %}
+									</select>
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+									<small>※「その他」をご選択の場合、この先のページ「ご注文内容のご確認」の「お問い合わせ欄」に詳細を明記下さい。</small>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">身長<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_body_height" id="plg_body_height" class="form-control">
+										<option value="">選択してください。</option>
+										{% for key, body_height in form_settings.body_height %}
+											<option value="{{key}}">{{body_height}}</option>
+										{% endfor %}
+									</select>
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="plg_foot_size" class="col-sm-5 control-label">足のサイズ<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_foot_size" id="plg_foot_size" class="form-control">
+										<option value="">選択してください。</option>
+										{% for key, foot_size in form_settings.foot_size %}
+											<option value="{{key}}">{{foot_size}}</option>
+										{% endfor %}
+									</select>
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								</div>
+							</div>
+                                                        <div class="form-group">
+								<label for="plg_decade" class="col-sm-5 control-label">年代<span class="label label-danger ml10">必須</span></label>
+								<div class="col-sm-7">
+									<select name="plg_decade" id="plg_decade" class="form-control">
+										<option value="">選択してください。</option>
+										{% for key, decade in form_settings.decade %}
+											<option value="{{key}}">{{decade}}</option>
+										{% endfor %}
+									</select>
+									<div class="alert alert-danger errormsg"><strong>選択して下さい。</strong></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="plg_body_type_0" class="col-sm-5 control-label">体型</label>
+								<div class="col-sm-7">
+									{% for key, body_type in form_settings.body_type %}
+										<div class="checkbox"> 
+											<label class=""><input type="checkbox" id="plg_body_type_{{loop.index}}" name="plg_body_type[]" value="{{key}}" /> {{body_type}}</label>
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="plg_secure_pack_0" class="col-sm-5 control-label">安心パック</label>
+								<div class="col-sm-7">
+									{% for key, secure_pack in form_settings.secure_pack %}
+										<div class="checkbox"> 
+											<label class=""><input type="checkbox" id="plg_secure_pack_{{loop.index}}" name="plg_secure_pack[]" value="{{key}}" /> {{secure_pack}}</label>
+										</div>
+									{% endfor %}
+									<small><a href="/user_data/cancel#cancel_t006" target="_blank">安心パックの詳細はこちら</a></small>
+								</div>
+							</div>
+
+							<div class="form-group only_visit">
+								<label for="inputEmail3" class="col-sm-5 control-label">フォト</label>
+								<div class="col-sm-7">
+									<select name="plg_need_photo" id="plg_need_photo" class="form-control only_visit">
+									{% for key, photo_plan in form_settings.photo_plan %}
+										<option value="{{key}}">{{photo_plan}}</option>
+									{% endfor %}
+									</select>
+                                    <small><a href="{{ url('homepage') }}user_data/service#s02" target="_blank">詳細はこちら</a></small>
+								</div>
+							</div>
+
+							<div class="form-group only_visit">
+								<label for="inputEmail3" class="col-sm-5 control-label">ヘア・メイクの有無</label>
+								<div class="col-sm-7">
+									<select name="plg_need_hair_make" id="plg_need_hair_make" class="form-control only_visit">
+									{% for key, hair_make in form_settings.hair_make %}
+										<option value="{{key}}">{{hair_make}}</option>
+									{% endfor %}
+									</select>
+                                                                        <small><a href="{{ url('homepage') }}user_data/service#s01" target="_blank">詳細はこちら</a></small>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="checkbox" id="check" />　<label for="check" class="user-guide">利用ガイドに同意します。詳細は <a href="/user_data/cancel" target="_blank" style="text-decoration: underline;">こちら</a></label>
+					<p style="text-align: center;"><small style="font-size: 12px;">店舗での受付時に現住所の確認できる身分証<br>（免許証や保険証など）をご提示ください。</small></p>
+					<p class="text-center"><a href="https://twitter.com/kimono_aki?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">@kimono_akiをフォロー</a>
+					<a href="https://www.instagram.com/kimono_rental_aki?ref=badge" class="insta_btn2" target="_blank"><i class="fab fa-instagram"></i><span style="font-size: 14px;font-weight: bold;"><img src="/template/aki/img/sns/innsuta_icon.png" alt="インスタアイコン" style="width: 20px;vertical-align: top;">kimono_rental_akiをフォロー</span></a></p>
+					<button type="submit" id="add-cart" class="btn btn-primary btn-block btn-lg mt10">カートに入れる</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--▲買い物かご-->
+{{ form_rest(form) }}
+</form>
+	<!-- ▲item_detail▲ -->
+{% if Product.belongsToCategory(37) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}
+				{% if Product.belongsToCategory(36) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}
+				{% if Product.belongsToCategory(35) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}
+				{% if Product.belongsToCategory(50) %}
+				<section class="block" id="sec02">
+					<!-- <div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_002.jpg" alt="卒入学式のお母さんの着物、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_002_s.jpg" alt="卒入学式のお母さんの着物、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div> -->
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}
+				{% if Product.belongsToCategory(49) %}
+				<section class="block" id="sec02">
+					<!-- <div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_002.jpg" alt="卒入学式のお母さんの着物、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/sotsunyugaku"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_002_s.jpg" alt="卒入学式のお母さんの着物、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div> -->
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}
+				{% if Product.belongsToCategory(41) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}	
+				{% if Product.belongsToCategory(38) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/753"><img src="{{ app.config.front_urlpath }}/img/753/index/top_banner_sp.jpg" alt="七五三レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %}	
+                {% if Product.belongsToCategory(53) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007.jpg" alt="成人式レンタル、振袖、袴、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007_s.jpg" alt="成人式レンタル、振袖、袴、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+                {% endif %} 
+                {% if Product.belongsToCategory(39) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007.jpg" alt="成人式レンタル、振袖、袴、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/seijin"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_007_s.jpg" alt="成人式レンタル、振袖、袴、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/hakama"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/hakama"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003_s.jpg" alt="卒業袴レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %} 
+                {% if Product.belongsToCategory(40) %}
+				<section class="block" id="sec02">
+					<div class="row">
+						<div class="main_visual">
+							<div class="item active">
+								<a href="/user_data/hakama"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003.jpg" alt="卒業袴レンタル、着物レンタルあき" class="img-responsive hidden-xs"></a>
+								<a href="/user_data/hakama"><img src="{{ app.config.front_urlpath }}/img/top/slide/slide_003_s.jpg" alt="卒業袴レンタル、着物レンタルあき" class="img-responsive visible-xs"></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				{% endif %} 
+{% endblock %}

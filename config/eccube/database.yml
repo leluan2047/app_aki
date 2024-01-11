@@ -1,0 +1,9 @@
+database:
+    driver: 'pdo_mysql'
+    host: 'localhost'
+    dbname: 'aki_d-old'
+    port: '3306'
+    user: 'root'
+    password : ''
+    charset: utf8
+    defaultTableOptions: { collate: utf8_general_ci }

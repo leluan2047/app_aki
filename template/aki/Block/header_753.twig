@@ -1,0 +1,221 @@
+    <div class="info_area">
+        <div class="container">
+            <a href="/user_data/news04">7月・8月は休まず営業いたします</a>           
+        </div>
+    </div>
+    <div class="site_title">
+        <div class="container">
+            <div class="row pb00">
+                <div class="col-sm-5 col-md-5">
+                    <h1>{% if PageLayout.url == "homepage" %}着物レンタルあき (来店着付け無料・全国配送無料){% else %}{% if subtitle is defined and subtitle is not empty %}{{ subtitle }} | {% elseif title is defined and title is not empty %}{{ title }} | {% endif %}着物レンタルあき (来店着付け無料・全国配送無料){% endif %}</h1>
+                </div>
+                <div class="col-sm-7 col-md-7 text-right utility hidden-xs">
+                    <ul class="list-inline mb00">
+                        {% if is_granted('ROLE_USER') %}
+                            <li><a href="{{ url('mypage') }}"><i class="zmdi zmdi-account-circle"></i> マイページ</a></li>
+                            {% if BaseInfo.option_favorite_product == 1 %}
+                            <li><a href="{{ url('mypage_favorite') }}"><i class="zmdi zmdi-favorite"></i> お気に入り</a></li>
+                            {% endif %}
+                            <li><a href="{{ url('logout') }}"><i class="zmdi zmdi-lock"></i> ログアウト</a></li>
+                            <li><a href="/cart"><i class="zmdi zmdi-shopping-cart"></i> カート</a></li>
+                        {% else %}
+                            <!-- <li><a href="{{ url('entry') }}"><i class="zmdi zmdi-account-circle"></i> 新規会員登録</a></li> -->
+                            {% if BaseInfo.option_favorite_product == 1 %}
+                            <li><a href="{{ url('mypage_favorite') }}"><i class="zmdi zmdi-favorite"></i> お気に入り</a></li>
+                            {% endif %}
+                            <li><a href="{{ url('mypage_login') }}"><i class="zmdi zmdi-lock"></i> ログイン</a></li>
+                            <li><a href="/cart"><i class="zmdi zmdi-shopping-cart"></i> カート</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar mb00">
+        <div class="container">
+			<div class="navbar-header">
+				<a class="nav-trigger navbar-toggle visible-xs" href="#nav"{#  onclick="gtag('event', 'クリック', {'event_category': 'リンク','event_label': 'SPメニュー'});" #} data-toggle="modal" data-target="#sp-nav-menu"><i class="zmdi zmdi-menu"></i><span>メニュー</span></a>
+                <a href="/cart" class="navbar-toggle visible-xs"><i class="zmdi zmdi-shopping-cart"></i><span>カートの中</span></a>
+				<a href="/" class="navbar-toggle visible-xs"><i class="zmdi zmdi-home zmdi-hc-fw"></i><span>TOP</span></a>
+				<a class="navbar-brand hidden-xs" style="padding: 15px;" href="{{ url('homepage') }}user_data/753"><img src="/template/aki/img/common/753_logo.svg" style="width: 300px; !important" alt="着物レンタルあき七五三レンタル" class="logo" ></a>
+                <a class="navbar-brand-753 visible-xs" style="padding: 15px;" href="{{ url('homepage') }}user_data/753"><img src="{{ app.config.front_urlpath }}/img/common/753_logo_sp.svg" class="" style="width: 150px;" alt="着物レンタルあき七五三レンタル"></a>
+            </div>
+
+            <div class="collapse navbar-collapse pr05" id="bs-example-navbar-collapse-1">
+                <ul class="pull-right mb00">
+                    <li><img src="{{ app.config.front_urlpath }}/img/common/head_shops_tel_02.png" alt="着物レンタルあき お問い合わせ電話番号"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="category" class="g_nav drawer_block pc">
+        <nav>
+            <div class="category-top_753">
+                <div class="container">
+                    <ul class="hidden-xs">
+                        <li><a href="/">着物レンタルあき<br>TOPページ</a></li>
+                        <li class="dropdown">
+                            <a href="/#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">着物レンタルあきの<br>七五三着物レンタル</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user_data/753/recommend">おすすめ七五三着物レンタル</a></li>
+                                <li><a href="/user_data/753/fullset">七五三着物フルセット</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/user_data/753/img_point">七五三写真<br>撮影のポイント</a></li>
+                        <li><a href="/user_data/753/faq">七五三の<br>よくある質問</a></li>
+                        <li><a href="/user_data/753/hair_makeup">七五三ヘアーセット<br>メイクについて</a></li>
+                        <li><a href="/user_data/753/rental_step">七五三着物<br>レンタルの流れ</a></li>
+                        <li class="dropdown">
+                            <a href="/user_data/753/voice" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">七五三レンタル<br>お客様からの声</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user_data/753/voice">お客様からの声</a></li>
+                                <li><a href="/user_data/753/basic_knowledge">お子さまからの質問</a></li>
+                                <li><a href="/user_data/753/spot">参拝スポットに近い</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="nav" class="visible-xs">
+                    <div class="solid">
+                        <h4>ご利用日から探す</h4>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <form name="sp_search_form" action="/products/list">
+                                <div class="form-group date">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon" id="basic-addon1"><i class="zmdi zmdi-calendar-note"></i></span>
+                                        <input name="date" type="text" class="form-control date datepicker hasDatepicker" placeholder="ご利用日" readonly="readonly" id="date">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon" id="basic-addon1"><i class="zmdi zmdi-view-list"></i></span>
+                                        <select name="category_id" class="form-control">
+                                            <option value="">利用シーンを選択</option>
+                                            <optgroup label="成人式">
+                                                <option value="53">振袖</option>
+                                                <option value="39">袴（男性用）</option>
+                                            </optgroup>
+                                            <optgroup label="卒業式・入学式">
+                                                <option value="40">卒業袴</option>
+                                                <option value="53">振袖</option>
+                                                <option value="50">訪問着</option>
+                                                <option value="39">袴（男性用）</option>
+                                            </optgroup>
+                                            <optgroup label="結婚式">
+                                                <option value="34">婚礼衣装</option>
+                                                <option value="53">振袖</option>
+                                                <option value="52">黒留袖</option>
+                                                <option value="51">色留袖</option>
+                                                <option value="50">訪問着</option>
+                                                <option value="41">男物</option>
+                                                <option value="39">袴（男性用）</option>
+                                            </optgroup>
+                                            <optgroup label="パーティー・お茶会">
+                                                <option value="53">振袖</option>
+                                                <option value="50">訪問着</option>
+                                                <option value="51">色留袖</option>
+                                                <option value="49">色無地</option>
+                                                <option value="48">小紋</option>
+                                                <option value="41">男物</option>
+                                            </optgroup>
+                                            <optgroup label="観劇・お食事会">
+                                                <option value="48">小紋</option>
+                                                <option value="50">訪問着</option>
+                                                <option value="41">男物</option>
+                                            </optgroup>
+                                            <optgroup label="七五三・お宮参り・十三参り">
+                                                <option value="48">産着</option>
+                                                <option value="37">七五三（三歳祝着）</option>
+                                                <option value="36">七五三（五歳祝着）</option>
+                                                <option value="35">七五三（七歳祝着）</option>
+                                                <option value="158">十三参り</option>
+                                                <option value="50">訪問着</option>
+                                                <option value="41">男物</option>
+                                            </optgroup>
+                                            <optgroup label="花火・お祭り">
+                                                <option value="43">浴衣（女性用）</option>
+                                                <option value="42">浴衣（男性用）</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block btn-lg" type="submit"><i class="zmdi zmdi-search"></i> 商品を探す</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+<script type="text/javascript">
+$(function() {
+    $form = $("form[name=sp_search_form]");
+    $form.on("submit", function() {
+        var category_id = $("select[name=category_id]", this).val();
+        var q = [];
+        if (category_id) {
+            q.push("category_id=" + category_id);
+        }
+        var date = $("input[name=date]", this).val();
+        if (date) {
+            q.push("date=" + date.replace(/\//g, '-'));
+        }
+        q = q.join("&");
+        location.href = $form.attr("action") + (q != "" ? "?" + q : "");
+        return false;
+    });
+});
+</script>
+                <div class="visible-xs">
+                    <!--<div class="solid">
+                        <h4>ご提供サービス</h4>
+                    </div>-->
+                    <div class="list-group">
+                        <a class="list-group-item" href="/">着物レンタルあきTOPページ</a>
+                        <a class="list-group-item" href="/user_data/753/recommend">おすすめ七五三着物レンタル</a>
+                        <a class="list-group-item" href="/user_data/753/fullset">七五三着物フルセット</a>
+                        <a class="list-group-item" href="/user_data/753/img_point">七五三写真撮影のポイント</a>
+                        <a class="list-group-item" href="/user_data/753/faq">七五三のよくある質問</a>
+                        <a class="list-group-item" href="/user_data/753/hair_makeup">七五三ヘアーセット メイクについて</a>
+                        <a class="list-group-item" href="/user_data/753/rental_step">七五三着物レンタルの流れ</a>
+                        <a class="list-group-item" href="/user_data/753/voice">七五三レンタルお客様からの声</a>
+                        <a class="list-group-item" href="/user_data/753/basic_knowledge">お子さまからの質問</a>
+                        <a class="list-group-item" href="/user_data/753/spot">近くの参拝スポット</a>
+                    </div>
+                    <div class="solid">
+                        <h4>店舗一覧</h4>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="/user_data/shop/shibuya">渋谷本店</a>
+                        <a class="list-group-item" href="/user_data/shop/ginza">銀座店</a>
+                        <a class="list-group-item" href="/user_data/shop/ikebukuro">池袋店</a>
+                        <a class="list-group-item" href="/user_data/shop/yokohama">横浜店</a>
+                    </div>
+                </div>
+
+            <div class="category-bottom_753">
+                <div class="container">
+                    <ul class="hidden-xs">
+                        <li><a href="/user_data/753#sec01">お得な<br class="visible-sm">七五三プラン</a></li>
+                        <li><a href="/user_data/753#sec02">商品の<br class="visible-sm">ご紹介</a></li>
+                        <li><a href="/user_data/753#sec03">ご来店レンタル<br class="visible-sm">ご利用の流れ</a></li>
+                        <li><a href="/user_data/753#sec04">配送レンタル<br class="visible-sm">ご利用の流れ</a></li>
+                        <li><a href="/user_data/753#sec05">店舗情報・<br class="visible-sm">おすすめ参拝スポット</a></li>
+                    </ul>
+                </div>
+            <!--<div class="visible-xs">
+                    <div class="solid">
+                        <h4>利用シーンから探す</h4>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="/user_data/753#plan">お得な七五三プラン</a>
+                        <a class="list-group-item" href="/user_data/753#osusume">商品のご紹介</a>
+                        <a class="list-group-item" href="/user_data/753#goraiten">ご来店レンタルご利用の流れ</a>
+                        <a class="list-group-item" href="/user_data/753#storeflow_step_4">配送レンタルご利用の流れ</a>
+                        <a class="list-group-item" href="/user_data/753#rentalflow_step_4">店舗情報・おすすめ参拝スポット</a>
+                    </div>
+                </div>-->
+            </div>
+
+            

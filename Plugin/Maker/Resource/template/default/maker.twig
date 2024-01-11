@@ -1,0 +1,17 @@
+{#
+/*
+ * This file is part of the Maker plugin
+ *
+ * Copyright (C) 2016 LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+#}
+<div class="plugin_maker_code">
+    {% if maker_url %}
+        <p class="item_code">取扱店舗名： <a href="{{ maker_url }}" target="_blank">{{ maker_name }}</a></p>
+    {% else %}
+        <p class="item_code">取扱店舗名： {{ maker_name }}</p>
+    {% endif %}
+</div>

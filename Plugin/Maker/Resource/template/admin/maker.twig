@@ -1,0 +1,204 @@
+{#
+/*
+ * This file is part of the Maker plugin
+ *
+ * Copyright (C) 2016 LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['product', 'maker'] %}
+
+{% block title %}商品管理{% endblock %}
+{% block sub_title %}メーカー管理{% endblock %}
+{% block stylesheet %}
+    <style type="text/css">
+        .attention {
+            color: #f00;
+        }
+        .sortable_list .icon_sortable {
+            width: 2%;
+        }
+        .box-title-maker a:last-child {
+            font-weight: bold;
+        }
+
+        .box-title-maker a:link, .box-title-maker a:visited, .box-title-maker a:hover, .box-title-maker a:active {
+            color: #444;
+        }
+    </style>
+
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+    <script>
+        var addButton = '追加';
+        var editButton = '更新';
+        var modalError = '{{ not form.vars.valid }}';
+        $(function () {
+            var myModal = $('#add-modal');
+            if (modalError) {
+                myModal.modal();
+            }
+
+            var oldRanks = [];
+            // 画面の中のrank一覧を保持
+            $("div.tableish > .item_box").each(function() {
+                oldRanks.push(this.dataset.rank);
+            });
+
+            // reverse sort
+            oldRanks.sort(function(a,b){return a - b;}).reverse();
+
+            $("div.tableish").sortable({
+                items: '> .item_box',
+                cursor: 'move',
+                update: function(e, ui) {
+                    $("body").append($('<div class="modal-backdrop in"></div>'));
+                    updateRank();
+                }
+            });
+
+            var updateRank = function() {
+                // 並び替え後にrankを更新
+                var newRanks = {};
+                var i = 0;
+                $("div.tableish > .item_box").each(function() {
+                    newRanks[this.dataset.makerId] = oldRanks[i];
+                    i++;
+                });
+
+                $.ajax({
+                    url: '{{ url('admin_plugin_maker_move_rank') }}',
+                    type: 'POST',
+                    data: newRanks
+                }).done(function(data) {
+                    $(".modal-backdrop").remove();
+                }).fail(function() {
+                    alert('fail');
+                    $(".modal-backdrop").remove();
+                });
+            };
+
+            $('.edit').on('click', function (e) {
+                e.preventDefault();
+                var makerId = $(this).data('id');
+                var makerName = $(this).data('name');
+                var editUrl = $(this).data('url');
+
+                $('#admin_maker_name').val(makerName);
+                $('#admin_maker_id').val(makerId);
+                $('#form1').attr('action', editUrl);
+                $('button#add-button-submit').text(editButton);
+                myModal.modal();
+            });
+
+            // Clear old data
+            myModal.on('hidden.bs.modal', function (e) {
+                var modal = $(this);
+                modal.find('#admin_maker_name').val('').css('background-color', '#fff');
+                modal.find('#admin_maker_id').val('');
+                modal.find('#form1').attr('action', '');
+                modal.find('button#add-button-submit').text(addButton);
+                modal.find('.attention').hide();
+                if (modalError) {
+                    window.location.href = "{{ url('admin_plugin_maker_index') }}";
+                }
+            });
+        });
+
+        function changeAction(action) {
+            document.form1.action = action;
+        }
+    </script>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div id="list_box" class="col-md-9">
+            <div id="list_box__body" class="box">
+                <div class="box-header">
+                    <div class="box-title box-title-maker">
+                        <a href="{{ url('admin_plugin_maker_index') }}">メーカー</a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <a id="add-button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#add-modal">メーカー作成</a>
+                </div><!-- /.box-header -->
+
+                {% if arrMaker|length > 0 %}
+                    <div class="box-body no-padding no-border">
+                        <div class="sortable_list">
+                            <div class="tableish">
+
+                                {% for Maker in arrMaker %}
+                                <div class="item_box tr" data-rank="{{ Maker.rank }}" data-maker-id="{{ Maker.id }}">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">
+                                        <a class="edit" data-id="{{ Maker.id }}" data-name="{{ Maker.name }}" href="#" data-url="{{ url('admin_plugin_maker_index', {id: Maker.id}) }}">{{ Maker.name }}</a>
+                                    </div>
+                                    <div class="icon_edit td">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown"><svg class="cb cb-ellipsis-h"> <use xlink:href="#cb-ellipsis-h" /></svg></a>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a class="edit" data-id="{{ Maker.id }}" data-name="{{ Maker.name }}" href="#" data-url="{{ url('admin_plugin_maker_index', {id: Maker.id}) }}">編集</a>
+                                                </li>
+                                                <li>
+                                                    {% set delete_action = url('admin_plugin_maker_delete', {id: Maker.id}) %}
+                                                    <a href="{{ delete_action }}" {{ csrf_token_for_anchor() }} data-method="delete" data-message="{{ 'admin.plugin.maker.delete.confirm'|trans }}">削除</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div><!-- /.item_box -->
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+            {% else %}
+                <div class="box-body no-padding">
+                    <div class="data-empty"><svg class="cb cb-inbox"> <use xlink:href="#cb-inbox" /></svg><p>データはありません</p></div>
+                </div><!-- /.box-body -->
+            {% endif %}
+            <!-- ▲ データがある時 ▲ -->
+
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+
+    </div>
+{% endblock %}
+
+{% block modal %}
+    <div class="modal" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form role="form" class="form-horizontal" name="form1" id="form1" method="post">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        {{ form_widget(form._token) }}
+                        {{ form_widget(form.name, {attr: {placeholder: 'メーカー名', class: 'form-control'}}) }}
+                        {{ form_errors(form.name) }}
+
+                        {{ form_widget(form.id) }}
+                        {{ form_errors(form.id) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-sm" id="add-button-submit">追加</button>
+                        <button type="reset" data-dismiss="modal" class="btn btn-default">キャンセル</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

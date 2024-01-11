@@ -1,0 +1,82 @@
+{% extends 'default_frame.twig' %}
+{% set body_class = 'mypage' %}
+{% block main %}
+<div id="">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<h2 class="title">ログイン</h2>
+			<p>
+				会員の方は、登録時に入力されたメールアドレスとパスワードでログインしてください。
+			</p>
+		</div>
+	</div>
+	<!-- <div class="mb20 text-left" style="padding: 10px; background: #e0f46e;">
+		<h5 style="color:red;">メール不具合のお知らせ</h5>
+		<p class="text-left">現在、弊社から一部のメールアカウントへの送信ができない不具合が発生しております。確認しているアカウントは「outlook.jp」「hotmail.com」です。お客様には大変ご迷惑をおかけしてしまい申し訳ございません。ほかのアカウントをお持ちの場合はそちらでご連絡頂けますと幸いです。もしくは、お電話でのご対応とさせていただきます。現在、復旧作業を行っております。恐れ入りますが今しばらくお待ち下さい。</p>
+		<h5 style="color:red;">Gmailをご利用のお客様へ</h5>
+		<p class="text-left">現在Gmailをご利用のお客様において、当店からのメールが一部正常に受信しないことがございます。お問合せ、またはご注文後に当店からのご返信が確認できない場合は、お手数をおかけしますが、「迷惑メールフォルダ」をご確認いただけますと幸いです。</p>
+		<div class="row">
+			<div class="col-sm-6">渋谷本店：　<a href="tel:0334763341" style="color: #337ab7; text-decoration: underline;">TEL：03-3476-3341</a></div>
+			<div class="col-sm-6">銀座店　：　<a href="tel:0355680529" style="color: #337ab7; text-decoration: underline;">TEL：03-5568-0529</a></div>
+			<div class="col-sm-6">池袋店　：　<a href="tel:0364160529" style="color: #337ab7; text-decoration: underline;">TEL：03-6416-0529</a></div>
+			<div class="col-sm-6">横浜店　：　<a href="tel:0454410529" style="color: #337ab7; text-decoration: underline;">TEL：045-441-0529</a></div>
+		</div>
+	</div> -->
+	<div class="">
+		<form name="login_mypage" id="login_mypage" method="post" action="{{ url('login_check') }}" onsubmit="return eccube.checkLoginFormInputted('login_mypage')" {{ form_enctype(form) }}>
+			{% if app.session.flashBag.has('eccube.login.target.path') %}
+				{% for targetPath in app.session.flashBag.get('eccube.login.target.path') %}
+					<input type="hidden" name="_target_path" value="{{ targetPath }}" />
+				{% endfor %}
+			{% endif %}
+			<div id="login_box" class="row">
+				<div id="mypage_login_wrap" class="col-sm-12">
+					<div id="mypage_login_box" class="column">
+						<div id="mypage_login_box__body" class="column_inner clearfix">
+							<div class="icon"><svg class="cb cb-user-circle"><use xlink:href="#cb-user-circle" /></svg></div>
+							<div id="mypage_login_box__login_email" class="form-group">
+								{{ form_widget(form.login_email, {'attr': {'style' : 'ime-mode: disabled;', 'placeholder' : 'メールアドレス', 'autofocus': true}}) }}
+							</div>
+							<div id="mypage_login_box__login_pass" class="form-group">
+								{{ form_widget(form.login_pass,  {'attr': {'placeholder' : 'パスワード' }}) }}
+								{% if BaseInfo.option_remember_me %}
+									{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+										<input id="mypage_login_box__login_memory" type="hidden" name="login_memory" value="1">
+									{% else %}
+										{{ form_widget(form.login_memory) }}
+									{% endif %}
+								{% endif %}
+							</div>
+							<div class="extra-form form-group">
+								{% for f in form.getIterator %}
+									{% if f.vars.name matches '[^plg*]' %}
+										{{ form_label(f) }}
+										{{ form_widget(f) }}
+										{{ form_errors(f) }}
+									{% endif %}
+								{% endfor %}
+							</div>
+							{% if error %}
+								<div id="mypage_login_box__error_message" class="form-group">
+									<span class="text-danger">{{ error|trans|raw }}</span>
+								</div>
+							{% endif %}
+							<div id="mypage_login__login_button" class="btn_area">
+								<p><button type="submit" class="btn btn-info btn-block btn-lg">ログイン</button></p><br>
+								<p><a href="{{ url('forgot') }}">パスワードをお忘れの方</a></p>	
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		</form>
+        <!-- <div class="row">
+            <div class="col-sm-12 text-center">
+                <p>新規会員登録をされたい方は、下記よりお進みください。</p>
+                <p class="col-sm-6 col-sm-offset-3"><a href="{{ url('entry') }}" class="btn btn-info btn-block btn-lg"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 新規会員登録</a></p>
+            </div>
+        </div> -->
+	</div>
+</div>
+{% endblock %}
