@@ -1,9 +1,0 @@
-mail:
-    transport: smtp
-    host: smtp.sendgrid.net
-    port: 587
-    username: apikey
-    password: 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
-    encryption: null
-    auth_mode: login
-    charset_iso_2022_jp: false
